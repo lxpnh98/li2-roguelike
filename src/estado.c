@@ -2,7 +2,7 @@
 #include "estado.h"
 
 #define MAX_BUFFER        10240
-
+// teste
 char *estado2str(ESTADO e)
 {
     static char buffer[MAX_BUFFER];
