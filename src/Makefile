@@ -1,5 +1,5 @@
 CFLAGS=-Wall -g
-FICHEIROS=cgi.h estado.c estado.h html.c html.h main.c Makefile
+FICHEIROS=../src/ ../images/ ../doc/
 
 install: main
 	sudo cp main /usr/lib/cgi-bin
@@ -10,7 +10,7 @@ main: main.o estado.o html.o
 	cc -o main main.o estado.o html.o
 
 zip: $(FICHEIROS)
-	zip -9 main.zip $(FICHEIROS)
+	zip -r -9 main.zip $(FICHEIROS)
 
 doc:
 	doxygen -g
