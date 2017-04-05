@@ -1,16 +1,16 @@
 CFLAGS=-Wall -g
-FICHEIROS=cgi.h estado.c estado.h exemplo.c Makefile
+FICHEIROS=cgi.h estado.c estado.h html.c html.h main.c Makefile
 
-install: exemplo
-	sudo cp exemplo /usr/lib/cgi-bin
+install: main
+	sudo cp main /usr/lib/cgi-bin
 	sudo cp ../images/* /var/www/html/images/
 	touch install
 
-exemplo: exemplo.o estado.o
-	cc -o exemplo exemplo.o estado.o
+main: main.o estado.o html.o
+	cc -o main main.o estado.o html.o
 
 zip: $(FICHEIROS)
-	zip -9 exemplo.zip $(FICHEIROS)
+	zip -9 main.zip $(FICHEIROS)
 
 doc:
 	doxygen -g
@@ -19,10 +19,11 @@ doc:
 	touch doc
 
 clean:
-	rm -rf *.o exemplo ../doc/Doxyfile ../doc/latex ../doc/html install doc
+	rm -rf *.o main ../doc/Doxyfile ../doc/latex ../doc/html install doc
 
-estado.o: estado.c estado.h
-exemplo.o: exemplo.c cgi.h estado.h
+estado.o: estado.c estado.h cgi.h
+html.o: html.c html.h cgi.h
+main.o: main.c cgi.h
 
 run-firefox:
-	firefox "localhost/cgi-bin/exemplo"
+	firefox "localhost/cgi-bin/main"

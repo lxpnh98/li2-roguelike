@@ -12,6 +12,12 @@ Definição do estado e das funções que convertem estados em strings e vice-ve
 /** \brief O nº máximo de obstáculos */
 #define MAX_OBSTACULOS		100
 
+#define MAX_BUFFER        10240
+
+#define TAM               10
+
+#define ESCALA            40
+
 /**
 \brief Estrutura que armazena uma posição
 */
@@ -51,5 +57,31 @@ char *estado2str(ESTADO e);
 @returns O estado correspondente à string dos argumentos
 */
 ESTADO str2estado(char *argumentos);
+
+int posicao_valida(int x, int y);
+
+int posicao_igual(POSICAO p, int x, int y);
+
+int tem_jogador(ESTADO e, int x, int y);
+
+int tem_inimigo(ESTADO e, int x, int y);
+
+int tem_obstaculo(ESTADO e, int x, int y);
+
+int tem_saida(ESTADO e, int x, int y);
+
+int posicao_ocupada(ESTADO e, int x, int y);
+
+ESTADO inicializar_inimigo(ESTADO e);
+
+ESTADO inicializar_inimigos(ESTADO e, int num);
+
+ESTADO inicializar_obstaculo(ESTADO e);
+
+ESTADO inicializar_obstaculos(ESTADO e, int num);
+
+ESTADO inicializar();
+
+ESTADO ler_estado(char *args);
 
 #endif
