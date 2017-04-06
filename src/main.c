@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
@@ -8,9 +9,11 @@
 
 int main()
 {
-    srandom(time(NULL));
+    /* srandom(time(NULL)); */
     int x, y;
-    ESTADO e = ler_estado(getenv("QUERY_STRING"));
+    ESTADO e;
+    srand(time(NULL));
+    e = ler_estado(getenv("QUERY_STRING"));
     COMECAR_HTML;
     ABRIR_SVG(600, 600);
     for(y = 0; y < 10; y++) {

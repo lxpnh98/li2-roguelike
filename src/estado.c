@@ -12,7 +12,7 @@ char *estado2str(ESTADO e)
 
     buffer[0] = 0;
 
-    for(i = 0; i < sizeof(ESTADO); i++)
+    for(i = 0; (unsigned int)i < sizeof(ESTADO); i++)
         sprintf(buffer, "%s%02x", buffer, p[i]);
     
     return buffer;
@@ -24,9 +24,9 @@ ESTADO str2estado(char *argumentos)
     char *p = (char *) &e;
     int i;
 
-    for(i = 0; i < sizeof(ESTADO); i++, argumentos += 2) {
+    for(i = 0; (unsigned int)i < sizeof(ESTADO); i++, argumentos += 2) {
         int d;
-        sscanf(argumentos, "%2x", &d);
+        sscanf(argumentos, "%2x", (unsigned int *)&d);
         p[i] = (char) d;
     }
     
@@ -75,15 +75,15 @@ int tem_saida(ESTADO e, int x, int y)
 
 int posicao_ocupada(ESTADO e, int x, int y)
 {
-    return tem_jogador(e, x, y) || tem_inimigo(e, x, y) || tem_obstaculo(e, x, y); // || tem_saida(e, x, y);
+    return tem_jogador(e, x, y) || tem_inimigo(e, x, y) || tem_obstaculo(e, x, y);
 }
 
 ESTADO inicializar_inimigo(ESTADO e) {
     int x, y;
 
     do {
-        x = random() % TAM;
-        y = random() % TAM;
+        x = rand() % TAM;
+        y = rand() % TAM;
     } while (posicao_ocupada(e, x, y) || tem_saida(e, x, y));
 
     e.inimigo[(int)e.num_inimigos].x = x;
@@ -104,8 +104,8 @@ ESTADO inicializar_obstaculo(ESTADO e) {
     int x, y;
 
     do {
-        x = random() % TAM;
-        y = random() % TAM;
+        x = rand() % TAM;
+        y = rand() % TAM;
     } while(posicao_ocupada(e, x, y) || tem_saida(e, x, y));
 
     e.obstaculo[(int)e.num_obstaculos].x = x;
@@ -124,16 +124,16 @@ ESTADO inicializar_obstaculos(ESTADO e, int num) {
 
 ESTADO inicializar() {
     int x, y;
-    ESTADO e = {{0}};
+    ESTADO e = {{0,0},0,0,{{0}},{{0}},{0,0}};
     do {
-        x = random() % TAM;
-        y = random() % TAM;
+        x = rand() % TAM;
+        y = rand() % TAM;
     } while (posicao_ocupada(e, x, y));
     e.jog.x = x;
     e.jog.y = y;
     do {
-        x = random() % TAM;
-        y = random() % TAM;
+        x = rand() % TAM;
+        y = rand() % TAM;
     } while (posicao_ocupada(e, x, y));
     e.saida.x = x;
     e.saida.y = y;

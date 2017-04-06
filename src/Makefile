@@ -1,4 +1,4 @@
-CFLAGS=-Wall -g
+CFLAGS=-Wall -g -ansi -Wextra -pedantic -O2
 FICHEIROS=../src/ ../images/ ../doc/
 
 install: main
