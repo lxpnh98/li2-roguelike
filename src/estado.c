@@ -149,3 +149,15 @@ ESTADO ler_estado(char *args)
     return str2estado(args);
 }
 
+ESTADO atualizar_estado(ESTADO e, int x, int y)
+{
+    ESTADO novo = e;
+    int i;
+    novo.jog.x = x;
+    novo.jog.y = y;
+    for (i = 0; i < novo.num_inimigos; i++) {
+        novo.inimigo[i].x++;
+    }
+    return novo;
+}
+

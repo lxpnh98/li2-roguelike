@@ -84,4 +84,6 @@ ESTADO inicializar();
 
 ESTADO ler_estado(char *args);
 
+ESTADO atualizar_estado(ESTADO e, int x, int y);
+
 #endif

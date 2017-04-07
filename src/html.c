@@ -1,5 +1,16 @@
 #include "cgi.h"
 #include "estado.h"
+#include "html.h"
+
+void imprime_tabuleiro(ESTADO e)
+{
+    int x, y;
+    for(y = 0; y < 10; y++) {
+        for(x = 0; x < 10; x++) {
+            imprime_casa(e, x, y);
+        }
+    }
+}
 
 void imprime_casa(ESTADO e, int x, int y)
 {
@@ -10,13 +21,12 @@ void imprime_casa(ESTADO e, int x, int y)
 
 void imprime_movimento(ESTADO e, int dx, int dy)
 {
-    ESTADO novo = e;
+    ESTADO novo;
     int x = e.jog.x + dx;
     int y = e.jog.y + dy;
     char link[MAX_BUFFER];
 
-    if (!posicao_valida(x, y)) return;
-    if (posicao_ocupada(e, x, y)) return;
+    if (!posicao_valida(x, y) || posicao_ocupada(e, x, y)) return;
     if (tem_saida(e, x, y)) {
         sprintf(link, "http://localhost/cgi-bin/main");
         ABRIR_LINK(link);
@@ -24,8 +34,7 @@ void imprime_movimento(ESTADO e, int dx, int dy)
         FECHAR_LINK;
         return;
     }
-    novo.jog.x = x;
-    novo.jog.y = y;
+    novo = atualizar_estado(e, x, y);
     sprintf(link, "http://localhost/cgi-bin/main?%s", estado2str(novo));
     ABRIR_LINK(link);
     imprime_casa(e, x, y);
