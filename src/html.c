@@ -18,7 +18,7 @@ void imprime_movimento(ESTADO e, int dx, int dy)
     if (!posicao_valida(x, y)) return;
     if (posicao_ocupada(e, x, y)) return;
     if (tem_saida(e, x, y)) {
-        sprintf(link, "http://localhost/cgi-bin/exemplo");
+        sprintf(link, "http://localhost/cgi-bin/main");
         ABRIR_LINK(link);
         imprime_casa(e, x, y);
         FECHAR_LINK;
@@ -26,7 +26,7 @@ void imprime_movimento(ESTADO e, int dx, int dy)
     }
     novo.jog.x = x;
     novo.jog.y = y;
-    sprintf(link, "http://localhost/cgi-bin/exemplo?%s", estado2str(novo));
+    sprintf(link, "http://localhost/cgi-bin/main?%s", estado2str(novo));
     ABRIR_LINK(link);
     imprime_casa(e, x, y);
     FECHAR_LINK;
