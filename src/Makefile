@@ -26,4 +26,4 @@ html.o: html.c html.h cgi.h
 main.o: main.c cgi.h
 
 run-firefox:
-	firefox "localhost/cgi-bin/main"
+	firefox "localhost/cgi-bin/main" &>/dev/null &
