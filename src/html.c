@@ -14,7 +14,7 @@ void imprime_tabuleiro(ESTADO e)
 
 void imprime_casa(ESTADO e, int x, int y)
 {
-    char *cor[] = {"#666600", "#555500", "#338855"};
+    char *cor[] = {"#4d4d33", "#d6d6c2", "#11aa22"};
     int idx = (tem_saida(e, x, y) ? 2 : (x + y) % 2);
     QUADRADO(x, y,ESCALA, cor[idx]);
 }    
@@ -63,7 +63,7 @@ void imprime_inimigos(ESTADO e)
 {
     int i;
     for(i = 0; i < e.num_inimigos; i++)
-        IMAGEM(e.inimigo[i].x, e.inimigo[i].y, ESCALA, "Driders_04.png");
+        IMAGEM(e.inimigo[i].x, e.inimigo[i].y, ESCALA, "ks01-ogre_mage2_02_hi.png");
 }
 
 void imprime_obstaculos(ESTADO e)
