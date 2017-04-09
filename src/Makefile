@@ -3,7 +3,7 @@ FICHEIROS=../src/ ../images/ ../doc/
 
 install: main
 	sudo cp main /usr/lib/cgi-bin
-	sudo cp ../images/* /var/www/html/images/
+	sudo cp -r ../images/ /var/www/html/
 	touch install
 
 main: main.o estado.o html.o
