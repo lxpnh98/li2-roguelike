@@ -60,27 +60,9 @@ ESTADO str2estado(char *argumentos);
 
 int posicao_valida(int x, int y);
 
-int posicao_igual(POSICAO p, int x, int y);
-
-int tem_jogador(ESTADO e, int x, int y);
-
-int tem_inimigo(ESTADO e, int x, int y);
-
-int tem_obstaculo(ESTADO e, int x, int y);
-
 int tem_saida(ESTADO e, int x, int y);
 
 int posicao_ocupada(ESTADO e, int x, int y);
-
-ESTADO inicializar_inimigo(ESTADO e);
-
-ESTADO inicializar_inimigos(ESTADO e, int num);
-
-ESTADO inicializar_obstaculo(ESTADO e);
-
-ESTADO inicializar_obstaculos(ESTADO e, int num);
-
-ESTADO inicializar();
 
 ESTADO ler_estado(char *args);
 

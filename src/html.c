@@ -2,6 +2,13 @@
 #include "estado.h"
 #include "html.h"
 
+void imprime_casa(ESTADO e, int x, int y)
+{
+    char *cor[] = {"#4d4d33", "#d6d6c2", "#11aa22"};
+    int idx = (tem_saida(e, x, y) ? 2 : (x + y) % 2);
+    QUADRADO(x, y,ESCALA, cor[idx]);
+}    
+
 void imprime_tabuleiro(ESTADO e)
 {
     int x, y;
@@ -11,13 +18,6 @@ void imprime_tabuleiro(ESTADO e)
         }
     }
 }
-
-void imprime_casa(ESTADO e, int x, int y)
-{
-    char *cor[] = {"#4d4d33", "#d6d6c2", "#11aa22"};
-    int idx = (tem_saida(e, x, y) ? 2 : (x + y) % 2);
-    QUADRADO(x, y,ESCALA, cor[idx]);
-}    
 
 void imprime_movimento(ESTADO e, int dx, int dy)
 {
