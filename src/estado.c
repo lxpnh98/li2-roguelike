@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 #include "estado.h"
 
@@ -149,6 +150,19 @@ ESTADO ler_estado(char *args)
     return str2estado(args);
 }
 
+int adjacente(POSICAO p1, POSICAO p2)
+{
+    return (abs(p1.x - p2.x) < 2) && (abs(p1.y - p2.y) < 2);
+}
+
+void eliminar_inimigo(ESTADO *e, int n)
+{
+    int i;
+    for (i = n + 1; i < e->num_inimigos; i++)
+        e->inimigo[i - 1] = e->inimigo[i];
+    e->num_inimigos--;
+}
+
 ESTADO atualizar_estado(ESTADO e, int x, int y)
 {
     ESTADO novo = e;
@@ -156,7 +170,10 @@ ESTADO atualizar_estado(ESTADO e, int x, int y)
     novo.jog.x = x;
     novo.jog.y = y;
     for (i = 0; i < novo.num_inimigos; i++) {
-        novo.inimigo[i].x++;
+        if (adjacente(novo.inimigo[i], e.jog) && adjacente(novo.inimigo[i], novo.jog)) {
+            eliminar_inimigo(&novo, i);
+        }
+        /* novo.inimigo[i].x++; */
     }
     return novo;
 }
