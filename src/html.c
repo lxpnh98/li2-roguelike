@@ -23,7 +23,7 @@ void imprime_casa(ESTADO e, int x, int y)
     /* char *cor[] = {"#4d4d33", "#d6d6c2", "#11aa22"};
     int idx = (tem_saida(e, x, y) ? 2 : (x + y) % 2);
     QUADRADO(x, y,ESCALA, cor[idx]); */
-    IMAGEM(x, y, /* x_offset, y_offset, */ ESCALA, "basic_hex.png");
+    IMAGEM(x, y, x_offset, y_offset, ESCALA, "basic_hex.png");
 }    
 
 void imprime_tabuleiro(ESTADO e)
@@ -74,7 +74,7 @@ void imprime_jogador(ESTADO e)
 {
     int x_offset = calc_xoffset(e.jog.x, e.jog.y);
     int y_offset = calc_yoffset(e.jog.y);
-    IMAGEM(e.jog.x, e.jog.y, /* x_offset, y_offset, */ ESCALA, "DwellerN_03.png");
+    IMAGEM(e.jog.x, e.jog.y, x_offset, y_offset, ESCALA, "DwellerN_03.png");
     imprime_movimentos(e);
 }
 
@@ -83,10 +83,11 @@ void imprime_inimigos(ESTADO e)
     int x_offset = 0;
     int y_offset = 0;
     int i;
-    for(i = 0; i < e.num_inimigos; i++)
+    for(i = 0; i < e.num_inimigos; i++) {
         x_offset = calc_xoffset(e.inimigo[i].x, e.inimigo[i].y);
         y_offset = calc_yoffset(e.inimigo[i].y);
-        IMAGEM(e.inimigo[i].x, e.inimigo[i].y, /* x_offset, y_offset, */ ESCALA, "ks01-ogre_mage2_02_hi.png");
+        IMAGEM(e.inimigo[i].x, e.inimigo[i].y, x_offset, y_offset, ESCALA, "ks01-ogre_mage2_02_hi.png");
+    }
 }
 
 void imprime_obstaculos(ESTADO e)
@@ -94,8 +95,9 @@ void imprime_obstaculos(ESTADO e)
     int x_offset = 0;
     int y_offset = 0;
     int i;
-    for(i = 0; i < e.num_obstaculos; i++)
+    for(i = 0; i < e.num_obstaculos; i++) {
         x_offset = calc_xoffset(e.obstaculo[i].x, e.obstaculo[i].y);
         y_offset = calc_yoffset(e.obstaculo[i].y);
-        IMAGEM(e.obstaculo[i].x, e.obstaculo[i].y, /* x_offset, y_offset, */ ESCALA, "lava_pool1.png");
+        IMAGEM(e.obstaculo[i].x, e.obstaculo[i].y, x_offset, y_offset, ESCALA, "lava_pool1.png");
+    }
 }

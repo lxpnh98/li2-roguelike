@@ -36,8 +36,8 @@ Macros úteis para gerar CGIs
 @param ESCALA A escala da imagem
 @param FICHEIRO O caminho para o link do ficheiro
 */
-#define IMAGEM(X, Y, /* X_OFFSET, Y_OFFSET, */ ESCALA, FICHEIRO)		printf("<image x=%d y=%d width=%d height=%d xlink:href=%s />\n", \
-												ESCALA * X, ESCALA * Y, ESCALA, ESCALA, IMAGE_PATH FICHEIRO)
+#define IMAGEM(X, Y, X_OFFSET, Y_OFFSET, ESCALA, FICHEIRO)		printf("<image x=%d y=%d width=%d height=%d xlink:href=%s />\n", \
+        												ESCALA * X + X_OFFSET, ESCALA * Y + Y_OFFSET, ESCALA, ESCALA, IMAGE_PATH FICHEIRO)
 
 /**
 \brief Macro para criar um quadrado
