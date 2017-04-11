@@ -2,11 +2,28 @@
 #include "estado.h"
 #include "html.h"
 
+#define OFFSET_WIDTH            21
+#define OFFSET_HEIGHT           8
+
+int calc_xoffset(int x, int y)
+{
+    if (y % 2) return x + OFFSET_WIDTH;
+    else       return x;
+}
+
+int calc_yoffset(int y)
+{
+    return - OFFSET_HEIGHT * y;
+}
+
 void imprime_casa(ESTADO e, int x, int y)
 {
-    char *cor[] = {"#4d4d33", "#d6d6c2", "#11aa22"};
+    int x_offset = calc_xoffset(x, y);
+    int y_offset = calc_yoffset(y);
+    /* char *cor[] = {"#4d4d33", "#d6d6c2", "#11aa22"};
     int idx = (tem_saida(e, x, y) ? 2 : (x + y) % 2);
-    QUADRADO(x, y,ESCALA, cor[idx]);
+    QUADRADO(x, y,ESCALA, cor[idx]); */
+    IMAGEM(x, y, /* x_offset, y_offset, */ ESCALA, "basic_hex.png");
 }    
 
 void imprime_tabuleiro(ESTADO e)
@@ -55,20 +72,30 @@ void imprime_movimentos(ESTADO e)
 
 void imprime_jogador(ESTADO e)
 {
-    IMAGEM(e.jog.x, e.jog.y, ESCALA, "DwellerN_03.png");
+    int x_offset = calc_xoffset(e.jog.x, e.jog.y);
+    int y_offset = calc_yoffset(e.jog.y);
+    IMAGEM(e.jog.x, e.jog.y, /* x_offset, y_offset, */ ESCALA, "DwellerN_03.png");
     imprime_movimentos(e);
 }
 
 void imprime_inimigos(ESTADO e)
 {
+    int x_offset = 0;
+    int y_offset = 0;
     int i;
     for(i = 0; i < e.num_inimigos; i++)
-        IMAGEM(e.inimigo[i].x, e.inimigo[i].y, ESCALA, "ks01-ogre_mage2_02_hi.png");
+        x_offset = calc_xoffset(e.inimigo[i].x, e.inimigo[i].y);
+        y_offset = calc_yoffset(e.inimigo[i].y);
+        IMAGEM(e.inimigo[i].x, e.inimigo[i].y, /* x_offset, y_offset, */ ESCALA, "ks01-ogre_mage2_02_hi.png");
 }
 
 void imprime_obstaculos(ESTADO e)
 {
+    int x_offset = 0;
+    int y_offset = 0;
     int i;
     for(i = 0; i < e.num_obstaculos; i++)
-        IMAGEM(e.obstaculo[i].x, e.obstaculo[i].y, ESCALA, "lava_pool1.png");
+        x_offset = calc_xoffset(e.obstaculo[i].x, e.obstaculo[i].y);
+        y_offset = calc_yoffset(e.obstaculo[i].y);
+        IMAGEM(e.obstaculo[i].x, e.obstaculo[i].y, /* x_offset, y_offset, */ ESCALA, "lava_pool1.png");
 }
