@@ -64,10 +64,15 @@ void imprime_movimentos(ESTADO e)
     imprime_movimento(e,  0, +1);
     imprime_movimento(e, -1,  0);
     imprime_movimento(e, +1,  0);
-    imprime_movimento(e, -1, -1);
-    imprime_movimento(e, +1, +1);
-    imprime_movimento(e, -1, +1);
-    imprime_movimento(e, +1, -1);
+
+    if (e.jog.y % 2) {
+        imprime_movimento(e, +1, -1);
+        imprime_movimento(e, +1, +1);
+    }
+    else {
+        imprime_movimento(e, -1, -1);
+        imprime_movimento(e, -1, +1);
+    }
 }
 
 void imprime_jogador(ESTADO e)

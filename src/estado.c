@@ -152,7 +152,10 @@ ESTADO ler_estado(char *args)
 
 int adjacente(POSICAO p1, POSICAO p2)
 {
-    return (abs(p1.x - p2.x) < 2) && (abs(p1.y - p2.y) < 2);
+    int diagonal;
+    if (p1.y % 2) diagonal = 1;
+    else          diagonal = -1;
+    return (abs(p1.x - p2.x) < 2) && (abs(p1.y - p2.y) < 2) && (p1.x - p2.x != diagonal || p1.y == p2.y);
 }
 
 void eliminar_inimigo(ESTADO *e, int n)
