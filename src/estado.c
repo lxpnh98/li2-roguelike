@@ -161,23 +161,26 @@ int adjacente(POSICAO p1, POSICAO p2)
 void eliminar_inimigo(ESTADO *e, int n)
 {
     int i;
-    for (i = n + 1; i < e->num_inimigos; i++)
+    for (i = n + 1; i <= e->num_inimigos; i++)
         e->inimigo[i - 1] = e->inimigo[i];
     e->num_inimigos--;
 }
 
 ESTADO atualizar_estado(ESTADO e, int x, int y)
 {
-    ESTADO novo = e;
+    ESTADO novo;
     int i;
-    novo.jog.x = x;
-    novo.jog.y = y;
-    for (i = 0; i < novo.num_inimigos; i++) {
-        if (adjacente(novo.inimigo[i], e.jog) && adjacente(novo.inimigo[i], novo.jog)) {
-            eliminar_inimigo(&novo, i);
+    POSICAO nova_pos = {x, y};
+    novo = e;
+    for (i = 0; i < e.num_inimigos; i++) {
+        if (adjacente(e.inimigo[i], e.jog) && adjacente(e.inimigo[i], nova_pos)) {
+            eliminar_inimigo(&e, i);
+            i--;
         }
         /* novo.inimigo[i].x++; */
     }
+    e.jog = nova_pos;
+    novo = e;
     return novo;
 }
 
