@@ -177,9 +177,9 @@ ESTADO atualizar_estado(ESTADO e, int x, int y)
             eliminar_inimigo(&e, i);
             i--;
         }
-        /* novo.inimigo[i].x++; */
+        e.inimigo[i].x++;
     }
-    e.jog = nova_pos;
+    /* e.jog = nova_pos; */
     novo = e;
     return novo;
 }

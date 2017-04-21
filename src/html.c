@@ -23,8 +23,10 @@ void imprime_casa(ESTADO e, int x, int y)
     /* char *cor[] = {"#4d4d33", "#d6d6c2", "#11aa22"};
     int idx = (tem_saida(e, x, y) ? 2 : (x + y) % 2);
     QUADRADO(x, y,ESCALA, cor[idx]); */
+    if (tem_saida(e, x, y))
+        IMAGEM(x, y, x_offset, y_offset, ESCALA, "hexit.png");
     IMAGEM(x, y, x_offset, y_offset, ESCALA, "basic_hex.png");
-}    
+}
 
 void imprime_tabuleiro(ESTADO e)
 {
