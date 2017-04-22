@@ -152,10 +152,21 @@ ESTADO ler_estado(char *args)
 
 int adjacente(POSICAO p1, POSICAO p2)
 {
-    int diagonal;
-    if (p1.y % 2) diagonal = 1;
-    else          diagonal = -1;
-    return (abs(p1.x - p2.x) < 2) && (abs(p1.y - p2.y) < 2) && (p1.x - p2.x != diagonal || p1.y == p2.y);
+    return (abs(p1.x - p2.x) < 2) &&
+           (abs(p1.y - p2.y) < 2) &&
+           (abs(get_z(p1) - get_z(p2)) < 2);
+}
+
+int get_z(POSICAO p)
+{
+    return -(p.x + p.y);
+}
+
+int colinear(POSICAO p1, POSICAO p2, POSICAO p3)
+{
+    return (p1.x == p2.x && p2.x == p3.x) ||
+           (p1.y == p2.y && p2.y == p3.y) ||
+           (get_z(p1) == get_z(p2) && get_z(p2) == get_z(p3));
 }
 
 void eliminar_inimigo(ESTADO *e, int n)
@@ -170,16 +181,19 @@ ESTADO atualizar_estado(ESTADO e, int x, int y)
 {
     ESTADO novo;
     int i;
+    int adj, lunge;
     POSICAO nova_pos = {x, y};
     novo = e;
     for (i = 0; i < e.num_inimigos; i++) {
-        if (adjacente(e.inimigo[i], e.jog) && adjacente(e.inimigo[i], nova_pos)) {
+        adj = adjacente(e.inimigo[i], e.jog);
+        lunge = colinear(e.inimigo[i], e.jog, nova_pos);
+        if (adjacente(e.inimigo[i], nova_pos) && (adj || lunge)) {
             eliminar_inimigo(&e, i);
             i--;
         }
-        e.inimigo[i].x++;
+        /* e.inimigo[i].x++; */
     }
-    /* e.jog = nova_pos; */
+    e.jog = nova_pos;
     novo = e;
     return novo;
 }

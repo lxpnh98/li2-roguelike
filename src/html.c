@@ -1,14 +1,15 @@
+#include <math.h>
+
 #include "cgi.h"
 #include "estado.h"
 #include "html.h"
 
-#define OFFSET_WIDTH            21
-#define OFFSET_HEIGHT           8
+#define OFFSET_WIDTH            20
+#define OFFSET_HEIGHT           10
 
 int calc_xoffset(int x, int y)
 {
-    if (y % 2) return x + OFFSET_WIDTH;
-    else       return x;
+    return OFFSET_WIDTH * y;
 }
 
 int calc_yoffset(int y)
@@ -20,9 +21,6 @@ void imprime_casa(ESTADO e, int x, int y)
 {
     int x_offset = calc_xoffset(x, y);
     int y_offset = calc_yoffset(y);
-    /* char *cor[] = {"#4d4d33", "#d6d6c2", "#11aa22"};
-    int idx = (tem_saida(e, x, y) ? 2 : (x + y) % 2);
-    QUADRADO(x, y,ESCALA, cor[idx]); */
     if (tem_saida(e, x, y))
         IMAGEM(x, y, x_offset, y_offset, ESCALA, "hexit.png");
     IMAGEM(x, y, x_offset, y_offset, ESCALA, "basic_hex.png");
@@ -36,6 +34,8 @@ void imprime_tabuleiro(ESTADO e)
             imprime_casa(e, x, y);
         }
     }
+
+    
 }
 
 void imprime_movimento(ESTADO e, int dx, int dy)
@@ -66,15 +66,8 @@ void imprime_movimentos(ESTADO e)
     imprime_movimento(e,  0, +1);
     imprime_movimento(e, -1,  0);
     imprime_movimento(e, +1,  0);
-
-    if (e.jog.y % 2) {
-        imprime_movimento(e, +1, -1);
-        imprime_movimento(e, +1, +1);
-    }
-    else {
-        imprime_movimento(e, -1, -1);
-        imprime_movimento(e, -1, +1);
-    }
+    imprime_movimento(e, -1, +1);
+    imprime_movimento(e, +1, -1);
 }
 
 void imprime_jogador(ESTADO e)
