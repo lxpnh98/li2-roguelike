@@ -9,12 +9,15 @@
 
 int main()
 {
-    /* srandom(time(NULL)); */
     FILE *file = fopen("/var/www/estado", "r+");
     ESTADO e;
+
     srand(time(NULL));
-    /* e = ler_estado(getenv("QUERY_STRING")); */
-    e = ler_estado(NULL);
+    e = ler_estado(file, getenv("QUERY_STRING"));
+    if (file != NULL) {
+        fputs(estado2str(e), file);
+    }
+
     COMECAR_HTML;
     ABRIR_SVG(600, 600);
     imprime_tabuleiro(e);

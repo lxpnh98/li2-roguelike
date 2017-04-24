@@ -64,7 +64,7 @@ int tem_saida(ESTADO e, int x, int y);
 
 int posicao_ocupada(ESTADO e, int x, int y);
 
-ESTADO ler_estado(FILE *file);
+ESTADO ler_estado(FILE *file, char query[]);
 
 ESTADO atualizar_estado(ESTADO e, int x, int y);
 

@@ -143,19 +143,23 @@ ESTADO inicializar() {
     return e;
 }
 
-ESTADO ler_estado(FILE *file)
+ESTADO ler_estado(FILE *file, char query[])
 {
     char *e;
     int tamanho;
 
     /* Se não existir ficheiro, criar estado aleatório. */
-    if(file == NULL)
+    if (file == NULL)
         return inicializar();
 
     /* Descubrir tamanho do ficheiro. */
     fseek(file, 0, SEEK_END);
     tamanho = ftell(file);
     rewind(file);
+
+    /* Se ficheiro existir mas for vazio, criar estado aleatório. */
+    if (tamanho == 0)
+        return inicializar();
 
     /* Alocar memória necessária, copiar conteúdos do ficheiro para a variável
      * e terminar o string. */
