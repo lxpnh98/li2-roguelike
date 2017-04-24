@@ -143,23 +143,41 @@ ESTADO inicializar() {
     return e;
 }
 
-ESTADO ler_estado(char *args)
+ESTADO ler_estado(FILE *file)
 {
-    if(strlen(args) == 0)
+    char *e;
+    int tamanho;
+
+    /* Se não existir ficheiro, criar estado aleatório. */
+    if(file == NULL)
         return inicializar();
-    return str2estado(args);
+
+    /* Descubrir tamanho do ficheiro. */
+    fseek(file, 0, SEEK_END);
+    tamanho = ftell(file);
+    rewind(file);
+
+    /* Alocar memória necessária, copiar conteúdos do ficheiro para a variável
+     * e terminar o string. */
+    e = (char *)malloc(sizeof(char) * (tamanho + 1));
+    tamanho = fread(e, sizeof(char), tamanho, file);
+    e[tamanho] = '\0';
+
+    /* Converter o string para estado e retornar. */
+    return str2estado(e);
 }
+
+int get_z(POSICAO p)
+{
+    return -(p.x + p.y);
+}
+
 
 int adjacente(POSICAO p1, POSICAO p2)
 {
     return (abs(p1.x - p2.x) < 2) &&
            (abs(p1.y - p2.y) < 2) &&
            (abs(get_z(p1) - get_z(p2)) < 2);
-}
-
-int get_z(POSICAO p)
-{
-    return -(p.x + p.y);
 }
 
 int colinear(POSICAO p1, POSICAO p2, POSICAO p3)
@@ -182,7 +200,9 @@ ESTADO atualizar_estado(ESTADO e, int x, int y)
     ESTADO novo;
     int i;
     int adj, lunge;
-    POSICAO nova_pos = {x, y};
+    POSICAO nova_pos;
+    nova_pos.x = x;
+    nova_pos.y = y;
     novo = e;
     for (i = 0; i < e.num_inimigos; i++) {
         adj = adjacente(e.inimigo[i], e.jog);
