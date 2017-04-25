@@ -66,6 +66,6 @@ int posicao_ocupada(ESTADO e, int x, int y);
 
 ESTADO ler_estado(FILE *file, char query[]);
 
-ESTADO atualizar_estado(ESTADO e, int x, int y);
+ESTADO atualizar_estado(ESTADO e, char query[]);
 
 #endif

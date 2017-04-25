@@ -9,12 +9,15 @@
 
 int main()
 {
-    FILE *file = fopen("/var/www/estado", "r+");
+    FILE *file = fopen("/var/www/estado", "r");
     ESTADO e;
-
+    char query[MAX_BUFFER];
+    sprintf(query, "%s", getenv("QUERY_STRING"));
     srand(time(NULL));
-    e = ler_estado(file, getenv("QUERY_STRING"));
+    e = ler_estado(file, query);
+    e = atualizar_estado(e, query);
     if (file != NULL) {
+        file = fopen("/var/www/estado", "w");
         fputs(estado2str(e), file);
     }
 

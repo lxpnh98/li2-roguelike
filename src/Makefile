@@ -4,6 +4,8 @@ FICHEIROS=../src/ ../images/ ../doc/
 install: main
 	sudo cp main /usr/lib/cgi-bin
 	sudo cp -r ../images/ /var/www/html/
+	touch /var/www/estado
+	chmod 777 /var/www/estado
 	touch install
 
 main: main.o estado.o html.o
@@ -19,7 +21,7 @@ doc:
 	touch doc
 
 clean:
-	rm -rf *.o main ../doc/Doxyfile ../doc/latex ../doc/html install doc
+	rm -rf *.o main ../doc/Doxyfile ../doc/latex ../doc/html install doc /var/www/estado
 
 estado.o: estado.c estado.h cgi.h
 html.o: html.c html.h cgi.h

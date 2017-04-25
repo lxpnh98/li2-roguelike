@@ -148,8 +148,9 @@ ESTADO ler_estado(FILE *file, char query[])
     char *e;
     int tamanho;
 
-    /* Se não existir ficheiro, criar estado aleatório. */
-    if (file == NULL)
+    /* Se não existir ficheiro ou o jogador entrar num novo nível, criar estado
+     * aleatório. */
+    if (file == NULL || query[0] == 'x')
         return inicializar();
 
     /* Descubrir tamanho do ficheiro. */
@@ -199,14 +200,40 @@ void eliminar_inimigo(ESTADO *e, int n)
     e->num_inimigos--;
 }
 
-ESTADO atualizar_estado(ESTADO e, int x, int y)
+ESTADO atualizar_estado(ESTADO e, char query[])
 {
     ESTADO novo;
     int i;
     int adj, lunge;
     POSICAO nova_pos;
-    nova_pos.x = x;
-    nova_pos.y = y;
+    nova_pos.x = e.jog.x;
+    nova_pos.y = e.jog.y;
+    switch (query[0]) {
+        case 'r':
+            nova_pos.x = e.jog.x + 1;
+            nova_pos.y = e.jog.y;
+            break;
+        case 'l':
+            nova_pos.x = e.jog.x - 1;
+            nova_pos.y = e.jog.y;
+            break;
+        case 'u':
+            nova_pos.x = e.jog.x;
+            nova_pos.y = e.jog.y - 1;
+            break;
+        case 'd':
+            nova_pos.x = e.jog.x;
+            nova_pos.y = e.jog.y + 1;
+            break;
+        case 'f':
+            nova_pos.x = e.jog.x + 1;
+            nova_pos.y = e.jog.y - 1;
+            break;
+        case 'b':
+            nova_pos.x = e.jog.x - 1;
+            nova_pos.y = e.jog.y + 1;
+            break;
+    }
     novo = e;
     for (i = 0; i < e.num_inimigos; i++) {
         adj = adjacente(e.inimigo[i], e.jog);

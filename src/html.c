@@ -38,23 +38,36 @@ void imprime_tabuleiro(ESTADO e)
     
 }
 
+char determinar_mov(int dx, int dy)
+{
+    int mov;
+    if      (dx ==  0 && dy == +1) mov = 'd';
+    else if (dx ==  0 && dy == -1) mov = 'u';
+    else if (dx == +1 && dy ==  0) mov = 'r';
+    else if (dx == -1 && dy ==  0) mov = 'l';
+    else if (dx == +1 && dy == -1) mov = 'f';
+    else                           mov = 'b';
+    return mov;
+}
+
 void imprime_movimento(ESTADO e, int dx, int dy)
 {
-    ESTADO novo;
-    int x = e.jog.x + dx;
-    int y = e.jog.y + dy;
+    char mov;
     char link[MAX_BUFFER];
+    int x, y;
+    x = e.jog.x + dx;
+    y = e.jog.y + dy;
 
     if (!posicao_valida(x, y) || posicao_ocupada(e, x, y)) return;
     if (tem_saida(e, x, y)) {
-        sprintf(link, "http://localhost/cgi-bin/main");
+        sprintf(link, "http://localhost/cgi-bin/main?x");
         ABRIR_LINK(link);
         imprime_casa(e, x, y);
         FECHAR_LINK;
         return;
     }
-    novo = atualizar_estado(e, x, y);
-    sprintf(link, "http://localhost/cgi-bin/main?%s", estado2str(novo));
+    mov = determinar_mov(dx, dy);
+    sprintf(link, "http://localhost/cgi-bin/main?%c", mov);
     ABRIR_LINK(link);
     imprime_casa(e, x, y);
     FECHAR_LINK;
