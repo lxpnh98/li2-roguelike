@@ -97,9 +97,9 @@ void imprime_inimigos(ESTADO e)
     int y_offset = 0;
     int i;
     for(i = 0; i < e.num_inimigos; i++) {
-        x_offset = calc_xoffset(e.inimigo[i].x, e.inimigo[i].y);
-        y_offset = calc_yoffset(e.inimigo[i].y);
-        IMAGEM(e.inimigo[i].x, e.inimigo[i].y, x_offset, y_offset, ESCALA, "ks01-ogre_mage2_02_hi.png");
+        x_offset = calc_xoffset(e.inimigo[i].pos.x, e.inimigo[i].pos.y);
+        y_offset = calc_yoffset(e.inimigo[i].pos.y);
+        IMAGEM(e.inimigo[i].pos.x, e.inimigo[i].pos.y, x_offset, y_offset, ESCALA, "ks01-ogre_mage2_02_hi.png");
     }
 }
 

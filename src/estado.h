@@ -18,6 +18,12 @@ Definição do estado e das funções que convertem estados em strings e vice-ve
 
 #define ESCALA            40
 
+/*
+enum TIPO_INIMIGO {
+	GUERREIRO;
+}
+*/
+
 /**
 \brief Estrutura que armazena uma posição
 */
@@ -25,6 +31,11 @@ typedef struct posicao {
 	char x;
 	char y;
 } POSICAO;
+
+typedef struct inimigo {
+	int tipo;
+	POSICAO pos;
+} INIMIGO;
 
 /**
 \brief Estrutura que armazena o estado do jogo
@@ -37,7 +48,7 @@ typedef struct estado {
 	/** \brief O nº de obstáculos */
 	char num_obstaculos;
 	/** \brief Array com a posição dos inimigos */
-	POSICAO inimigo[MAX_INIMIGOS];
+	INIMIGO inimigo[MAX_INIMIGOS];
 	/** \brief Array com a posição dos obstáculos */
 	POSICAO obstaculo[MAX_OBSTACULOS];
         /** \brief Saída do nível */

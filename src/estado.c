@@ -53,7 +53,7 @@ int tem_inimigo(ESTADO e, int x, int y)
 {
     int i;
     for (i = 0; i < e.num_inimigos; i++) {
-        if (posicao_igual(e.inimigo[i], x, y))
+        if (posicao_igual(e.inimigo[i].pos, x, y))
             return 1;
         }
     return 0;
@@ -87,8 +87,8 @@ ESTADO inicializar_inimigo(ESTADO e) {
         y = rand() % TAM;
     } while (posicao_ocupada(e, x, y) || tem_saida(e, x, y));
 
-    e.inimigo[(int)e.num_inimigos].x = x;
-    e.inimigo[(int)e.num_inimigos].y = y;
+    e.inimigo[(int)e.num_inimigos].pos.x = x;
+    e.inimigo[(int)e.num_inimigos].pos.y = y;
     e.num_inimigos++;
 
     return e;
@@ -172,11 +172,35 @@ ESTADO ler_estado(FILE *file, char query[])
     return str2estado(e);
 }
 
+void preencher(int m[TAM][TAM], ESTADO e, int x, int y, int dist)
+{
+    if (m[y][x] > dist && posicao_valida(x, y) && 
+        !tem_obstaculo(e, x, y) && !tem_inimigo(e, x, y)) {
+        m[y][x] = dist;
+        preencher(m, e, x + 1, y    , dist + 1);
+        preencher(m, e, x - 1, y    , dist + 1);
+        preencher(m, e, x    , y - 1, dist + 1);
+        preencher(m, e, x    , y + 1, dist + 1);
+        preencher(m, e, x + 1, y - 1, dist + 1);
+        preencher(m, e, x - 1, y + 1, dist + 1);
+    }
+}
+
+int *matriz_guerreiro(ESTADO e)
+{
+    int m[TAM][TAM];
+    int i, j;
+    for (i = 0; i < TAM; i++)
+        for (j = 0; j < TAM; j++)
+            m[i][j] = 999;
+    preencher(m, e, e.jog.x, e.jog.y, 0);
+    return m;
+}
+
 int get_z(POSICAO p)
 {
     return -(p.x + p.y);
 }
-
 
 int adjacente(POSICAO p1, POSICAO p2)
 {
@@ -198,6 +222,11 @@ void eliminar_inimigo(ESTADO *e, int n)
     for (i = n + 1; i <= e->num_inimigos; i++)
         e->inimigo[i - 1] = e->inimigo[i];
     e->num_inimigos--;
+}
+
+ESTADO mover_inimigo(ESTADO e, INIMIGO i)
+{
+    return e;
 }
 
 ESTADO atualizar_estado(ESTADO e, char query[])
@@ -236,15 +265,19 @@ ESTADO atualizar_estado(ESTADO e, char query[])
     }
     novo = e;
     for (i = 0; i < e.num_inimigos; i++) {
-        adj = adjacente(e.inimigo[i], e.jog);
-        lunge = colinear(e.inimigo[i], e.jog, nova_pos);
-        if (adjacente(e.inimigo[i], nova_pos) && (adj || lunge)) {
+        adj = adjacente(e.inimigo[i].pos, e.jog);
+        lunge = colinear(e.inimigo[i].pos, e.jog, nova_pos);
+        if (adjacente(e.inimigo[i].pos, nova_pos) && (adj || lunge)) {
             eliminar_inimigo(&e, i);
             i--;
         }
-        /* e.inimigo[i].x++; */
     }
+
     e.jog = nova_pos;
+
+    for (i = 0; i < e.num_inimigos; i++)
+        e = mover_inimigo(e, e.inimigo[i]);
+
     novo = e;
     return novo;
 }
