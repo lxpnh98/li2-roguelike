@@ -84,9 +84,9 @@ int posicao_ocupada(ESTADO e, int x, int y)
 void rand_pos(ESTADO e, int *x, int *y, int testar_saida)
 {
     do {
-        *x = rand() % TAM;
-        *y = rand() % TAM;
-    } while (posicao_ocupada(e, *x, *y) || (tem_saida(e, *x, *y) || !testar_saida));
+        *x = rand() % TAM - TAM / 2;
+        *y = rand() % TAM - TAM / 2;
+    } while (!posicao_valida(*x, *y) || posicao_ocupada(e, *x, *y) || (tem_saida(e, *x, *y) && testar_saida));
 }
 
 ESTADO inicializar_inimigo(ESTADO e) {
@@ -134,8 +134,8 @@ ESTADO inicializar() {
     rand_pos(e, &x, &y, 0);
     e.saida.x = x;
     e.saida.y = y;
-    e = inicializar_inimigos(e, 20);
-    e = inicializar_obstaculos(e, 20);
+    e = inicializar_inimigos(e, 10);
+    e = inicializar_obstaculos(e, 10);
     return e;
 }
 
@@ -269,7 +269,7 @@ ESTADO atualizar_estado(ESTADO e, char query[])
             nova_pos.y = e.jog.y + 1;
             break;
     }
-    novo = e;
+
     for (i = 0; i < e.num_inimigos; i++) {
         adj = adjacente(e.inimigo[i].pos, e.jog);
         lunge = colinear(e.inimigo[i].pos, e.jog, nova_pos);
