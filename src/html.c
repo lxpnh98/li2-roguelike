@@ -6,16 +6,17 @@
 
 #define OFFSET_WIDTH            20
 #define OFFSET_HEIGHT           10
-#define TAMCASA                 43
+
+#define TAM_CASA                45
 
 int calc_xoffset(int x, int y)
 {
-    return OFFSET_WIDTH * y + TAMCASA * TAM/2;
+    return OFFSET_WIDTH * y;
 }
 
 int calc_yoffset(int y)
 {
-    return - OFFSET_HEIGHT * y + TAMCASA * TAM/2;
+    return - OFFSET_HEIGHT * y;
 }
 
 void imprime_casa(ESTADO e, int x, int y)
@@ -30,14 +31,10 @@ void imprime_casa(ESTADO e, int x, int y)
 void imprime_tabuleiro(ESTADO e)
 {
     int x, y;
-    for(y = -4; y <= 4; y++) {
-        for(x = -4; x <= 4; x++) {
-            if ( posicao_valida(x,y) )
-            imprime_casa(e, x, y);
-        }
-    }
-
-    
+    for (y = 0; y < TAM; y++)
+        for (x = 0; x < TAM; x++)
+            if (posicao_valida(x, y))
+                imprime_casa(e, x, y);
 }
 
 char determinar_mov(int dx, int dy)
@@ -99,9 +96,9 @@ void imprime_inimigos(ESTADO e)
     int y_offset = 0;
     int i;
     for(i = 0; i < e.num_inimigos; i++) {
-        x_offset = calc_xoffset(e.inimigo[i].pos.x, e.inimigo[i].pos.y);
-        y_offset = calc_yoffset(e.inimigo[i].pos.y);
-        IMAGEM(e.inimigo[i].pos.x, e.inimigo[i].pos.y, x_offset, y_offset, ESCALA, "ks01-ogre_mage2_02_hi.png");
+        x_offset = calc_xoffset(e.inimigo[i].x, e.inimigo[i].y);
+        y_offset = calc_yoffset(e.inimigo[i].y);
+        IMAGEM(e.inimigo[i].x, e.inimigo[i].y, x_offset, y_offset, ESCALA, "ks01-ogre_mage2_02_hi.png");
     }
 }
 

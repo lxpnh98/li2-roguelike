@@ -14,7 +14,7 @@ char *estado2str(ESTADO e)
     buffer[0] = 0;
 
     for(i = 0; (unsigned int)i < sizeof(ESTADO); i++)
-        sprintf(buffer, "%s%02x", buffer, p[i]); 
+        sprintf(buffer, "%s%02x", buffer, p[i]);
     
     return buffer;
 }
@@ -34,11 +34,36 @@ ESTADO str2estado(char *argumentos)
     return e;
 }
 
+int max3(int a, int b, int c)
+{
+    int r;
+    if      (a >= b && a >= c)
+        r = a;
+    else if (b >= a && b >= c)
+        r = b;
+    else
+        r = c;
+    return r;
+}
+
 int posicao_valida(int x, int y)
 {
-    POSICAO pos = {x,y};
-    return max3(abs(x), abs(y), abs(get_z(pos))) <= TAM / 2;
+    POSICAO pos, center_pos;
+    pos.x = x;
+    pos.y = y;
+    center_pos.x = TAM / 2;
+    center_pos.y = TAM / 2;
+    return abs(x - TAM / 2) <= TAM / 2 &&
+           abs(y - TAM / 2) <= TAM / 2 &&
+           abs(get_z(pos) - get_z(center_pos)) <= TAM / 2;
+}
 
+void rand_pos(ESTADO e, int *x, int *y, int testar_saida)
+{
+    do {
+        *x = rand() % TAM;
+        *y = rand() % TAM;
+    } while (!posicao_valida(*x, *y) || posicao_ocupada(e, *x, *y) || (tem_saida(e, *x, *y) && testar_saida));
 }
 
 int posicao_igual(POSICAO p, int x, int y)
@@ -55,7 +80,7 @@ int tem_inimigo(ESTADO e, int x, int y)
 {
     int i;
     for (i = 0; i < e.num_inimigos; i++) {
-        if (posicao_igual(e.inimigo[i].pos, x, y))
+        if (posicao_igual(e.inimigo[i], x, y))
             return 1;
         }
     return 0;
@@ -81,19 +106,19 @@ int posicao_ocupada(ESTADO e, int x, int y)
     return tem_jogador(e, x, y) || tem_inimigo(e, x, y) || tem_obstaculo(e, x, y);
 }
 
-void rand_pos(ESTADO e, int *x, int *y, int testar_saida)
-{
-    do {
-        *x = rand() % TAM - TAM / 2;
-        *y = rand() % TAM - TAM / 2;
-    } while (!posicao_valida(*x, *y) || posicao_ocupada(e, *x, *y) || (tem_saida(e, *x, *y) && testar_saida));
-}
-
 ESTADO inicializar_inimigo(ESTADO e) {
     int x, y;
+
+    /*
+    do {
+        x = rand() % TAM;
+        y = rand() % TAM;
+    } while (posicao_ocupada(e, x, y) || tem_saida(e, x, y));
+    */
     rand_pos(e, &x, &y, 1);
-    e.inimigo[(int)e.num_inimigos].pos.x = x;
-    e.inimigo[(int)e.num_inimigos].pos.y = y;
+
+    e.inimigo[(int)e.num_inimigos].x = x;
+    e.inimigo[(int)e.num_inimigos].y = y;
     e.num_inimigos++;
 
     return e;
@@ -108,7 +133,15 @@ ESTADO inicializar_inimigos(ESTADO e, int num) {
 
 ESTADO inicializar_obstaculo(ESTADO e) {
     int x, y;
+
+    /*
+    do {
+        x = rand() % TAM;
+        y = rand() % TAM;
+    } while(posicao_ocupada(e, x, y) || tem_saida(e, x, y));
+    */
     rand_pos(e, &x, &y, 1);
+
     e.obstaculo[(int)e.num_obstaculos].x = x;
     e.obstaculo[(int)e.num_obstaculos].y = y;
     e.num_obstaculos++;
@@ -126,11 +159,21 @@ ESTADO inicializar_obstaculos(ESTADO e, int num) {
 ESTADO inicializar() {
     int x, y;
     ESTADO e = {{0,0},0,0,{{0}},{{0}},{0,0}};
-    
+    /*
+    do {
+        x = rand() % TAM;
+        y = rand() % TAM;
+    } while (posicao_ocupada(e, x, y));
+    */
     rand_pos(e, &x, &y, 0);
     e.jog.x = x;
     e.jog.y = y;
-    
+    /*
+    do {
+        x = rand() % TAM;
+        y = rand() % TAM;
+    } while (posicao_ocupada(e, x, y));
+    */
     rand_pos(e, &x, &y, 0);
     e.saida.x = x;
     e.saida.y = y;
@@ -168,45 +211,11 @@ ESTADO ler_estado(FILE *file, char query[])
     return str2estado(e);
 }
 
-void preencher(int m[TAM][TAM], ESTADO e, int x, int y, int dist)
-{
-    if (m[y][x] > dist && posicao_valida(x, y) && 
-        !tem_obstaculo(e, x, y) && !tem_inimigo(e, x, y)) {
-        m[y][x] = dist;
-        preencher(m, e, x + 1, y    , dist + 1);
-        preencher(m, e, x - 1, y    , dist + 1);
-        preencher(m, e, x    , y - 1, dist + 1);
-        preencher(m, e, x    , y + 1, dist + 1);
-        preencher(m, e, x + 1, y - 1, dist + 1);
-        preencher(m, e, x - 1, y + 1, dist + 1);
-    }
-}
-
-int *matriz_guerreiro(ESTADO e)
-{
-    int m[TAM][TAM];
-    int i, j;
-    for (i = 0; i < TAM; i++)
-        for (j = 0; j < TAM; j++)
-            m[i][j] = 999;
-    preencher(m, e, e.jog.x, e.jog.y, 0);
-    return m;
-}
-
 int get_z(POSICAO p)
 {
     return -(p.x + p.y);
 }
 
-int max3(int a, int b, int c) {
-    int r;
-    if(a >= b && a >= c) r = a;
-    else {
-        if (b >= a && b >= c) r = b;
-        else r = c;
-    } 
-    return r;
-}
 
 int adjacente(POSICAO p1, POSICAO p2)
 {
@@ -228,11 +237,6 @@ void eliminar_inimigo(ESTADO *e, int n)
     for (i = n + 1; i <= e->num_inimigos; i++)
         e->inimigo[i - 1] = e->inimigo[i];
     e->num_inimigos--;
-}
-
-ESTADO mover_inimigo(ESTADO e, INIMIGO i)
-{
-    return e;
 }
 
 ESTADO atualizar_estado(ESTADO e, char query[])
@@ -269,21 +273,17 @@ ESTADO atualizar_estado(ESTADO e, char query[])
             nova_pos.y = e.jog.y + 1;
             break;
     }
-
+    novo = e;
     for (i = 0; i < e.num_inimigos; i++) {
-        adj = adjacente(e.inimigo[i].pos, e.jog);
-        lunge = colinear(e.inimigo[i].pos, e.jog, nova_pos);
-        if (adjacente(e.inimigo[i].pos, nova_pos) && (adj || lunge)) {
+        adj = adjacente(e.inimigo[i], e.jog);
+        lunge = colinear(e.inimigo[i], e.jog, nova_pos);
+        if (adjacente(e.inimigo[i], nova_pos) && (adj || lunge)) {
             eliminar_inimigo(&e, i);
             i--;
         }
+        /* e.inimigo[i].x++; */
     }
-
     e.jog = nova_pos;
-
-    for (i = 0; i < e.num_inimigos; i++)
-        e = mover_inimigo(e, e.inimigo[i]);
-
     novo = e;
     return novo;
 }
