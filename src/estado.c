@@ -14,7 +14,7 @@ char *estado2str(ESTADO e)
     buffer[0] = 0;
 
     for(i = 0; (unsigned int)i < sizeof(ESTADO); i++)
-        sprintf(buffer, "%s%02x", buffer, p[i]);
+        sprintf(buffer, "%s%02x", buffer, p[i]); 
     
     return buffer;
 }
@@ -36,7 +36,9 @@ ESTADO str2estado(char *argumentos)
 
 int posicao_valida(int x, int y)
 {
-    return x >= 0 && y >= 0 && x < TAM && y < TAM;
+    POSICAO pos = {x,y};
+    return max3(abs(x),abs(y),abs(get_z(pos))) <= TAM/2;
+
 }
 
 int posicao_igual(POSICAO p, int x, int y)
@@ -200,6 +202,16 @@ int *matriz_guerreiro(ESTADO e)
 int get_z(POSICAO p)
 {
     return -(p.x + p.y);
+}
+
+int max3(int a, int b, int c) {
+    int r;
+    if(a >= b && a >= c) r = a;
+    else {
+        if (b >= a && b >= c) r = b;
+        else r = c;
+    } 
+    return r;
 }
 
 int adjacente(POSICAO p1, POSICAO p2)

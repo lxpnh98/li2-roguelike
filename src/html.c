@@ -6,15 +6,16 @@
 
 #define OFFSET_WIDTH            20
 #define OFFSET_HEIGHT           10
+#define TAMCASA                 43
 
 int calc_xoffset(int x, int y)
 {
-    return OFFSET_WIDTH * y;
+    return OFFSET_WIDTH * y + TAMCASA * TAM/2;
 }
 
 int calc_yoffset(int y)
 {
-    return - OFFSET_HEIGHT * y;
+    return - OFFSET_HEIGHT * y + TAMCASA * TAM/2;
 }
 
 void imprime_casa(ESTADO e, int x, int y)
@@ -29,8 +30,9 @@ void imprime_casa(ESTADO e, int x, int y)
 void imprime_tabuleiro(ESTADO e)
 {
     int x, y;
-    for(y = 0; y < 10; y++) {
-        for(x = 0; x < 10; x++) {
+    for(y = -4; y <= 4; y++) {
+        for(x = -4; x <= 4; x++) {
+            if ( posicao_valida(x,y) )
             imprime_casa(e, x, y);
         }
     }
