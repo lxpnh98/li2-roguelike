@@ -21,6 +21,9 @@ doc:
 	touch doc
 
 clean:
+	rm -rf *.o main ../doc/Doxyfile ../doc/latex ../doc/html install doc
+
+clean-all:
 	rm -rf *.o main ../doc/Doxyfile ../doc/latex ../doc/html install doc /var/www/estado
 
 estado.o: estado.c estado.h cgi.h

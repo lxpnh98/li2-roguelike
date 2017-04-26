@@ -79,13 +79,18 @@ int posicao_ocupada(ESTADO e, int x, int y)
     return tem_jogador(e, x, y) || tem_inimigo(e, x, y) || tem_obstaculo(e, x, y);
 }
 
+void rand_pos(ESTADO e, int *x, int *y, int testar_saida)
+{
+    do {
+        *x = rand() % TAM;
+        *y = rand() % TAM;
+    } while (posicao_ocupada(e, *x, *y) || (tem_saida(e, *x, *y) || !testar_saida));
+}
+
 ESTADO inicializar_inimigo(ESTADO e) {
     int x, y;
 
-    do {
-        x = rand() % TAM;
-        y = rand() % TAM;
-    } while (posicao_ocupada(e, x, y) || tem_saida(e, x, y));
+    rand_pos(e, &x, &y, 1);
 
     e.inimigo[(int)e.num_inimigos].x = x;
     e.inimigo[(int)e.num_inimigos].y = y;
@@ -103,11 +108,7 @@ ESTADO inicializar_inimigos(ESTADO e, int num) {
 
 ESTADO inicializar_obstaculo(ESTADO e) {
     int x, y;
-
-    do {
-        x = rand() % TAM;
-        y = rand() % TAM;
-    } while(posicao_ocupada(e, x, y) || tem_saida(e, x, y));
+    rand_pos(e, &x, &y, 1);
 
     e.obstaculo[(int)e.num_obstaculos].x = x;
     e.obstaculo[(int)e.num_obstaculos].y = y;
@@ -126,16 +127,12 @@ ESTADO inicializar_obstaculos(ESTADO e, int num) {
 ESTADO inicializar() {
     int x, y;
     ESTADO e = {{0,0},0,0,{{0}},{{0}},{0,0}};
-    do {
-        x = rand() % TAM;
-        y = rand() % TAM;
-    } while (posicao_ocupada(e, x, y));
+    
+    rand_pos(e, &x, &y, 0);
     e.jog.x = x;
     e.jog.y = y;
-    do {
-        x = rand() % TAM;
-        y = rand() % TAM;
-    } while (posicao_ocupada(e, x, y));
+    
+    rand_pos(e, &x, &y, 0);
     e.saida.x = x;
     e.saida.y = y;
     e = inicializar_inimigos(e, 20);
