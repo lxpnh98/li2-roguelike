@@ -21,7 +21,10 @@ doc:
 	touch doc
 
 clean:
-	sudo rm -rf *.o main ../doc/Doxyfile ../doc/latex ../doc/html install doc /var/www/estado
+	rm -rf *.o main ../doc/Doxyfile ../doc/latex ../doc/html install doc
+
+clean-all:
+	rm -rf *.o main ../doc/Doxyfile ../doc/latex ../doc/html install doc /var/www/estado
 
 estado.o: estado.c estado.h cgi.h
 html.o: html.c html.h cgi.h
