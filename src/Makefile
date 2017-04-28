@@ -8,8 +8,8 @@ install: main
 	chmod 777 /var/www/estado
 	touch install
 
-main: main.o estado.o html.o
-	cc -o main main.o estado.o html.o
+main: main.o estado.o html.o aux.o
+	cc -o main main.o estado.o html.o aux.o
 
 zip: $(FICHEIROS)
 	zip -r -9 main.zip $(FICHEIROS)
@@ -23,7 +23,7 @@ doc:
 clean:
 	rm -rf *.o main ../doc/Doxyfile ../doc/latex ../doc/html install doc /var/www/estado
 
-estado.o: estado.c estado.h cgi.h
+estado.o: estado.c estado.h aux.h cgi.h
 html.o: html.c html.h cgi.h
 main.o: main.c cgi.h
 

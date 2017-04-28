@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #ifndef ___ESTADO_H___
 #define ___ESTADO_H___
 
