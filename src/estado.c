@@ -225,15 +225,13 @@ void preencher(int m[TAM][TAM], ESTADO e, int x, int y, int dist)
     }
 }
 
-int *matriz_guerreiro(ESTADO e)
+void *matriz_guerreiro(ESTADO e, int m[TAM][TAM])
 {
-    int m[TAM][TAM];
     int i, j;
     for (i = 0; i < TAM; i++)
         for (j = 0; j < TAM; j++)
             m[i][j] = 999;
     preencher(m, e, e.jog.x, e.jog.y, 0);
-    return m;
 }
 
 int get_z(POSICAO p)
