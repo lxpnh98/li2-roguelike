@@ -211,6 +211,31 @@ ESTADO ler_estado(FILE *file, char query[])
     return str2estado(e);
 }
 
+void preencher(int m[TAM][TAM], ESTADO e, int x, int y, int dist)
+{
+    if (m[y][x] > dist && posicao_valida(x, y) && 
+        !tem_obstaculo(e, x, y) && !tem_inimigo(e, x, y)) {
+        m[y][x] = dist;
+        preencher(m, e, x + 1, y    , dist + 1);
+        preencher(m, e, x - 1, y    , dist + 1);
+        preencher(m, e, x    , y - 1, dist + 1);
+        preencher(m, e, x    , y + 1, dist + 1);
+        preencher(m, e, x + 1, y - 1, dist + 1);
+        preencher(m, e, x - 1, y + 1, dist + 1);
+    }
+}
+
+int *matriz_guerreiro(ESTADO e)
+{
+    int m[TAM][TAM];
+    int i, j;
+    for (i = 0; i < TAM; i++)
+        for (j = 0; j < TAM; j++)
+            m[i][j] = 999;
+    preencher(m, e, e.jog.x, e.jog.y, 0);
+    return m;
+}
+
 int get_z(POSICAO p)
 {
     return -(p.x + p.y);
