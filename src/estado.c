@@ -39,8 +39,9 @@ ESTADO inicializar_inimigo(ESTADO e) {
     int x, y;
 
     rand_pos(e, &x, &y, 1);
-    e.inimigo[(int)e.num_inimigos].x = x;
-    e.inimigo[(int)e.num_inimigos].y = y;
+    e.inimigo[(int)e.num_inimigos].tipo = GUERREIRO;
+    e.inimigo[(int)e.num_inimigos].pos.x = x;
+    e.inimigo[(int)e.num_inimigos].pos.y = y;
     e.num_inimigos++;
 
     return e;
@@ -137,6 +138,25 @@ void matriz_guerreiro(ESTADO e, int m[TAM][TAM])
     preencher(m, e, e.jog.x, e.jog.y, 0);
 }
 
+void mover_inimigo(ESTADO *e, int n, int m_guerreiro[TAM][TAM])
+{
+    int i, j;
+    INIMIGO *inimigo = &(e->inimigo[n]);
+    switch (inimigo->tipo) {
+        case GUERREIRO:
+            for (i = inimigo->pos.x - 1; i <= inimigo->pos.x + 1; i++)
+                for (j = inimigo->pos.y - 1; j <= inimigo->pos.y + 1; j++)
+                    if (posicao_valida(i, j) &&
+                        !posicao_ocupada(*e, i, j) &&
+                        movimento_valido(inimigo->pos.x - i, inimigo->pos.y - j) &&
+                        m_guerreiro[j][i] < m_guerreiro[inimigo->pos.y][inimigo->pos.x]) {
+                        inimigo->pos.x = i;
+                        inimigo->pos.y = j;
+                    }
+            break;
+    }
+}
+
 void eliminar_inimigo(ESTADO *e, int n)
 {
     int i;
@@ -150,6 +170,7 @@ ESTADO atualizar_estado(ESTADO e, char query[])
     ESTADO novo;
     int i;
     int adj, lunge;
+    int m_guerreiro[TAM][TAM];
     POSICAO nova_pos;
     nova_pos.x = e.jog.x;
     nova_pos.y = e.jog.y;
@@ -181,15 +202,21 @@ ESTADO atualizar_estado(ESTADO e, char query[])
     }
     novo = e;
     for (i = 0; i < e.num_inimigos; i++) {
-        adj = adjacente(e.inimigo[i], e.jog);
-        lunge = colinear(e.inimigo[i], e.jog, nova_pos);
-        if (adjacente(e.inimigo[i], nova_pos) && (adj || lunge)) {
+        adj = adjacente(e.inimigo[i].pos, e.jog);
+        lunge = colinear(e.inimigo[i].pos, e.jog, nova_pos);
+        if (adjacente(e.inimigo[i].pos, nova_pos) && (adj || lunge)) {
             eliminar_inimigo(&e, i);
             i--;
         }
-        /* Mover inimigos aqui */
     }
     e.jog = nova_pos;
+
+    /* Mover inimigos aqui */
+    matriz_guerreiro(e, m_guerreiro);
+    for (i = 0; i < e.num_inimigos; i++) {
+        mover_inimigo(&e, i, m_guerreiro);
+    }
+
     novo = e;
     return novo;
 }

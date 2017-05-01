@@ -9,7 +9,7 @@
 
 #define TAM_CASA                45
 
-int calc_xoffset(int x, int y)
+int calc_xoffset(int y)
 {
     return OFFSET_WIDTH * y;
 }
@@ -21,7 +21,7 @@ int calc_yoffset(int y)
 
 void imprime_casa(ESTADO e, int x, int y)
 {
-    int x_offset = calc_xoffset(x, y);
+    int x_offset = calc_xoffset(y);
     int y_offset = calc_yoffset(y);
     if (tem_saida(e, x, y))
         IMAGEM(x, y, x_offset, y_offset, ESCALA, "hexit.png");
@@ -84,7 +84,7 @@ void imprime_movimentos(ESTADO e)
 
 void imprime_jogador(ESTADO e)
 {
-    int x_offset = calc_xoffset(e.jog.x, e.jog.y);
+    int x_offset = calc_xoffset(e.jog.y);
     int y_offset = calc_yoffset(e.jog.y);
     IMAGEM(e.jog.x, e.jog.y, x_offset, y_offset, ESCALA, "DwellerN_03.png");
     imprime_movimentos(e);
@@ -96,9 +96,9 @@ void imprime_inimigos(ESTADO e)
     int y_offset = 0;
     int i;
     for(i = 0; i < e.num_inimigos; i++) {
-        x_offset = calc_xoffset(e.inimigo[i].x, e.inimigo[i].y);
-        y_offset = calc_yoffset(e.inimigo[i].y);
-        IMAGEM(e.inimigo[i].x, e.inimigo[i].y, x_offset, y_offset, ESCALA, "ks01-ogre_mage2_02_hi.png");
+        x_offset = calc_xoffset(e.inimigo[i].pos.y);
+        y_offset = calc_yoffset(e.inimigo[i].pos.y);
+        IMAGEM(e.inimigo[i].pos.x, e.inimigo[i].pos.y, x_offset, y_offset, ESCALA, "ks01-ogre_mage2_02_hi.png");
     }
 }
 
@@ -108,7 +108,7 @@ void imprime_obstaculos(ESTADO e)
     int y_offset = 0;
     int i;
     for(i = 0; i < e.num_obstaculos; i++) {
-        x_offset = calc_xoffset(e.obstaculo[i].x, e.obstaculo[i].y);
+        x_offset = calc_xoffset(e.obstaculo[i].y);
         y_offset = calc_yoffset(e.obstaculo[i].y);
         IMAGEM(e.obstaculo[i].x, e.obstaculo[i].y, x_offset, y_offset, ESCALA, "lava_pool1.png");
     }

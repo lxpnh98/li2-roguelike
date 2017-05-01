@@ -20,6 +20,16 @@ int posicao_valida(int x, int y)
            abs(get_z(pos) - get_z(center_pos)) <= TAM / 2;
 }
 
+int movimento_valido(int dx, int dy)
+{
+    POSICAO p;
+    p.x = dx; 
+    p.y = dy; 
+    return abs(dx)            < 2 &&
+           abs(dy)            < 2 &&
+           abs(get_z(p)) < 2;
+}
+
 void rand_pos(ESTADO e, int *x, int *y, int testar_saida)
 {
     do {
@@ -42,7 +52,7 @@ int tem_inimigo(ESTADO e, int x, int y)
 {
     int i;
     for (i = 0; i < e.num_inimigos; i++) {
-        if (posicao_igual(e.inimigo[i], x, y))
+        if (posicao_igual(e.inimigo[i].pos, x, y))
             return 1;
         }
     return 0;

@@ -1,5 +1,7 @@
 int posicao_valida(int x, int y);
 
+int movimento_valido(int dx, int dy);
+
 void rand_pos(ESTADO e, int *x, int *y, int testar_saida);
 
 int posicao_igual(POSICAO p, int x, int y);
