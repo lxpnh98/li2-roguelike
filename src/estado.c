@@ -78,6 +78,7 @@ ESTADO inicializar() {
     rand_pos(e, &x, &y, 0);
     e.jog.x = x;
     e.jog.y = y;
+    e.vidas = 5;
     rand_pos(e, &x, &y, 0);
     e.saida.x = x;
     e.saida.y = y;
@@ -157,6 +158,20 @@ void mover_inimigo(ESTADO *e, int n, int m_guerreiro[TAM][TAM])
     }
 }
 
+void matar_jogador(ESTADO *e, ESTADO antigo)
+{
+    int i;
+    for (i = 0; i < e->num_inimigos; i++) {
+        switch (e->inimigo[i].tipo) {
+            case GUERREIRO:
+                if (adjacente(e->jog, antigo.inimigo[i].pos))
+                    e->vidas--;
+        }
+    }
+    if (e->vidas < 0)
+        e->vidas = 0;
+}
+
 void eliminar_inimigo(ESTADO *e, int n)
 {
     int i;
@@ -167,7 +182,7 @@ void eliminar_inimigo(ESTADO *e, int n)
 
 ESTADO atualizar_estado(ESTADO e, char query[])
 {
-    ESTADO novo;
+    ESTADO antigo;
     int i;
     int adj, lunge;
     int m_guerreiro[TAM][TAM];
@@ -200,12 +215,12 @@ ESTADO atualizar_estado(ESTADO e, char query[])
             nova_pos.y = e.jog.y + 1;
             break;
     }
-    novo = e;
     for (i = 0; i < e.num_inimigos; i++) {
         adj = adjacente(e.inimigo[i].pos, e.jog);
         lunge = colinear(e.inimigo[i].pos, e.jog, nova_pos);
         if (adjacente(e.inimigo[i].pos, nova_pos) && (adj || lunge)) {
             eliminar_inimigo(&e, i);
+            eliminar_inimigo(&antigo, i);
             i--;
         }
     }
@@ -217,7 +232,8 @@ ESTADO atualizar_estado(ESTADO e, char query[])
         mover_inimigo(&e, i, m_guerreiro);
     }
 
-    novo = e;
-    return novo;
+    matar_jogador(&e, antigo);
+
+    return e;
 }
 

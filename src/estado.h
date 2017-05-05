@@ -39,6 +39,8 @@ typedef struct inimigo {
 typedef struct estado {
 	/** \brief A posição do jogador */
 	POSICAO jog;
+	/** \brief O nº de vidas do jogador */
+        int vidas;
 	/** \brief O nº de inimigos */
 	char num_inimigos;
 	/** \brief O nº de obstáculos */

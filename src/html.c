@@ -54,22 +54,23 @@ void imprime_movimento(ESTADO e, int dx, int dy)
     char mov;
     char link[MAX_BUFFER];
     int x, y;
-    x = e.jog.x + dx;
-    y = e.jog.y + dy;
-
-    if (!posicao_valida(x, y) || posicao_ocupada(e, x, y)) return;
-    if (tem_saida(e, x, y)) {
-        sprintf(link, "http://localhost/cgi-bin/main?x");
+    if (e.vidas > 0) {
+        x = e.jog.x + dx;
+        y = e.jog.y + dy;
+        if (!posicao_valida(x, y) || posicao_ocupada(e, x, y)) return;
+        if (tem_saida(e, x, y)) {
+            sprintf(link, "http://localhost/cgi-bin/main?x");
+            ABRIR_LINK(link);
+            imprime_casa(e, x, y);
+            FECHAR_LINK;
+            return;
+        }
+        mov = determinar_mov(dx, dy);
+        sprintf(link, "http://localhost/cgi-bin/main?%c", mov);
         ABRIR_LINK(link);
         imprime_casa(e, x, y);
         FECHAR_LINK;
-        return;
     }
-    mov = determinar_mov(dx, dy);
-    sprintf(link, "http://localhost/cgi-bin/main?%c", mov);
-    ABRIR_LINK(link);
-    imprime_casa(e, x, y);
-    FECHAR_LINK;
 }
 
 void imprime_movimentos(ESTADO e)
@@ -86,8 +87,10 @@ void imprime_jogador(ESTADO e)
 {
     int x_offset = calc_xoffset(e.jog.y);
     int y_offset = calc_yoffset(e.jog.y);
-    IMAGEM(e.jog.x, e.jog.y, x_offset, y_offset, ESCALA, "DwellerN_03.png");
-    imprime_movimentos(e);
+    if (e.vidas > 0) {
+        IMAGEM(e.jog.x, e.jog.y, x_offset, y_offset, ESCALA, "DwellerN_03.png");
+        imprime_movimentos(e);
+    }
 }
 
 void imprime_inimigos(ESTADO e)
