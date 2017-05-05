@@ -37,7 +37,6 @@ ESTADO str2estado(char *argumentos)
 
 ESTADO inicializar_inimigo(ESTADO e) {
     int x, y;
-
     rand_pos(e, &x, &y, 1);
     e.inimigo[(int)e.num_inimigos].tipo = GUERREIRO;
     e.inimigo[(int)e.num_inimigos].pos.x = x;
@@ -56,7 +55,6 @@ ESTADO inicializar_inimigos(ESTADO e, int num) {
 
 ESTADO inicializar_obstaculo(ESTADO e) {
     int x, y;
-
     rand_pos(e, &x, &y, 1);
     e.obstaculo[(int)e.num_obstaculos].x = x;
     e.obstaculo[(int)e.num_obstaculos].y = y;
@@ -74,7 +72,7 @@ ESTADO inicializar_obstaculos(ESTADO e, int num) {
 
 ESTADO inicializar() {
     int x, y;
-    ESTADO e = {{0,0},0,0,{{0}},{{0}},{0,0}};
+    ESTADO e = {{0,0},0,0,0,{{0}},{{0}},{0,0}};
     rand_pos(e, &x, &y, 0);
     e.jog.x = x;
     e.jog.y = y;
@@ -143,16 +141,19 @@ void mover_guerreiro(ESTADO *e, int n, int m_guerreiro[TAM][TAM])
 {
     int i, j;
     INIMIGO *inimigo = &(e->inimigo[n]);
-    int nx = inimigo->pos.x; int ny = inimigo->pos.y;
-    for (i = inimigo->pos.x - 1; i <= inimigo->pos.x + 1; i++)
-        for (j = inimigo->pos.y - 1; j <= inimigo->pos.y + 1; j++)
-            if (posicao_valida(i, j) &&
-                !posicao_ocupada(*e, i, j) &&
-                movimento_valido(inimigo->pos.x - i, inimigo->pos.y - j) &&
-                m_guerreiro[j][i] < m_guerreiro[ny][nx]) {
-                nx = i;
-                ny = j;                    
+    int nx = inimigo->pos.x;
+    int ny = inimigo->pos.y;
+    if (!adjacente(inimigo->pos, e->jog)) {
+        for (i = inimigo->pos.x - 1; i <= inimigo->pos.x + 1; i++)
+            for (j = inimigo->pos.y - 1; j <= inimigo->pos.y + 1; j++)
+                if (posicao_valida(i, j) &&
+                    !posicao_ocupada(*e, i, j) &&
+                    movimento_valido(inimigo->pos.x - i, inimigo->pos.y - j) &&
+                    m_guerreiro[j][i] < m_guerreiro[ny][nx]) {
+                    nx = i;
+                    ny = j;                    
                 }
+    }
     inimigo->pos.x = nx;
     inimigo->pos.y = ny;
 }
@@ -161,7 +162,8 @@ void mover_corredor(ESTADO *e, int n, int m_guerreiro[TAM][TAM])
 {
     int i, j;
     INIMIGO *inimigo = &(e->inimigo[n]);
-    int nx = inimigo->pos.x; int ny = inimigo->pos.y;
+    int nx = inimigo->pos.x;
+    int ny = inimigo->pos.y;
     for (i = inimigo->pos.x - 1; i <= inimigo->pos.x + 1; i++)
         for (j = inimigo->pos.y - 1; j <= inimigo->pos.y + 1; j++)
             if (posicao_valida(i, j) &&
@@ -170,7 +172,7 @@ void mover_corredor(ESTADO *e, int n, int m_guerreiro[TAM][TAM])
                 m_guerreiro[j][i] < m_guerreiro[ny][nx]) {
                 nx = i;
                 ny = j;                    
-                }
+            }
     inimigo->pos.x = nx;
     inimigo->pos.y = ny;
 }
@@ -182,7 +184,6 @@ void mover_inimigo(ESTADO *e, int n, int m_guerreiro[TAM][TAM])
         case GUERREIRO:
             mover_guerreiro(e, n, m_guerreiro);
             break;
-
         case CORREDOR:
             mover_corredor(e, n, m_guerreiro);
             break;
@@ -195,8 +196,15 @@ void matar_jogador(ESTADO *e, ESTADO antigo)
     for (i = 0; i < e->num_inimigos; i++) {
         switch (e->inimigo[i].tipo) {
             case GUERREIRO:
-                if (adjacente(e->jog, antigo.inimigo[i].pos))
+                if (posicao_igual(e->inimigo[i].pos, antigo.inimigo[i].pos.x, antigo.inimigo[i].pos.y) &&
+                    adjacente(e->jog, e->inimigo[i].pos))
                     e->vidas--;
+                break;
+            case CORREDOR:
+                if (colinear(e->inimigo[i].pos, antigo.inimigo[i].pos, e->jog) &&
+                    adjacente(e->jog, e->inimigo[i].pos))
+                    e->vidas--;
+                break;
         }
     }
     if (e->vidas < 0)
@@ -213,7 +221,7 @@ void eliminar_inimigo(ESTADO *e, int n)
 
 ESTADO atualizar_estado(ESTADO e, char query[])
 {
-    ESTADO antigo;
+    ESTADO antigo = e;
     int i;
     int adj, lunge;
     int m_guerreiro[TAM][TAM];

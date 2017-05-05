@@ -25,8 +25,8 @@ int movimento_valido(int dx, int dy)
     POSICAO p;
     p.x = dx; 
     p.y = dy; 
-    return abs(dx)            < 2 &&
-           abs(dy)            < 2 &&
+    return abs(dx)       < 2 &&
+           abs(dy)       < 2 &&
            abs(get_z(p)) < 2;
 }
 
