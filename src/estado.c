@@ -4,7 +4,7 @@
 #include <math.h>
 
 #include "estado.h"
-#include "aux.h"
+#include "calc.h"
 
 char *estado2str(ESTADO e)
 {
@@ -36,11 +36,10 @@ ESTADO str2estado(char *argumentos)
 }
 
 ESTADO inicializar_inimigo(ESTADO e) {
-    int x, y;
-    rand_pos(e, &x, &y, 1);
+    POSICAO p;
+    rand_pos(e, &p, 1);
     e.inimigo[(int)e.num_inimigos].tipo = GUERREIRO;
-    e.inimigo[(int)e.num_inimigos].pos.x = x;
-    e.inimigo[(int)e.num_inimigos].pos.y = y;
+    e.inimigo[(int)e.num_inimigos].pos = p;
     e.num_inimigos++;
 
     return e;
@@ -54,10 +53,9 @@ ESTADO inicializar_inimigos(ESTADO e, int num) {
 }
 
 ESTADO inicializar_obstaculo(ESTADO e) {
-    int x, y;
-    rand_pos(e, &x, &y, 1);
-    e.obstaculo[(int)e.num_obstaculos].x = x;
-    e.obstaculo[(int)e.num_obstaculos].y = y;
+    POSICAO p;
+    rand_pos(e, &p, 1);
+    e.obstaculo[(int)e.num_obstaculos] = p;
     e.num_obstaculos++;
 
     return e;
@@ -71,15 +69,13 @@ ESTADO inicializar_obstaculos(ESTADO e, int num) {
 }
 
 ESTADO inicializar() {
-    int x, y;
+    POSICAO p;
     ESTADO e = {{0,0},0,0,0,{{0}},{{0}},{0,0}};
-    rand_pos(e, &x, &y, 0);
-    e.jog.x = x;
-    e.jog.y = y;
+    rand_pos(e, &p, 0);
+    e.jog = p;
     e.vidas = 5;
-    rand_pos(e, &x, &y, 0);
-    e.saida.x = x;
-    e.saida.y = y;
+    rand_pos(e, &p, 0);
+    e.saida = p;
     e = inicializar_inimigos(e, 10);
     e = inicializar_obstaculos(e, 10);
     return e;
@@ -116,8 +112,11 @@ ESTADO ler_estado(FILE *file, char query[])
 
 void preencher(int m[TAM][TAM], ESTADO e, int x, int y, int dist)
 {
-    if (m[y][x] > dist && posicao_valida(x, y) && 
-        !tem_obstaculo(e, x, y) && !tem_inimigo(e, x, y)) {
+    POSICAO p;
+    p.x = x;
+    p.y = y;
+    if (m[y][x] > dist && posicao_valida(p) && 
+        !tem_obstaculo(e, p) && !tem_inimigo(e, p)) {
         m[y][x] = dist;
         preencher(m, e, x + 1, y    , dist + 1);
         preencher(m, e, x - 1, y    , dist + 1);
@@ -143,16 +142,20 @@ void mover_guerreiro(ESTADO *e, int n, int m_guerreiro[TAM][TAM])
     INIMIGO *inimigo = &(e->inimigo[n]);
     int nx = inimigo->pos.x;
     int ny = inimigo->pos.y;
+    POSICAO p;
     if (!adjacente(inimigo->pos, e->jog)) {
         for (i = inimigo->pos.x - 1; i <= inimigo->pos.x + 1; i++)
-            for (j = inimigo->pos.y - 1; j <= inimigo->pos.y + 1; j++)
-                if (posicao_valida(i, j) &&
-                    !posicao_ocupada(*e, i, j) &&
+            for (j = inimigo->pos.y - 1; j <= inimigo->pos.y + 1; j++) {
+                p.x = i;
+                p.y = j;
+                if (posicao_valida(p) &&
+                    !posicao_ocupada(*e, p) &&
                     movimento_valido(inimigo->pos.x - i, inimigo->pos.y - j) &&
                     m_guerreiro[j][i] < m_guerreiro[ny][nx]) {
                     nx = i;
                     ny = j;                    
                 }
+            }
     }
     inimigo->pos.x = nx;
     inimigo->pos.y = ny;
@@ -164,15 +167,19 @@ void mover_corredor(ESTADO *e, int n, int m_guerreiro[TAM][TAM])
     INIMIGO *inimigo = &(e->inimigo[n]);
     int nx = inimigo->pos.x;
     int ny = inimigo->pos.y;
+    POSICAO p;
     for (i = inimigo->pos.x - 1; i <= inimigo->pos.x + 1; i++)
-        for (j = inimigo->pos.y - 1; j <= inimigo->pos.y + 1; j++)
-            if (posicao_valida(i, j) &&
-                !posicao_ocupada(*e, i, j) &&
+        for (j = inimigo->pos.y - 1; j <= inimigo->pos.y + 1; j++) {
+            p.x = i;
+            p.y = j;
+            if (posicao_valida(p) &&
+                !posicao_ocupada(*e, p) &&
                 movimento_valido(inimigo->pos.x - i, inimigo->pos.y - j) &&
                 m_guerreiro[j][i] < m_guerreiro[ny][nx]) {
                 nx = i;
                 ny = j;                    
             }
+        }
     inimigo->pos.x = nx;
     inimigo->pos.y = ny;
 }
@@ -196,7 +203,7 @@ void matar_jogador(ESTADO *e, ESTADO antigo)
     for (i = 0; i < e->num_inimigos; i++) {
         switch (e->inimigo[i].tipo) {
             case GUERREIRO:
-                if (posicao_igual(e->inimigo[i].pos, antigo.inimigo[i].pos.x, antigo.inimigo[i].pos.y) &&
+                if (posicao_igual(e->inimigo[i].pos, antigo.inimigo[i].pos) &&
                     adjacente(e->jog, e->inimigo[i].pos))
                     e->vidas--;
                 break;

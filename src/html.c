@@ -2,6 +2,7 @@
 
 #include "cgi.h"
 #include "estado.h"
+#include "calc.h"
 #include "html.h"
 
 #define OFFSET_WIDTH            20
@@ -19,22 +20,27 @@ int calc_yoffset(int y)
     return - OFFSET_HEIGHT * y;
 }
 
-void imprime_casa(ESTADO e, int x, int y)
+void imprime_casa(ESTADO e, POSICAO p)
 {
-    int x_offset = calc_xoffset(y);
-    int y_offset = calc_yoffset(y);
-    if (tem_saida(e, x, y))
-        IMAGEM(x, y, x_offset, y_offset, ESCALA, "hexit.png");
-    IMAGEM(x, y, x_offset, y_offset, ESCALA, "basic_hex.png");
+    int x_offset = calc_xoffset(p.y);
+    int y_offset = calc_yoffset(p.y);
+    if (tem_saida(e, p))
+        IMAGEM(p.x, p.y, x_offset, y_offset, ESCALA, "hexit.png");
+    IMAGEM(p.x, p.y, x_offset, y_offset, ESCALA, "basic_hex.png");
 }
 
 void imprime_tabuleiro(ESTADO e)
 {
     int x, y;
-    for (y = 0; y < TAM; y++)
-        for (x = 0; x < TAM; x++)
-            if (posicao_valida(x, y))
-                imprime_casa(e, x, y);
+    POSICAO p;
+    for (y = 0; y < TAM; y++) {
+        p.y = y;
+        for (x = 0; x < TAM; x++) {
+            p.x = x;
+            if (posicao_valida(p))
+                imprime_casa(e, p);
+        }
+    }
 }
 
 char determinar_mov(int dx, int dy)
@@ -53,22 +59,22 @@ void imprime_movimento(ESTADO e, int dx, int dy)
 {
     char mov;
     char link[MAX_BUFFER];
-    int x, y;
+    POSICAO p;
     if (e.vidas > 0) {
-        x = e.jog.x + dx;
-        y = e.jog.y + dy;
-        if (!posicao_valida(x, y) || posicao_ocupada(e, x, y)) return;
-        if (tem_saida(e, x, y)) {
+        p.x = e.jog.x + dx;
+        p.y = e.jog.y + dy;
+        if (!posicao_valida(p) || posicao_ocupada(e, p)) return;
+        if (tem_saida(e, p)) {
             sprintf(link, "http://localhost/cgi-bin/main?x");
             ABRIR_LINK(link);
-            imprime_casa(e, x, y);
+            imprime_casa(e, p);
             FECHAR_LINK;
             return;
         }
         mov = determinar_mov(dx, dy);
         sprintf(link, "http://localhost/cgi-bin/main?%c", mov);
         ABRIR_LINK(link);
-        imprime_casa(e, x, y);
+        imprime_casa(e, p);
         FECHAR_LINK;
     }
 }

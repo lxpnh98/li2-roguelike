@@ -8,8 +8,8 @@ install: main
 	sudo chmod 777 /var/www/estado
 	sudo touch install
 
-main: main.o estado.o html.o aux.o
-	cc -o main main.o estado.o html.o aux.o
+main: main.o estado.o html.o calc.o
+	cc -o main main.o estado.o html.o calc.o
 
 zip: $(FICHEIROS)
 	zip -r -9 main.zip $(FICHEIROS)
@@ -23,7 +23,7 @@ doc:
 clean:
 	sudo rm -rf *.o main ../doc/Doxyfile ../doc/latex ../doc/html install doc /var/www/estado
 
-estado.o: estado.c estado.h aux.h cgi.h
+estado.o: estado.c estado.h calc.h cgi.h
 html.o: html.c html.h cgi.h
 main.o: main.c cgi.h
 
