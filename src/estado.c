@@ -139,21 +139,52 @@ void matriz_guerreiro(ESTADO e, int m[TAM][TAM])
     preencher(m, e, e.jog.x, e.jog.y, 0);
 }
 
-void mover_inimigo(ESTADO *e, int n, int m_guerreiro[TAM][TAM])
+void mover_guerreiro(ESTADO *e, int n, int m_guerreiro[TAM][TAM])
 {
     int i, j;
     INIMIGO *inimigo = &(e->inimigo[n]);
+    int nx = inimigo->pos.x; int ny = inimigo->pos.y;
+    for (i = inimigo->pos.x - 1; i <= inimigo->pos.x + 1; i++)
+        for (j = inimigo->pos.y - 1; j <= inimigo->pos.y + 1; j++)
+            if (posicao_valida(i, j) &&
+                !posicao_ocupada(*e, i, j) &&
+                movimento_valido(inimigo->pos.x - i, inimigo->pos.y - j) &&
+                m_guerreiro[j][i] < m_guerreiro[ny][nx]) {
+                nx = i;
+                ny = j;                    
+                }
+    inimigo->pos.x = nx;
+    inimigo->pos.y = ny;
+}
+
+void mover_corredor(ESTADO *e, int n, int m_guerreiro[TAM][TAM])
+{
+    int i, j;
+    INIMIGO *inimigo = &(e->inimigo[n]);
+    int nx = inimigo->pos.x; int ny = inimigo->pos.y;
+    for (i = inimigo->pos.x - 1; i <= inimigo->pos.x + 1; i++)
+        for (j = inimigo->pos.y - 1; j <= inimigo->pos.y + 1; j++)
+            if (posicao_valida(i, j) &&
+                !posicao_ocupada(*e, i, j) &&
+                movimento_valido(inimigo->pos.x - i, inimigo->pos.y - j) &&
+                m_guerreiro[j][i] < m_guerreiro[ny][nx]) {
+                nx = i;
+                ny = j;                    
+                }
+    inimigo->pos.x = nx;
+    inimigo->pos.y = ny;
+}
+
+void mover_inimigo(ESTADO *e, int n, int m_guerreiro[TAM][TAM])
+{
+    INIMIGO *inimigo = &(e->inimigo[n]);
     switch (inimigo->tipo) {
         case GUERREIRO:
-            for (i = inimigo->pos.x - 1; i <= inimigo->pos.x + 1; i++)
-                for (j = inimigo->pos.y - 1; j <= inimigo->pos.y + 1; j++)
-                    if (posicao_valida(i, j) &&
-                        !posicao_ocupada(*e, i, j) &&
-                        movimento_valido(inimigo->pos.x - i, inimigo->pos.y - j) &&
-                        m_guerreiro[j][i] < m_guerreiro[inimigo->pos.y][inimigo->pos.x]) {
-                        inimigo->pos.x = i;
-                        inimigo->pos.y = j;
-                    }
+            mover_guerreiro(e, n, m_guerreiro);
+            break;
+
+        case CORREDOR:
+            mover_corredor(e, n, m_guerreiro);
             break;
     }
 }

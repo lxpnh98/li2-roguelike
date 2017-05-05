@@ -29,7 +29,7 @@ typedef struct posicao {
 } POSICAO;
 
 typedef struct inimigo {
-    enum {GUERREIRO} tipo;
+    enum {GUERREIRO, CORREDOR} tipo;
     POSICAO pos;
 } INIMIGO;
 
