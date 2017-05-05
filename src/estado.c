@@ -142,6 +142,7 @@ void mover_inimigo(ESTADO *e, int n, int m_guerreiro[TAM][TAM])
 {
     int i, j;
     INIMIGO *inimigo = &(e->inimigo[n]);
+    int nx = inimigo->pos.x; int ny = inimigo->pos.y;
     switch (inimigo->tipo) {
         case GUERREIRO:
             for (i = inimigo->pos.x - 1; i <= inimigo->pos.x + 1; i++)
@@ -149,10 +150,12 @@ void mover_inimigo(ESTADO *e, int n, int m_guerreiro[TAM][TAM])
                     if (posicao_valida(i, j) &&
                         !posicao_ocupada(*e, i, j) &&
                         movimento_valido(inimigo->pos.x - i, inimigo->pos.y - j) &&
-                        m_guerreiro[j][i] < m_guerreiro[inimigo->pos.y][inimigo->pos.x]) {
-                        inimigo->pos.x = i;
-                        inimigo->pos.y = j;
+                        m_guerreiro[j][i] < m_guerreiro[ny][nx]) {
+                        nx = i;
+                        ny = j;                    
                     }
+            inimigo->pos.x = nx;
+            inimigo->pos.y = ny;
             break;
     }
 }
