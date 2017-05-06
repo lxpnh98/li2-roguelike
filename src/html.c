@@ -20,6 +20,12 @@ int calc_yoffset(int y)
     return - OFFSET_HEIGHT * y;
 }
 
+void imprime_vidas(int x)
+{
+    int y = 7;
+    IMAGEM(x, y, OFFSET_WIDTH, OFFSET_HEIGHT, ESCALA, "Heart2.png");
+}
+
 void imprime_casa(ESTADO e, POSICAO p)
 {
     int x_offset = calc_xoffset(p.y);
@@ -32,6 +38,7 @@ void imprime_casa(ESTADO e, POSICAO p)
 void imprime_tabuleiro(ESTADO e)
 {
     int x, y;
+    int nvidas = e.vidas;
     POSICAO p;
     for (y = 0; y < TAM; y++) {
         p.y = y;
@@ -40,6 +47,10 @@ void imprime_tabuleiro(ESTADO e)
             if (posicao_valida(p))
                 imprime_casa(e, p);
         }
+    }
+    for(x = -1; nvidas > 0; nvidas--){
+        x++;
+        imprime_vidas(x);
     }
 }
 
