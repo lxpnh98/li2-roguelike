@@ -70,7 +70,7 @@ ESTADO inicializar_obstaculos(ESTADO e, int num) {
 
 ESTADO inicializar() {
     POSICAO p;
-    ESTADO e = {{0,0},0,0,0,{{0}},{{0}},{0,0}};
+    ESTADO e = {{0,0},0,0,0,0,{{0}},{{0}},{0,0}};
     rand_pos(e, &p, 0);
     e.jog = p;
     e.vidas = 5;
@@ -226,6 +226,33 @@ void eliminar_inimigo(ESTADO *e, int n)
     e->num_inimigos--;
 }
 
+POSICAO nova_posicao(POSICAO antiga, char mov)
+{
+    switch (mov) {
+        case 'r':
+            antiga.x++;
+            break;
+        case 'l':
+            antiga.x--;
+            break;
+        case 'u':
+            antiga.y--;
+            break;
+        case 'd':
+            antiga.y++;
+            break;
+        case 'f':
+            antiga.x++;
+            antiga.y--;
+            break;
+        case 'b':
+            antiga.x--;
+            antiga.y++;
+            break;
+    }
+    return antiga;
+}
+
 ESTADO atualizar_estado(ESTADO e, char query[])
 {
     ESTADO antigo = e;
@@ -233,34 +260,7 @@ ESTADO atualizar_estado(ESTADO e, char query[])
     int adj, lunge;
     int m_guerreiro[TAM][TAM];
     POSICAO nova_pos;
-    nova_pos.x = e.jog.x;
-    nova_pos.y = e.jog.y;
-    switch (query[0]) {
-        case 'r':
-            nova_pos.x = e.jog.x + 1;
-            nova_pos.y = e.jog.y;
-            break;
-        case 'l':
-            nova_pos.x = e.jog.x - 1;
-            nova_pos.y = e.jog.y;
-            break;
-        case 'u':
-            nova_pos.x = e.jog.x;
-            nova_pos.y = e.jog.y - 1;
-            break;
-        case 'd':
-            nova_pos.x = e.jog.x;
-            nova_pos.y = e.jog.y + 1;
-            break;
-        case 'f':
-            nova_pos.x = e.jog.x + 1;
-            nova_pos.y = e.jog.y - 1;
-            break;
-        case 'b':
-            nova_pos.x = e.jog.x - 1;
-            nova_pos.y = e.jog.y + 1;
-            break;
-    }
+    nova_pos = nova_posicao(e.jog, query[0]);
     for (i = 0; i < e.num_inimigos; i++) {
         adj = adjacente(e.inimigo[i].pos, e.jog);
         lunge = colinear(e.inimigo[i].pos, e.jog, nova_pos);

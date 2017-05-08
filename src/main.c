@@ -7,9 +7,13 @@
 #include "estado.h"
 #include "html.h"
 
+void guardar_pontuacao(int score)
+{}
+
 int main()
 {
     FILE *file = fopen("/var/www/estado", "r");
+    FILE *top_scores = fopen("/var/www/scores", "r");
     ESTADO e;
     char query[MAX_BUFFER];
     sprintf(query, "%s", getenv("QUERY_STRING"));
@@ -23,10 +27,13 @@ int main()
 
     COMECAR_HTML;
     ABRIR_SVG(600, 600);
-    imprime_tabuleiro(e);
-    imprime_jogador(e);
-    imprime_inimigos(e);
-    imprime_obstaculos(e);
+    if (e.vidas > 0) {
+        imprime_jogo(e);
+    } else {
+        top_scores = fopen("/var/www/scores", "w");
+        guardar_pontuacao(e.score);
+        imprime_top();
+    }
     FECHAR_SVG;
     if (file)
         fclose(file);

@@ -133,3 +133,14 @@ void imprime_obstaculos(ESTADO e)
         IMAGEM(e.obstaculo[i].x, e.obstaculo[i].y, x_offset, y_offset, ESCALA, "lava_pool1.png");
     }
 }
+
+void imprime_jogo(ESTADO e)
+{
+    imprime_tabuleiro(e);
+    imprime_jogador(e);
+    imprime_inimigos(e);
+    imprime_obstaculos(e);
+}
+
+void imprime_top()
+{}

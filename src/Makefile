@@ -6,6 +6,8 @@ install: main
 	sudo cp -r ../images/ /var/www/html/
 	sudo touch /var/www/estado
 	sudo chmod 777 /var/www/estado
+	sudo touch /var/www/scores
+	sudo chmod 777 /var/www/scores
 	sudo touch install
 
 main: main.o estado.o html.o calc.o
@@ -21,7 +23,7 @@ doc:
 	touch doc
 
 clean:
-	sudo rm -rf *.o main ../doc/Doxyfile ../doc/latex ../doc/html install doc /var/www/estado
+	sudo rm -rf *.o main ../doc/Doxyfile ../doc/latex ../doc/html install doc /var/www/estado /var/www/scores
 
 estado.o: estado.c estado.h calc.h cgi.h
 html.o: html.c html.h cgi.h
