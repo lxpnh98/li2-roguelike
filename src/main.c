@@ -7,13 +7,39 @@
 #include "estado.h"
 #include "html.h"
 
-void guardar_pontuacao(int score)
-{}
+void guardar_pontuacao(char top_scores[], int score)
+{
+    FILE *file = fopen(top_scores, "r");
+    int i, j;
+    int scores[10];
+
+    /* Carregar pontuações mais altas, preenchendo o resto da array com 0s. */
+    for (i = 0; fscanf(file, "%d\n", &scores[i]) == 1 && i < 10; i++);
+    for (; i < 10; i++) scores[i] = 0;
+    fclose(file);
+
+    /* Inserir pontuação na array ordenada. */
+    for (i = 0; i < 10; i++) {
+        if (score > scores[i]) {
+            for (j = 9; j > i; j--)
+                scores[j] = scores[j-1];
+            scores[j] = score;
+            break;
+        }
+    }
+
+    /* Escrever o top das pontuações atualizado para o ficheiro. */
+    file = fopen(top_scores, "w+");
+    for (i = 0; i < 10; i++) {
+        fprintf(file, "%d\n", scores[i]);
+    }
+
+    
+}
 
 int main()
 {
     FILE *file = fopen("/var/www/estado", "r");
-    FILE *top_scores = fopen("/var/www/scores", "r");
     ESTADO e;
     char query[MAX_BUFFER];
     sprintf(query, "%s", getenv("QUERY_STRING"));
@@ -30,8 +56,7 @@ int main()
     if (e.vidas > 0) {
         imprime_jogo(e);
     } else {
-        top_scores = fopen("/var/www/scores", "w");
-        guardar_pontuacao(e.score);
+        guardar_pontuacao("/var/www/scores", e.score);
         imprime_top();
     }
     FECHAR_SVG;

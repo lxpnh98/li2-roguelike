@@ -98,7 +98,6 @@ ESTADO ler_estado(FILE *file, char query[])
         sscanf(query, "x,%d,%d", &vidas, &score);
         return inicializar(vidas, score);
     }
-
     /* Descubrir tamanho do ficheiro. */
     fseek(file, 0, SEEK_END);
     tamanho = ftell(file);
@@ -268,6 +267,8 @@ ESTADO atualizar_estado(ESTADO e, char query[])
     int adj, lunge;
     int m_guerreiro[TAM][TAM];
     POSICAO nova_pos;
+    if (e.vidas <= 0)
+        return e;
     nova_pos = nova_posicao(e.jog, query[0]);
     for (i = 0; i < e.num_inimigos; i++) {
         adj = adjacente(e.inimigo[i].pos, e.jog);
@@ -276,6 +277,7 @@ ESTADO atualizar_estado(ESTADO e, char query[])
             eliminar_inimigo(&e, i);
             eliminar_inimigo(&antigo, i);
             i--;
+            e.score++;
         }
     }
     e.jog = nova_pos;
