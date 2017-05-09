@@ -6,6 +6,8 @@
 #include "estado.h"
 #include "calc.h"
 
+#define INIT_VIDAS              5
+
 char *estado2str(ESTADO e)
 {
     static char buffer[MAX_BUFFER];
@@ -68,12 +70,13 @@ ESTADO inicializar_obstaculos(ESTADO e, int num) {
     return e;
 }
 
-ESTADO inicializar() {
+ESTADO inicializar(int vidas, int score) {
     POSICAO p;
     ESTADO e = {{0,0},0,0,0,0,{{0}},{{0}},{0,0}};
     rand_pos(e, &p, 0);
     e.jog = p;
-    e.vidas = 5;
+    e.vidas = vidas;
+    e.score = score;
     rand_pos(e, &p, 0);
     e.saida = p;
     e = inicializar_inimigos(e, 10);
@@ -85,11 +88,16 @@ ESTADO ler_estado(FILE *file, char query[])
 {
     char *e;
     int tamanho;
+    int vidas, score;
 
     /* Se não existir ficheiro ou o jogador entrar num novo nível, criar estado
      * aleatório. */
-    if (file == NULL || query[0] == 'x')
-        return inicializar();
+    if (file == NULL)
+        return inicializar(INIT_VIDAS, 0);
+    if (query[0] == 'x') {
+        sscanf(query, "x,%d,%d", &vidas, &score);
+        return inicializar(vidas, score);
+    }
 
     /* Descubrir tamanho do ficheiro. */
     fseek(file, 0, SEEK_END);
@@ -98,7 +106,7 @@ ESTADO ler_estado(FILE *file, char query[])
 
     /* Se ficheiro existir mas for vazio, criar estado aleatório. */
     if (tamanho == 0)
-        return inicializar();
+        return inicializar(INIT_VIDAS, 0);
 
     /* Alocar memória necessária, copiar conteúdos do ficheiro para a variável
      * e terminar o string. */

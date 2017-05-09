@@ -76,7 +76,7 @@ void imprime_movimento(ESTADO e, int dx, int dy)
         p.y = e.jog.y + dy;
         if (!posicao_valida(p) || posicao_ocupada(e, p)) return;
         if (tem_saida(e, p)) {
-            sprintf(link, "http://localhost/cgi-bin/main?x");
+            sprintf(link, "http://localhost/cgi-bin/main?x,%d,%d", e.vidas, e.score);
             ABRIR_LINK(link);
             imprime_casa(e, p);
             FECHAR_LINK;
