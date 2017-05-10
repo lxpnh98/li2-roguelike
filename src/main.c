@@ -44,14 +44,13 @@ int main()
     char query[MAX_BUFFER];
     sprintf(query, "%s", getenv("QUERY_STRING"));
     srand(time(NULL));
+    COMECAR_HTML;
     e = ler_estado(file, query);
     e = atualizar_estado(e, query);
     if (file != NULL) {
         file = fopen("/var/www/estado", "w");
         fputs(estado2str(e), file);
     }
-
-    COMECAR_HTML;
     ABRIR_SVG(600, 600);
     if (e.jog.vidas > 0) {
         imprime_jogo(e);

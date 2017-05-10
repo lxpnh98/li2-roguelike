@@ -261,40 +261,42 @@ POSICAO nova_posicao(POSICAO antiga, char mov)
     return antiga;
 }
 
-ESTADO atualizar_normal(ESTADO e, char mov)
+void atualizar_normal(ESTADO *e, ESTADO *antigo, char mov)
 {
     POSICAO nova_pos;
-    ESTADO antigo = e;
     int i;
     int adj, lunge;
-    nova_pos = nova_posicao(e.jog.pos, mov);
-    for (i = 0; i < e.num_inimigos; i++) {
-        adj = adjacente(e.inimigo[i].pos, e.jog.pos);
-        lunge = colinear(e.inimigo[i].pos, e.jog.pos, nova_pos);
-        if (adjacente(e.inimigo[i].pos, nova_pos) && (adj || lunge)) {
-            eliminar_inimigo(&e, i);
-            eliminar_inimigo(&antigo, i);
+    nova_pos = nova_posicao(e->jog.pos, mov);
+    for (i = 0; i < e->num_inimigos; i++) {
+        adj = adjacente(e->inimigo[i].pos, e->jog.pos);
+        lunge = colinear(e->inimigo[i].pos, e->jog.pos, nova_pos);
+        if (adjacente(e->inimigo[i].pos, nova_pos) && (adj || lunge)) {
+            eliminar_inimigo(e, i);
+            eliminar_inimigo(antigo, i);
             i--;
-            e.jog.score++;
+            e->jog.score++;
         }
     }
-    e.jog.pos = nova_pos;
-
-    return e;
+    e->jog.pos = nova_pos;
 }
 
-ESTADO atualizar_ataque(ESTADO e, char mov)
+void atualizar_ataque(ESTADO *e, ESTADO *antigo, char mov)
 {
     int i;
-    POSICAO pos_ataque = e.jog.pos;
-    for(i = 0; i < e.num_inimigos; i++){
-        if (posicao_igual(nova_posicao(pos_ataque, mov), e.inimigo[i].pos))
-            eliminar_inimigo(&e, (i-1));
+    POSICAO pos_ataque = nova_posicao(e->jog.pos, mov);
+    for(i = 0; i < e->num_inimigos; i++){
+        if (posicao_igual(pos_ataque, e->inimigo[i].pos)) {
+            eliminar_inimigo(e, i);
+            eliminar_inimigo(antigo, i);
+            e->jog.score++;
+            break;
+        }
     }
     /* ver se é igual
     // loop dos inimigos
        eliminar inimigo i */
-    return e;
+
+    e->jog.modo = 'n';
 }
 
 ESTADO atualizar_estado(ESTADO e, char query[])
@@ -303,15 +305,17 @@ ESTADO atualizar_estado(ESTADO e, char query[])
     char mov;
     int i;
     int m_guerreiro[TAM][TAM];
-    if (e.jog.vidas <= 0)
+    if (e.jog.vidas <= 0 || query[0] == 'x')
         return e;
-    sscanf(query, "%c,%c", &(e.jog.modo), &mov);
+    sscanf(query, "%c,%c", (char *)&e.jog.modo, &mov);
+    printf("<!-- %c -->\n", e.jog.modo);
+
     switch (e.jog.modo) {
         case NORMAL:
-            atualizar_normal(e, mov);
+            atualizar_normal(&e, &antigo, mov);
             break;
         case ATAQUE:
-            atualizar_ataque(e, mov);
+            atualizar_ataque(&e, &antigo, mov);
             break;
     }
 

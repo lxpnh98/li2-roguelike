@@ -112,6 +112,7 @@ void imprime_ataque(ESTADO e, int dx, int dy)
             mov = determinar_mov(dx, dy);
             sprintf(link, "http://localhost/cgi-bin/main?a,%c", mov);
             ABRIR_LINK(link);
+            imprime_casa(e, p);
             FECHAR_LINK;
         }
     }
