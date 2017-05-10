@@ -7,7 +7,7 @@
 #include "estado.h"
 #include "html.h"
 
-void guardar_pontuacao(char top_scores[], int score)
+void guardar_pontuacao(char top_scores[], JOGADOR jog)
 {
     FILE *file = fopen(top_scores, "r");
     int i, j;
@@ -20,10 +20,10 @@ void guardar_pontuacao(char top_scores[], int score)
 
     /* Inserir pontuação na array ordenada. */
     for (i = 0; i < 10; i++) {
-        if (score > scores[i]) {
+        if (jog.score > scores[i]) {
             for (j = 9; j > i; j--)
                 scores[j] = scores[j-1];
-            scores[j] = score;
+            scores[j] = jog.score;
             break;
         }
     }
@@ -53,10 +53,10 @@ int main()
 
     COMECAR_HTML;
     ABRIR_SVG(600, 600);
-    if (e.vidas > 0) {
+    if (e.jog.vidas > 0) {
         imprime_jogo(e);
     } else {
-        guardar_pontuacao("/var/www/scores", e.score);
+        guardar_pontuacao("/var/www/scores", e.jog);
         imprime_top();
     }
     FECHAR_SVG;
