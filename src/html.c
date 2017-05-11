@@ -38,7 +38,7 @@ void imprime_casa(ESTADO e, POSICAO p)
 void imprime_tabuleiro(ESTADO e)
 {
     int x, y;
-    int nvidas = e.vidas;
+    int nvidas = e.jog.vidas;
     POSICAO p;
     for (y = 0; y < TAM; y++) {
         p.y = y;
@@ -71,19 +71,19 @@ void imprime_movimento(ESTADO e, int dx, int dy)
     char mov;
     char link[MAX_BUFFER];
     POSICAO p;
-    if (e.vidas > 0) {
-        p.x = e.jog.x + dx;
-        p.y = e.jog.y + dy;
+    if (e.jog.vidas > 0) {
+        p.x = e.jog.pos.x + dx;
+        p.y = e.jog.pos.y + dy;
         if (!posicao_valida(p) || posicao_ocupada(e, p)) return;
         if (tem_saida(e, p)) {
-            sprintf(link, "http://localhost/cgi-bin/main?x,%d,%d", e.vidas, e.score);
+            sprintf(link, "http://localhost/cgi-bin/main?x,%d,%d", e.jog.vidas, e.jog.score);
             ABRIR_LINK(link);
             imprime_casa(e, p);
             FECHAR_LINK;
             return;
         }
         mov = determinar_mov(dx, dy);
-        sprintf(link, "http://localhost/cgi-bin/main?%c", mov);
+        sprintf(link, "http://localhost/cgi-bin/main?n,%c", mov);
         ABRIR_LINK(link);
         imprime_casa(e, p);
         FECHAR_LINK;
@@ -100,13 +100,48 @@ void imprime_movimentos(ESTADO e)
     imprime_movimento(e, +1, -1);
 }
 
+void imprime_ataque(ESTADO e, int dx, int dy)
+{
+    char mov;
+    char link[MAX_BUFFER];
+    POSICAO p;
+    if (e.jog.vidas > 0) {
+        p.x = e.jog.pos.x + dx;
+        p.y = e.jog.pos.y + dy;
+        if (posicao_valida(p) && tem_inimigo(e, p)) {
+            mov = determinar_mov(dx, dy);
+            sprintf(link, "http://localhost/cgi-bin/main?a,%c", mov);
+            ABRIR_LINK(link);
+            imprime_casa(e, p);
+            FECHAR_LINK;
+        }
+    }
+}
+
+void imprime_ataques(ESTADO e)
+{
+    imprime_ataque(e,  0, -1);
+    imprime_ataque(e,  0, +1);
+    imprime_ataque(e, -1,  0);
+    imprime_ataque(e, +1,  0);
+    imprime_ataque(e, -1, +1);
+    imprime_ataque(e, +1, -1);
+}
+
 void imprime_jogador(ESTADO e)
 {
-    int x_offset = calc_xoffset(e.jog.y);
-    int y_offset = calc_yoffset(e.jog.y);
-    if (e.vidas > 0) {
-        IMAGEM(e.jog.x, e.jog.y, x_offset, y_offset, ESCALA, "DwellerN_03.png");
-        imprime_movimentos(e);
+    int x_offset = calc_xoffset(e.jog.pos.y);
+    int y_offset = calc_yoffset(e.jog.pos.y);
+    if (e.jog.vidas > 0) {
+        IMAGEM(e.jog.pos.x, e.jog.pos.y, x_offset, y_offset, ESCALA, "DwellerN_03.png");
+        switch (e.jog.modo) {
+            case NORMAL:
+                imprime_movimentos(e);
+                break;
+            case ATAQUE:
+                imprime_ataques(e);
+                break;
+        }
     }
 }
 

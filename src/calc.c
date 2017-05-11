@@ -44,7 +44,7 @@ int posicao_igual(POSICAO p1, POSICAO p2)
 
 int tem_jogador(ESTADO e, POSICAO p)
 {
-    return posicao_igual(e.jog, p);
+    return posicao_igual(e.jog.pos, p);
 }
 
 int tem_inimigo(ESTADO e, POSICAO p)

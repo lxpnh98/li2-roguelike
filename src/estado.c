@@ -72,11 +72,12 @@ ESTADO inicializar_obstaculos(ESTADO e, int num) {
 
 ESTADO inicializar(int vidas, int score) {
     POSICAO p;
-    ESTADO e = {{0,0},0,0,0,0,{{0}},{{0}},{0,0}};
+    ESTADO e = {{{0,0},0,0,0},0,0,{{0}},{{0}},{0,0}};
     rand_pos(e, &p, 0);
-    e.jog = p;
-    e.vidas = vidas;
-    e.score = score;
+    e.jog.pos = p;
+    e.jog.vidas = vidas;
+    e.jog.score = score;
+    e.jog.modo = NORMAL;
     rand_pos(e, &p, 0);
     e.saida = p;
     e = inicializar_inimigos(e, 10);
@@ -140,7 +141,7 @@ void matriz_guerreiro(ESTADO e, int m[TAM][TAM])
     for (i = 0; i < TAM; i++)
         for (j = 0; j < TAM; j++)
             m[i][j] = 999;
-    preencher(m, e, e.jog.x, e.jog.y, 0);
+    preencher(m, e, e.jog.pos.x, e.jog.pos.y, 0);
 }
 
 void mover_guerreiro(ESTADO *e, int n, int m_guerreiro[TAM][TAM])
@@ -150,7 +151,7 @@ void mover_guerreiro(ESTADO *e, int n, int m_guerreiro[TAM][TAM])
     int nx = inimigo->pos.x;
     int ny = inimigo->pos.y;
     POSICAO p;
-    if (!adjacente(inimigo->pos, e->jog)) {
+    if (!adjacente(inimigo->pos, e->jog.pos)) {
         for (i = inimigo->pos.x - 1; i <= inimigo->pos.x + 1; i++)
             for (j = inimigo->pos.y - 1; j <= inimigo->pos.y + 1; j++) {
                 p.x = i;
@@ -211,18 +212,18 @@ void matar_jogador(ESTADO *e, ESTADO antigo)
         switch (e->inimigo[i].tipo) {
             case GUERREIRO:
                 if (posicao_igual(e->inimigo[i].pos, antigo.inimigo[i].pos) &&
-                    adjacente(e->jog, e->inimigo[i].pos))
-                    e->vidas--;
+                    adjacente(e->jog.pos, e->inimigo[i].pos))
+                    e->jog.vidas--;
                 break;
             case CORREDOR:
-                if (colinear(e->inimigo[i].pos, antigo.inimigo[i].pos, e->jog) &&
-                    adjacente(e->jog, e->inimigo[i].pos))
-                    e->vidas--;
+                if (colinear(e->inimigo[i].pos, antigo.inimigo[i].pos, e->jog.pos) &&
+                    adjacente(e->jog.pos, e->inimigo[i].pos))
+                    e->jog.vidas--;
                 break;
         }
     }
-    if (e->vidas < 0)
-        e->vidas = 0;
+    if (e->jog.vidas < 0)
+        e->jog.vidas = 0;
 }
 
 void eliminar_inimigo(ESTADO *e, int n)
@@ -260,27 +261,63 @@ POSICAO nova_posicao(POSICAO antiga, char mov)
     return antiga;
 }
 
+void atualizar_normal(ESTADO *e, ESTADO *antigo, char mov)
+{
+    POSICAO nova_pos;
+    int i;
+    int adj, lunge;
+    nova_pos = nova_posicao(e->jog.pos, mov);
+    for (i = 0; i < e->num_inimigos; i++) {
+        adj = adjacente(e->inimigo[i].pos, e->jog.pos);
+        lunge = colinear(e->inimigo[i].pos, e->jog.pos, nova_pos);
+        if (adjacente(e->inimigo[i].pos, nova_pos) && (adj || lunge)) {
+            eliminar_inimigo(e, i);
+            eliminar_inimigo(antigo, i);
+            i--;
+            e->jog.score++;
+        }
+    }
+    e->jog.pos = nova_pos;
+}
+
+void atualizar_ataque(ESTADO *e, ESTADO *antigo, char mov)
+{
+    int i;
+    POSICAO pos_ataque = nova_posicao(e->jog.pos, mov);
+    for(i = 0; i < e->num_inimigos; i++){
+        if (posicao_igual(pos_ataque, e->inimigo[i].pos)) {
+            eliminar_inimigo(e, i);
+            eliminar_inimigo(antigo, i);
+            e->jog.score++;
+            break;
+        }
+    }
+    /* ver se é igual
+    // loop dos inimigos
+       eliminar inimigo i */
+
+    e->jog.modo = 'n';
+}
+
 ESTADO atualizar_estado(ESTADO e, char query[])
 {
     ESTADO antigo = e;
+    char mov;
     int i;
-    int adj, lunge;
     int m_guerreiro[TAM][TAM];
-    POSICAO nova_pos;
-    if (e.vidas <= 0)
+    if (e.jog.vidas <= 0 || query[0] == 'x')
         return e;
-    nova_pos = nova_posicao(e.jog, query[0]);
-    for (i = 0; i < e.num_inimigos; i++) {
-        adj = adjacente(e.inimigo[i].pos, e.jog);
-        lunge = colinear(e.inimigo[i].pos, e.jog, nova_pos);
-        if (adjacente(e.inimigo[i].pos, nova_pos) && (adj || lunge)) {
-            eliminar_inimigo(&e, i);
-            eliminar_inimigo(&antigo, i);
-            i--;
-            e.score++;
-        }
+    sscanf(query, "%c,%c", (char *)&e.jog.modo, &mov);
+    printf("<!-- %c -->\n", e.jog.modo);
+
+    switch (e.jog.modo) {
+        case NORMAL:
+            atualizar_normal(&e, &antigo, mov);
+            break;
+        case ATAQUE:
+            atualizar_ataque(&e, &antigo, mov);
+            break;
     }
-    e.jog = nova_pos;
 
     /* Mover inimigos aqui */
     matriz_guerreiro(e, m_guerreiro);

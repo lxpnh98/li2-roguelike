@@ -33,16 +33,18 @@ typedef struct inimigo {
     POSICAO pos;
 } INIMIGO;
 
+typedef struct jogador {
+	POSICAO pos;
+	int score;
+	int vidas;
+	enum {NORMAL = 'n', ATAQUE = 'a'} modo;
+} JOGADOR;
 /**
 \brief Estrutura que armazena o estado do jogo
 */
 typedef struct estado {
 	/** \brief A posição do jogador */
-	POSICAO jog;
-	/** \brief A pontuação do jogador */
-	int score;
-	/** \brief O nº de vidas do jogador */
-        int vidas;
+	JOGADOR jog;
 	/** \brief O nº de inimigos */
 	char num_inimigos;
 	/** \brief O nº de obstáculos */
