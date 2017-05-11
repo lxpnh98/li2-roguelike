@@ -143,4 +143,23 @@ void imprime_jogo(ESTADO e)
 }
 
 void imprime_top()
-{}
+{
+	FILE *file = fopen("/var/www/scores", "r");
+	if(file == NULL) {
+		perror("nao consegui abrir o ficheiro de scores para leitura");
+		exit(1);
+	}
+	int i, x;
+	char buf[102040];
+	fprintf(stderr, "lendo a linha: %p", fgets(buf, 10240, file));
+	fprintf(stderr, "primeira linha: %s", buf);
+	fprintf(stderr, "<!-- %p %d -->", file, fscanf(file, "%d ", &x));
+	ABRIR_TABELA;
+	for (i = 0; fscanf(file, "%d\n", &x) && i < 10; i++) {
+		ABRIR_LINHA;
+		IMPRIMIR_CELULA(x);
+		FECHAR_LINHA;
+	}
+	FECHAR_TABELA;
+	fclose(file);
+}

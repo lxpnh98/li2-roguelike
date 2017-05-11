@@ -60,4 +60,29 @@ Macros úteis para gerar CGIs
 */
 #define FECHAR_LINK							printf("</a>\n")
 
+/**
+\brief Macro para abrir a tabela das pontuções
+*/
+#define ABRIR_TABELA                        printf("<TABLE border=\"1\" style=\"position:absolute; left:100px; top: 100px;\">\n")
+
+/**
+\brief Macro para fechar a tabela das pontuções
+*/
+#define FECHAR_TABELA                       printf("</TABLE>\n")
+
+/**
+\brief Macro para abrir uma linha da tabela
+*/
+#define ABRIR_LINHA                         printf("<TR>\n")
+
+/**
+\brief Macro para fechar uma linha da tabela
+*/
+#define FECHAR_LINHA                        printf("</TR>\n")
+
+/**
+\brief Macro para imprimir uma célula da tabela
+*/
+#define IMPRIMIR_CELULA(X)                  printf("<TD>%d</TD>\n", X)
+
 #endif

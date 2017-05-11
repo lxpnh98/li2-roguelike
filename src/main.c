@@ -9,10 +9,11 @@
 
 void guardar_pontuacao(char top_scores[], int score)
 {
-    FILE *file = fopen(top_scores, "r");
     int i, j;
     int scores[10];
-
+    
+    FILE *file = fopen(top_scores, "r");
+    
     /* Carregar pontuações mais altas, preenchendo o resto da array com 0s. */
     for (i = 0; fscanf(file, "%d\n", &scores[i]) == 1 && i < 10; i++);
     for (; i < 10; i++) scores[i] = 0;
@@ -31,10 +32,8 @@ void guardar_pontuacao(char top_scores[], int score)
     /* Escrever o top das pontuações atualizado para o ficheiro. */
     file = fopen(top_scores, "w+");
     for (i = 0; i < 10; i++) {
-        fprintf(file, "%d\n", scores[i]);
+        fprintf(file, "%d\n", &scores[i]);
     }
-
-    
 }
 
 int main()
