@@ -11,13 +11,15 @@ void guardar_pontuacao(char top_scores[], JOGADOR jog)
 {
     int i, j;
     int scores[10];
-    
-    FILE *file = fopen(top_scores, "r");
-    
+    FILE *score_file = fopen(top_scores, "r");
+    if(score_file == NULL) {
+        fprintf(stderr, "nao consegui abrir o ficheiro de scores para leitura");
+        exit(1);
+    }
+
     /* Carregar pontuações mais altas, preenchendo o resto da array com 0s. */
-    for (i = 0; fscanf(file, "%d\n", &scores[i]) == 1 && i < 10; i++);
+    for (i = 0; fscanf(score_file, "%d\n", &scores[i]) == 1 && i < 10; i++);
     for (; i < 10; i++) scores[i] = 0;
-    fclose(file);
 
     /* Inserir pontuação na array ordenada. */
     for (i = 0; i < 10; i++) {
@@ -28,12 +30,15 @@ void guardar_pontuacao(char top_scores[], JOGADOR jog)
             break;
         }
     }
+    fclose(score_file);
 
     /* Escrever o top das pontuações atualizado para o ficheiro. */
-    file = fopen(top_scores, "w+");
+    score_file = fopen(top_scores, "w+");
     for (i = 0; i < 10; i++) {
-        fprintf(file, "%d\n", &scores[i]);
+        fprintf(score_file, "%d\n", scores[i]);
     }
+    rewind(score_file); /* Esta linha resove o problema inteiro. (elimina este comentário) */
+    close(score_file);
 }
 
 int main()
@@ -55,7 +60,7 @@ int main()
         imprime_jogo(e);
     } else {
         guardar_pontuacao("/var/www/scores", e.jog);
-        imprime_top();
+        imprime_top("/var/www/scores");
     }
     FECHAR_SVG;
     if (file)
