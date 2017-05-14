@@ -299,6 +299,11 @@ void atualizar_ataque(ESTADO *e, ESTADO *antigo, char mov)
     e->jog.modo = 'n';
 }
 
+void atualizar_modo(ESTADO *e, char modo)
+{
+    e->jog.modo = modo;
+}
+
 ESTADO atualizar_estado(ESTADO e, char query[])
 {
     ESTADO antigo = e;
@@ -317,15 +322,21 @@ ESTADO atualizar_estado(ESTADO e, char query[])
         case ATAQUE:
             atualizar_ataque(&e, &antigo, mov);
             break;
+        default:
+            break;
     }
 
     /* Mover inimigos aqui */
-    matriz_guerreiro(e, m_guerreiro);
-    for (i = 0; i < e.num_inimigos; i++) {
-        mover_inimigo(&e, i, m_guerreiro);
-    }
+    if (e.jog.modo != MUDAR_MODO) {
+        matriz_guerreiro(e, m_guerreiro);
+        for (i = 0; i < e.num_inimigos; i++) {
+            mover_inimigo(&e, i, m_guerreiro);
+        }
 
-    matar_jogador(&e, antigo);
+        matar_jogador(&e, antigo);
+    } else {
+        atualizar_modo(&e, mov);
+    }
 
     return e;
 }

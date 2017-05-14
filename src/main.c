@@ -38,7 +38,7 @@ void guardar_pontuacao(char top_scores[], JOGADOR jog)
         fprintf(score_file, "%d\n", scores[i]);
     }
     rewind(score_file); /* Esta linha resove o problema inteiro. (elimina este comentário) */
-    close(score_file);
+    fclose(score_file);
 }
 
 int main()

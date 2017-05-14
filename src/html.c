@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <math.h>
 
 #include "cgi.h"
@@ -20,10 +21,18 @@ int calc_yoffset(int y)
     return - OFFSET_HEIGHT * y;
 }
 
-void imprime_vidas(int x)
+void imprime_vida(int x)
 {
     int y = 7;
     IMAGEM(x, y, OFFSET_WIDTH, OFFSET_HEIGHT, ESCALA, "Heart2.png");
+}
+
+void imprime_vidas(ESTADO e)
+{
+    int i;
+    for(i = 0; i < e.jog.vidas; i++){
+        imprime_vida(i);
+    }
 }
 
 void imprime_casa(ESTADO e, POSICAO p)
@@ -38,7 +47,6 @@ void imprime_casa(ESTADO e, POSICAO p)
 void imprime_tabuleiro(ESTADO e)
 {
     int x, y;
-    int nvidas = e.jog.vidas;
     POSICAO p;
     for (y = 0; y < TAM; y++) {
         p.y = y;
@@ -47,10 +55,6 @@ void imprime_tabuleiro(ESTADO e)
             if (posicao_valida(p))
                 imprime_casa(e, p);
         }
-    }
-    for(x = -1; nvidas > 0; nvidas--){
-        x++;
-        imprime_vidas(x);
     }
 }
 
@@ -141,6 +145,8 @@ void imprime_jogador(ESTADO e)
             case ATAQUE:
                 imprime_ataques(e);
                 break;
+            default:
+                break;
         }
     }
 }
@@ -169,23 +175,45 @@ void imprime_obstaculos(ESTADO e)
     }
 }
 
+void imprime_modo(char modo, int x)
+{
+    int y = 8;
+    char link[MAX_BUFFER];
+    sprintf(link, "http://localhost/cgi-bin/main?m,%c", modo);
+    ABRIR_LINK(link);
+    IMAGEM(x, y, OFFSET_WIDTH, OFFSET_HEIGHT, ESCALA, "Heart2.png");
+    FECHAR_LINK;
+}
+
+void imprime_modos(ESTADO e)
+{
+    char modos[] = {'n', 'a', '\0'};
+    int i;
+    for (i = 0; modos[i] != '\0'; i++) {
+        if (modos[i] != (char)e.jog.modo)
+            imprime_modo(modos[i], i);
+    }
+}
+
 void imprime_jogo(ESTADO e)
 {
     imprime_tabuleiro(e);
-    imprime_jogador(e);
+    imprime_vidas(e);
     imprime_inimigos(e);
+    imprime_jogador(e);
     imprime_obstaculos(e);
+    imprime_modos(e);
 }
 
 void imprime_top(char top_scores[])
 {
     FILE *file = fopen(top_scores, "r");
+    int i, x;
+    /* char buf[102040]; */
     if(file == NULL) {
             perror("nao consegui abrir o ficheiro de scores para leitura");
             exit(1);
     }
-    int i, x;
-    char buf[102040];
     /* fprintf(stderr, "lendo a linha: %p\n", fgets(buf, 10240, file));
     fprintf(stderr, "primeira linha: %s\n", buf);
     fprintf(stderr, "<!-- %p %d -->\n", file, fscanf(file, "%d\n", &x)); */

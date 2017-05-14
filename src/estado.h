@@ -37,7 +37,9 @@ typedef struct jogador {
 	POSICAO pos;
 	int score;
 	int vidas;
-	enum {NORMAL = 'n', ATAQUE = 'a'} modo;
+	enum {NORMAL     = 'n', 
+              ATAQUE     = 'a',
+              MUDAR_MODO = 'm'} modo;
 } JOGADOR;
 /**
 \brief Estrutura que armazena o estado do jogo
