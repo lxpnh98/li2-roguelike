@@ -118,7 +118,7 @@ ESTADO ler_estado(FILE *file, char query[])
     return str2estado(e);
 }
 
-void preencher(int m[TAM][TAM], ESTADO e, int x, int y, int dist)
+void preencher_guerreiro(int m[TAM][TAM], ESTADO e, int x, int y, int dist)
 {
     POSICAO p;
     p.x = x;
@@ -126,12 +126,41 @@ void preencher(int m[TAM][TAM], ESTADO e, int x, int y, int dist)
     if (m[y][x] > dist && posicao_valida(p) && 
         !tem_obstaculo(e, p) && !tem_inimigo(e, p)) {
         m[y][x] = dist;
-        preencher(m, e, x + 1, y    , dist + 1);
-        preencher(m, e, x - 1, y    , dist + 1);
-        preencher(m, e, x    , y - 1, dist + 1);
-        preencher(m, e, x    , y + 1, dist + 1);
-        preencher(m, e, x + 1, y - 1, dist + 1);
-        preencher(m, e, x - 1, y + 1, dist + 1);
+        preencher_guerreiro(m, e, x + 1, y    , dist + 1);
+        preencher_guerreiro(m, e, x - 1, y    , dist + 1);
+        preencher_guerreiro(m, e, x    , y - 1, dist + 1);
+        preencher_guerreiro(m, e, x    , y + 1, dist + 1);
+        preencher_guerreiro(m, e, x + 1, y - 1, dist + 1);
+        preencher_guerreiro(m, e, x - 1, y + 1, dist + 1);
+    }
+}
+
+void preencher_cabaleiro(int m[TAM][TAM], ESTADO e, int x, int y, int dist)
+{
+    POSICAO p;
+    p.x = x;
+    p.y = y;
+    if (m[y][x] > dist && posicao_valida(p) && 
+        !tem_obstaculo(e, p) && !tem_inimigo(e, p)) {
+        m[y][x] = dist;
+        preencher_guerreiro(m, e, x + 1, y    , dist + 1);
+        preencher_guerreiro(m, e, x - 1, y    , dist + 1);
+        preencher_guerreiro(m, e, x    , y - 1, dist + 1);
+        preencher_guerreiro(m, e, x    , y + 1, dist + 1);
+        preencher_guerreiro(m, e, x + 1, y - 1, dist + 1);
+        preencher_guerreiro(m, e, x - 1, y + 1, dist + 1);
+        preencher_cabaleiro(m, e, x + 2, y    , dist + 1);
+        preencher_cabaleiro(m, e, x - 2, y    , dist + 1);
+        preencher_cabaleiro(m, e, x    , y - 2, dist + 1);
+        preencher_cabaleiro(m, e, x    , y + 2, dist + 1);
+        preencher_cabaleiro(m, e, x + 2, y - 2, dist + 1);
+        preencher_cabaleiro(m, e, x - 2, y + 2, dist + 1);
+        preencher_cabaleiro(m, e, x + 1, y - 2, dist + 1);
+        preencher_cabaleiro(m, e, x - 1, y + 2, dist + 1);
+        preencher_cabaleiro(m, e, x + 2, y - 1, dist + 1);
+        preencher_cabaleiro(m, e, x - 2, y + 1, dist + 1);
+        preencher_cabaleiro(m, e, x + 1, y + 1, dist + 1);
+        preencher_cabaleiro(m, e, x - 1, y - 1, dist + 1);
     }
 }
 
@@ -141,7 +170,41 @@ void matriz_guerreiro(ESTADO e, int m[TAM][TAM])
     for (i = 0; i < TAM; i++)
         for (j = 0; j < TAM; j++)
             m[i][j] = 999;
-    preencher(m, e, e.jog.pos.x, e.jog.pos.y, 0);
+    preencher_guerreiro(m, e, e.jog.pos.x, e.jog.pos.y, 0);
+}
+
+void matriz_cabaleiro(ESTADO e, int m[TAM][TAM])
+{
+    int i, j;
+    for (i = 0; i < TAM; i++)
+        for (j = 0; j < TAM; j++)
+            m[i][j] = 999;
+    preencher_cabaleiro(m, e, e.jog.pos.x, e.jog.pos.y, 0);
+}
+
+void mover_cabaleiro(ESTADO *e, int n, int m_cabaleiro[TAM][TAM])
+{
+    int i, j;
+    INIMIGO *inimigo = &(e->inimigo[n]);
+    int nx = inimigo->pos.x;
+    int ny = inimigo->pos.y;
+    POSICAO p;
+    if (!adjacente(inimigo->pos, e->jog.pos)) {
+        for (i = inimigo->pos.x - 2; i <= inimigo->pos.x + 2; i++)
+            for (j = inimigo->pos.y - 2; j <= inimigo->pos.y + 2; j++) {
+                p.x = i;
+                p.y = j;
+                if (posicao_valida(p) &&
+                    !posicao_ocupada(*e, p) &&
+                    movimento_valido(inimigo->pos.x - i, inimigo->pos.y - j) &&
+                    m_cabaleiro[j][i] < m_cabaleiro[ny][nx]) {
+                    nx = i;
+                    ny = j;                    
+                }
+            }
+    }
+    inimigo->pos.x = nx;
+    inimigo->pos.y = ny;
 }
 
 void mover_guerreiro(ESTADO *e, int n, int m_guerreiro[TAM][TAM])
@@ -192,7 +255,7 @@ void mover_corredor(ESTADO *e, int n, int m_guerreiro[TAM][TAM])
     inimigo->pos.y = ny;
 }
 
-void mover_inimigo(ESTADO *e, int n, int m_guerreiro[TAM][TAM])
+void mover_inimigo(ESTADO *e, int n, int m_guerreiro[TAM][TAM], int m_cabaleiro[TAM][TAM])
 {
     INIMIGO *inimigo = &(e->inimigo[n]);
     switch (inimigo->tipo) {
@@ -201,6 +264,9 @@ void mover_inimigo(ESTADO *e, int n, int m_guerreiro[TAM][TAM])
             break;
         case CORREDOR:
             mover_corredor(e, n, m_guerreiro);
+            break;
+        case CABALEIRO:
+            mover_cabaleiro(e, n, m_cabaleiro);
             break;
     }
 }
@@ -217,6 +283,11 @@ void matar_jogador(ESTADO *e, ESTADO antigo)
                 break;
             case CORREDOR:
                 if (colinear(e->inimigo[i].pos, antigo.inimigo[i].pos, e->jog.pos) &&
+                    adjacente(e->jog.pos, e->inimigo[i].pos))
+                    e->jog.vidas--;
+                break;
+            case CABALEIRO:
+                if (posicao_igual(e->inimigo[i].pos, antigo.inimigo[i].pos) &&
                     adjacente(e->jog.pos, e->inimigo[i].pos))
                     e->jog.vidas--;
                 break;
@@ -310,6 +381,7 @@ ESTADO atualizar_estado(ESTADO e, char query[])
     char mov;
     int i;
     int m_guerreiro[TAM][TAM];
+    int m_cabaleiro[TAM][TAM];
     if (e.jog.vidas <= 0 || query[0] == 'x')
         return e;
     sscanf(query, "%c,%c", (char *)&e.jog.modo, &mov);
@@ -330,7 +402,7 @@ ESTADO atualizar_estado(ESTADO e, char query[])
     if (e.jog.modo != MUDAR_MODO) {
         matriz_guerreiro(e, m_guerreiro);
         for (i = 0; i < e.num_inimigos; i++) {
-            mover_inimigo(&e, i, m_guerreiro);
+            mover_inimigo(&e, i, m_guerreiro, m_cabaleiro);
         }
 
         matar_jogador(&e, antigo);
