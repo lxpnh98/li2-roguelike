@@ -143,12 +143,6 @@ void preencher_cabaleiro(int m[TAM][TAM], ESTADO e, int x, int y, int dist)
     if (m[y][x] > dist && posicao_valida(p) && 
         !tem_obstaculo(e, p) && !tem_inimigo(e, p)) {
         m[y][x] = dist;
-        preencher_guerreiro(m, e, x + 1, y    , dist + 1);
-        preencher_guerreiro(m, e, x - 1, y    , dist + 1);
-        preencher_guerreiro(m, e, x    , y - 1, dist + 1);
-        preencher_guerreiro(m, e, x    , y + 1, dist + 1);
-        preencher_guerreiro(m, e, x + 1, y - 1, dist + 1);
-        preencher_guerreiro(m, e, x - 1, y + 1, dist + 1);
         preencher_cabaleiro(m, e, x + 2, y    , dist + 1);
         preencher_cabaleiro(m, e, x - 2, y    , dist + 1);
         preencher_cabaleiro(m, e, x    , y - 2, dist + 1);
