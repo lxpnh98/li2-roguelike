@@ -61,6 +61,7 @@ int main()
     } else {
         guardar_pontuacao("/var/www/scores", e.jog);
         imprime_top("/var/www/scores");
+        imprime_retorno();
     }
     FECHAR_SVG;
     if (file)

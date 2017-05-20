@@ -89,16 +89,31 @@ ESTADO ler_estado(FILE *file, char query[])
 {
     char *e;
     int tamanho;
-    int vidas, score;
+    int pagina, vidas, score;
+    char modo;
 
     /* Se não existir ficheiro ou o jogador entrar num novo nível, criar estado
      * aleatório. */
     if (file == NULL)
         return inicializar(INIT_VIDAS, 0);
+
+    sscanf(query, "%d", &pagina);
+
+    if (pagina == 1) {
+        sscanf(query, "1,%c", &modo);
+        if (modo == 'x') {
+            sscanf(query, "1,x,%d,%d", &vidas, &score);
+            return inicializar(vidas, score);
+        }
+    }
+
+    /*
     if (query[0] == 'x') {
         sscanf(query, "x,%d,%d", &vidas, &score);
         return inicializar(vidas, score);
     }
+    */
+
     /* Descubrir tamanho do ficheiro. */
     fseek(file, 0, SEEK_END);
     tamanho = ftell(file);
@@ -372,10 +387,50 @@ void atualizar_modo(ESTADO *e, char modo)
 ESTADO atualizar_estado(ESTADO e, char query[])
 {
     ESTADO antigo = e;
-    char mov;
+    int pagina;
+    char modo, mov;
     int i;
     int m_guerreiro[TAM][TAM];
     int m_cabaleiro[TAM][TAM];
+
+    sscanf(query, "%d", &pagina);
+    //%c,%c", (char *)&e.jog.modo, &mov);
+
+    if (pagina == 1) {
+        sscanf(query, "1,%c", &modo);
+        if (e.jog.vidas <= 0 || modo == 'x')
+            return e;
+        sscanf(query, "1,%c,%c", (char *)&e.jog.modo, &mov);
+        
+        switch (e.jog.modo) {
+            case NORMAL:
+                atualizar_normal(&e, &antigo, mov);
+                break;
+            case ATAQUE:
+                atualizar_ataque(&e, &antigo, mov);
+                break;
+            default:
+                break;
+        }
+
+        /* Mover inimigos aqui */
+        if (e.jog.modo != MUDAR_MODO) {
+            matriz_guerreiro(e, m_guerreiro);
+            for (i = 0; i < e.num_inimigos; i++) {
+                mover_inimigo(&e, i, m_guerreiro, m_cabaleiro);
+            }
+
+            matar_jogador(&e, antigo);
+        } else {
+            atualizar_modo(&e, mov);
+        }
+        return e;
+
+    } else {
+        return inicializar(INIT_VIDAS, 0);
+    }
+
+    /*
     if (e.jog.vidas <= 0 || query[0] == 'x')
         return e;
     sscanf(query, "%c,%c", (char *)&e.jog.modo, &mov);
@@ -392,7 +447,6 @@ ESTADO atualizar_estado(ESTADO e, char query[])
             break;
     }
 
-    /* Mover inimigos aqui */
     if (e.jog.modo != MUDAR_MODO) {
         matriz_guerreiro(e, m_guerreiro);
         for (i = 0; i < e.num_inimigos; i++) {
@@ -403,7 +457,7 @@ ESTADO atualizar_estado(ESTADO e, char query[])
     } else {
         atualizar_modo(&e, mov);
     }
+    */
 
-    return e;
 }
 

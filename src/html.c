@@ -80,14 +80,14 @@ void imprime_movimento(ESTADO e, int dx, int dy)
         p.y = e.jog.pos.y + dy;
         if (!posicao_valida(p) || posicao_ocupada(e, p)) return;
         if (tem_saida(e, p)) {
-            sprintf(link, "http://localhost/cgi-bin/main?x,%d,%d", e.jog.vidas, e.jog.score);
+            sprintf(link, "http://localhost/cgi-bin/main?1,x,%d,%d", e.jog.vidas, e.jog.score);
             ABRIR_LINK(link);
             imprime_casa(e, p);
             FECHAR_LINK;
             return;
         }
         mov = determinar_mov(dx, dy);
-        sprintf(link, "http://localhost/cgi-bin/main?n,%c", mov);
+        sprintf(link, "http://localhost/cgi-bin/main?1,n,%c", mov);
         ABRIR_LINK(link);
         imprime_casa(e, p);
         FECHAR_LINK;
@@ -114,7 +114,7 @@ void imprime_ataque(ESTADO e, int dx, int dy)
         p.y = e.jog.pos.y + dy;
         if (posicao_valida(p) && tem_inimigo(e, p)) {
             mov = determinar_mov(dx, dy);
-            sprintf(link, "http://localhost/cgi-bin/main?a,%c", mov);
+            sprintf(link, "http://localhost/cgi-bin/main?1,a,%c", mov);
             ABRIR_LINK(link);
             imprime_casa(e, p);
             FECHAR_LINK;
@@ -179,7 +179,7 @@ void imprime_modo(char modo, int x)
 {
     int y = 8;
     char link[MAX_BUFFER];
-    sprintf(link, "http://localhost/cgi-bin/main?m,%c", modo);
+    sprintf(link, "http://localhost/cgi-bin/main?1,m,%c", modo);
     ABRIR_LINK(link);
     IMAGEM(x, y, OFFSET_WIDTH, OFFSET_HEIGHT, ESCALA, "Heart2.png");
     FECHAR_LINK;
@@ -226,4 +226,12 @@ void imprime_top(char top_scores[])
     }
     FECHAR_TABELA;
     fclose(file);
+}
+
+void imprime_retorno()
+{
+    // Têm de fazer scroll para baixo para ver o link.
+    // Depois substitui-se por uma imagem (e põe-se a retornar para o menu
+    // principal, não um novo jogo).
+    printf("<a href=\"http://localhost/cgi-bin/main?0\" class=\"button\">Retornar</a>");
 }
