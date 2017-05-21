@@ -137,7 +137,7 @@ void imprime_jogador(ESTADO e)
     int x_offset = calc_xoffset(e.jog.pos.y);
     int y_offset = calc_yoffset(e.jog.pos.y);
     if (e.jog.vidas > 0) {
-        IMAGEM(e.jog.pos.x, e.jog.pos.y, x_offset, y_offset, ESCALA, "DwellerN_03.png");
+        IMAGEM(e.jog.pos.x, e.jog.pos.y, x_offset, y_offset, ESCALA, "jogador.png");
         switch (e.jog.modo) {
             case NORMAL:
                 imprime_movimentos(e);
@@ -159,7 +159,17 @@ void imprime_inimigos(ESTADO e)
     for(i = 0; i < e.num_inimigos; i++) {
         x_offset = calc_xoffset(e.inimigo[i].pos.y);
         y_offset = calc_yoffset(e.inimigo[i].pos.y);
-        IMAGEM(e.inimigo[i].pos.x, e.inimigo[i].pos.y, x_offset, y_offset, ESCALA, "ks01-ogre_mage2_02_hi.png");
+        switch (e.inimigo[i].tipo) {
+            case GUERREIRO:
+                IMAGEM(e.inimigo[i].pos.x, e.inimigo[i].pos.y, x_offset, y_offset, ESCALA, "guerreiro.png");
+                break;
+            case CORREDOR:
+                IMAGEM(e.inimigo[i].pos.x, e.inimigo[i].pos.y, x_offset, y_offset, ESCALA, "corredor.png");
+                break;
+            case CABALEIRO:
+                IMAGEM(e.inimigo[i].pos.x, e.inimigo[i].pos.y, x_offset, y_offset, ESCALA, "cavaleiro.png");
+                break;
+        }
     }
 }
 
@@ -171,7 +181,7 @@ void imprime_obstaculos(ESTADO e)
     for(i = 0; i < e.num_obstaculos; i++) {
         x_offset = calc_xoffset(e.obstaculo[i].y);
         y_offset = calc_yoffset(e.obstaculo[i].y);
-        IMAGEM(e.obstaculo[i].x, e.obstaculo[i].y, x_offset, y_offset, ESCALA, "lava_pool1.png");
+        IMAGEM(e.obstaculo[i].x, e.obstaculo[i].y, x_offset, y_offset, ESCALA, "obstaculo.png");
     }
 }
 
@@ -181,7 +191,16 @@ void imprime_modo(char modo, int x)
     char link[MAX_BUFFER];
     sprintf(link, "http://localhost/cgi-bin/main?1,m,%c", modo);
     ABRIR_LINK(link);
-    IMAGEM(x, y, OFFSET_WIDTH, OFFSET_HEIGHT, ESCALA, "Heart2.png");
+    switch (modo) {
+        case NORMAL:
+            IMAGEM(x, y, OFFSET_WIDTH, OFFSET_HEIGHT, ESCALA, "botao_normal.png");
+            break;
+        case ATAQUE:
+            IMAGEM(x, y, OFFSET_WIDTH, OFFSET_HEIGHT, ESCALA, "botao_ataque.png");
+            break;
+        default:
+            break;
+    }
     FECHAR_LINK;
 }
 
