@@ -40,7 +40,7 @@ ESTADO str2estado(char *argumentos)
 ESTADO inicializar_inimigo(ESTADO e) {
     POSICAO p;
     rand_pos(e, &p, 1);
-    e.inimigo[(int)e.num_inimigos].tipo = GUERREIRO;
+    e.inimigo[(int)e.num_inimigos].tipo = rand() % 3;
     e.inimigo[(int)e.num_inimigos].pos = p;
     e.num_inimigos++;
 
@@ -92,13 +92,13 @@ ESTADO ler_estado(FILE *file, char query[])
     int pagina, vidas, score;
     char modo;
 
-    /* Se não existir ficheiro ou o jogador entrar num novo nível, criar estado
-     * aleatório. */
+    /* Se não existir ficheiro , criar estado aleatório. */
     if (file == NULL)
         return inicializar(INIT_VIDAS, 0);
 
+    /* Se estiver no menu principal ou jogador passar de nível, gerar estado
+     * aleatório */
     sscanf(query, "%d", &pagina);
-
     if (pagina == 1) {
         sscanf(query, "1,%c", &modo);
         if (modo == 'x') {
@@ -106,13 +106,6 @@ ESTADO ler_estado(FILE *file, char query[])
             return inicializar(vidas, score);
         }
     }
-
-    /*
-    if (query[0] == 'x') {
-        sscanf(query, "x,%d,%d", &vidas, &score);
-        return inicializar(vidas, score);
-    }
-    */
 
     /* Descubrir tamanho do ficheiro. */
     fseek(file, 0, SEEK_END);
@@ -205,8 +198,8 @@ void mover_cabaleiro(ESTADO *e, int n, int m_cabaleiro[TAM][TAM])
                 p.y = j;
                 if (posicao_valida(p) &&
                     !posicao_ocupada(*e, p) &&
-                    movimento_valido(inimigo->pos.x - i, inimigo->pos.y - j) &&
-                    m_cabaleiro[j][i] < m_cabaleiro[ny][nx]) {
+                    movimento_valido_cav(inimigo->pos.x - i, inimigo->pos.y - j) &&
+                    m_cabaleiro[j][i] <= m_cabaleiro[ny][nx]) {
                     nx = i;
                     ny = j;                    
                 }
@@ -275,7 +268,7 @@ void mover_inimigo(ESTADO *e, int n, int m_guerreiro[TAM][TAM], int m_cabaleiro[
             mover_corredor(e, n, m_guerreiro);
             break;
         case CABALEIRO:
-            mover_cabaleiro(e, n, m_cabaleiro);
+            mover_cabaleiro(e, n, m_guerreiro /* m_cabaleiro */);
             break;
     }
 }
@@ -296,7 +289,8 @@ void matar_jogador(ESTADO *e, ESTADO antigo)
                     e->jog.vidas--;
                 break;
             case CABALEIRO:
-                if (posicao_igual(e->inimigo[i].pos, antigo.inimigo[i].pos) &&
+                if (!posicao_igual(e->inimigo[i].pos, antigo.inimigo[i].pos) &&
+                    adjacente(e->jog.pos, antigo.inimigo[i].pos) &&
                     adjacente(e->jog.pos, e->inimigo[i].pos))
                     e->jog.vidas--;
                 break;
