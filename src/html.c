@@ -137,7 +137,7 @@ void imprime_jogador(ESTADO e)
     int x_offset = calc_xoffset(e.jog.pos.y);
     int y_offset = calc_yoffset(e.jog.pos.y);
     if (e.jog.vidas > 0) {
-        IMAGEM(e.jog.pos.x, e.jog.pos.y, x_offset, y_offset, ESCALA, "jogador.png");
+        IMAGEM(e.jog.pos.x, e.jog.pos.y, x_offset, y_offset, ESCALA, "player.png");
 
         switch (e.jog.modo) {
             case NORMAL:
