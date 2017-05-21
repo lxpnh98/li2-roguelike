@@ -24,7 +24,7 @@ int calc_yoffset(int y)
 void imprime_vida(int x)
 {
     int y = 7;
-    IMAGEM(x, y, OFFSET_WIDTH, OFFSET_HEIGHT, ESCALA, "Heart2.png");
+    IMAGEM(x, y, OFFSET_WIDTH, OFFSET_HEIGHT, ESCALA, "heart.png");
 }
 
 void imprime_vidas(ESTADO e)
@@ -39,9 +39,9 @@ void imprime_casa(ESTADO e, POSICAO p)
 {
     int x_offset = calc_xoffset(p.y);
     int y_offset = calc_yoffset(p.y);
+    IMAGEM(p.x, p.y, x_offset, y_offset, ESCALA, "basic_hex.png");
     if (tem_saida(e, p))
         IMAGEM(p.x, p.y, x_offset, y_offset, ESCALA, "hexit.png");
-    IMAGEM(p.x, p.y, x_offset, y_offset, ESCALA, "basic_hex.png");
 }
 
 void imprime_tabuleiro(ESTADO e)
@@ -137,7 +137,7 @@ void imprime_jogador(ESTADO e)
     int x_offset = calc_xoffset(e.jog.pos.y);
     int y_offset = calc_yoffset(e.jog.pos.y);
     if (e.jog.vidas > 0) {
-        IMAGEM(e.jog.pos.x, e.jog.pos.y, x_offset, y_offset, ESCALA, "DwellerN_03.png");
+        IMAGEM(e.jog.pos.x, e.jog.pos.y, x_offset, y_offset, ESCALA, "player.png");
         switch (e.jog.modo) {
             case NORMAL:
                 imprime_movimentos(e);
@@ -171,7 +171,7 @@ void imprime_obstaculos(ESTADO e)
     for(i = 0; i < e.num_obstaculos; i++) {
         x_offset = calc_xoffset(e.obstaculo[i].y);
         y_offset = calc_yoffset(e.obstaculo[i].y);
-        IMAGEM(e.obstaculo[i].x, e.obstaculo[i].y, x_offset, y_offset, ESCALA, "lava_pool1.png");
+        IMAGEM(e.obstaculo[i].x, e.obstaculo[i].y, x_offset, y_offset, ESCALA, "lava_pool.png");
     }
 }
 
