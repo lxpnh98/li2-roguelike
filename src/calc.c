@@ -29,6 +29,24 @@ int movimento_valido(int dx, int dy)
            abs(get_z(p)) < 2;
 }
 
+int movimento_valido_cav(int dx, int dy)
+{
+    int r = 0;
+    if      (dx == +2 && dy ==  0) r = 1;
+    else if (dx == -2 && dy ==  0) r = 1;
+    else if (dx ==  0 && dy == -2) r = 1;
+    else if (dx ==  0 && dy == +2) r = 1;
+    else if (dx == +2 && dy == -2) r = 1;
+    else if (dx == -2 && dy == +2) r = 1;
+    else if (dx == +1 && dy == -2) r = 1;
+    else if (dx == -1 && dy == +2) r = 1;
+    else if (dx == +2 && dy == -1) r = 1;
+    else if (dx == -2 && dy == +1) r = 1;
+    else if (dx == +1 && dy == +1) r = 1;
+    else if (dx == -1 && dy == -1) r = 1;
+    return r;
+}
+
 void rand_pos(ESTADO e, POSICAO *p, int testar_saida)
 {
     do {

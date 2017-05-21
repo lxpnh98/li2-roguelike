@@ -1,4 +1,5 @@
 int movimento_valido(int dx, int dy);
+int movimento_valido_cav(int dx, int dy);
 void rand_pos(ESTADO e, POSICAO *p, int testar_saida);
 int posicao_igual(POSICAO p1, POSICAO p2);
 int posicao_valida(POSICAO p);
