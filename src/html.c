@@ -167,7 +167,7 @@ void imprime_inimigos(ESTADO e)
             case CORREDOR:
                 IMAGEM(e.inimigo[i].pos.x, e.inimigo[i].pos.y, x_offset, y_offset, ESCALA, "corredor.png");
                 break;
-            case CABALEIRO:
+            case CAVALEIRO:
                 IMAGEM(e.inimigo[i].pos.x, e.inimigo[i].pos.y, x_offset, y_offset, ESCALA, "cavaleiro.png");
                 break;
         }
