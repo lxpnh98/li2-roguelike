@@ -44,6 +44,13 @@ void imprime_casa(ESTADO e, POSICAO p)
         IMAGEM(p.x, p.y, x_offset, y_offset, ESCALA, "hexit.png");
 }
 
+void imprime_casa_transparente(POSICAO p)
+{
+    int x_offset = calc_xoffset(p.y);
+    int y_offset = calc_yoffset(p.y);
+    IMAGEM(p.x, p.y, x_offset, y_offset, ESCALA, "alpha_hex.png");
+}
+
 void imprime_tabuleiro(ESTADO e)
 {
     int x, y;
@@ -89,7 +96,7 @@ void imprime_movimento(ESTADO e, int dx, int dy)
         mov = determinar_mov(dx, dy);
         sprintf(link, "http://localhost/cgi-bin/main?1,n,%c", mov);
         ABRIR_LINK(link);
-        imprime_casa(e, p);
+        imprime_casa_transparente(p);
         FECHAR_LINK;
     }
 }
@@ -116,7 +123,7 @@ void imprime_ataque(ESTADO e, int dx, int dy)
             mov = determinar_mov(dx, dy);
             sprintf(link, "http://localhost/cgi-bin/main?1,a,%c", mov);
             ABRIR_LINK(link);
-            imprime_casa(e, p);
+            imprime_casa_transparente(p);
             FECHAR_LINK;
         }
     }
