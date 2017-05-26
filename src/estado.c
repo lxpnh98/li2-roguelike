@@ -366,10 +366,6 @@ void atualizar_ataque(ESTADO *e, ESTADO *antigo, char mov)
             break;
         }
     }
-    /* ver se é igual
-    // loop dos inimigos
-       eliminar inimigo i */
-
     e->jog.modo = 'n';
 }
 
@@ -388,8 +384,6 @@ ESTADO atualizar_estado(ESTADO e, char query[])
     int m_cavaleiro[TAM][TAM];
 
     sscanf(query, "%d", &pagina);
-    //%c,%c", (char *)&e.jog.modo, &mov);
-
     if (pagina == 1) {
         sscanf(query, "1,%c", &modo);
         if (e.jog.vidas <= 0 || modo == 'x')
@@ -423,35 +417,6 @@ ESTADO atualizar_estado(ESTADO e, char query[])
     } else {
         return inicializar(INIT_VIDAS, 0);
     }
-
-    /*
-    if (e.jog.vidas <= 0 || query[0] == 'x')
-        return e;
-    sscanf(query, "%c,%c", (char *)&e.jog.modo, &mov);
-    printf("<!-- %c -->\n", e.jog.modo);
-
-    switch (e.jog.modo) {
-        case NORMAL:
-            atualizar_normal(&e, &antigo, mov);
-            break;
-        case ATAQUE:
-            atualizar_ataque(&e, &antigo, mov);
-            break;
-        default:
-            break;
-    }
-
-    if (e.jog.modo != MUDAR_MODO) {
-        matriz_guerreiro(e, m_guerreiro);
-        for (i = 0; i < e.num_inimigos; i++) {
-            mover_inimigo(&e, i, m_guerreiro, m_cavaleiro);
-        }
-
-        matar_jogador(&e, antigo);
-    } else {
-        atualizar_modo(&e, mov);
-    }
-    */
 
 }
 

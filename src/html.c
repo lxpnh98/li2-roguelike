@@ -236,14 +236,10 @@ void imprime_top(char top_scores[])
 {
     FILE *file = fopen(top_scores, "r");
     int i, x;
-    /* char buf[102040]; */
     if(file == NULL) {
             perror("nao consegui abrir o ficheiro de scores para leitura");
             exit(1);
     }
-    /* fprintf(stderr, "lendo a linha: %p\n", fgets(buf, 10240, file));
-    fprintf(stderr, "primeira linha: %s\n", buf);
-    fprintf(stderr, "<!-- %p %d -->\n", file, fscanf(file, "%d\n", &x)); */
     rewind(file);
     ABRIR_TABELA;
     for (i = 0; fscanf(file, "%d\n", &x) && i < 10; i++) {
