@@ -11,23 +11,23 @@ Macros úteis para gerar CGIs
 /**
 * Caminho para as imagens
 */
-#define IMAGE_PATH							"http://localhost/images/"
+#define IMAGE_PATH                            "http://localhost/images/"
 
 /**
 \brief Macro para começar o html
 */
-#define COMECAR_HTML						printf("Content-Type: text/html\n\n")
+#define COMECAR_HTML                          printf("Content-Type: text/html\n\n")
 
 /**
 \brief Macro para abrir um svg
 @param tamx O comprimento do svg
 @param tamy A altura do svg
 */
-#define ABRIR_SVG(tamx, tamy)				printf("<svg width=%d height=%d>\n", tamx, tamy)
+#define ABRIR_SVG(tamx, tamy)                 printf("<svg width=%d height=%d>\n", tamx, tamy)
 /**
 \brief Macro para fechar um svg
 */
-#define FECHAR_SVG							printf("</svg>\n")
+#define FECHAR_SVG                            printf("</svg>\n")
 
 /**
 \brief Macro para criar uma imagem
@@ -36,8 +36,9 @@ Macros úteis para gerar CGIs
 @param ESCALA A escala da imagem
 @param FICHEIRO O caminho para o link do ficheiro
 */
-#define IMAGEM(X, Y, X_OFFSET, Y_OFFSET, ESCALA, FICHEIRO)		printf("<image x=%d y=%d width=%d height=%d xlink:href=%s />\n", \
-        												ESCALA * X + X_OFFSET, ESCALA * Y + Y_OFFSET, ESCALA, ESCALA, IMAGE_PATH FICHEIRO)
+#define IMAGEM(X, Y, X_OFFSET, Y_OFFSET, ESCALA, FICHEIRO) \
+    printf("<image x=%d y=%d width=%d height=%d xlink:href=%s />\n", \
+        ESCALA * X + X_OFFSET, ESCALA * Y + Y_OFFSET, ESCALA, ESCALA, IMAGE_PATH FICHEIRO)
 
 /**
 \brief Macro para criar um quadrado
@@ -46,43 +47,44 @@ Macros úteis para gerar CGIs
 @param ESCALA A escala do quadrado
 @param COR A cor de preenchimento do quadrado
 */
-#define QUADRADO(X, Y, ESCALA, COR)			printf("<rect x=%d y=%d width=%d height=%d fill=%s />\n", \
-												ESCALA * X, ESCALA* Y, ESCALA, ESCALA, COR)
+#define QUADRADO(X, Y, ESCALA, COR) \
+    printf("<rect x=%d y=%d width=%d height=%d fill=%s />\n", \
+        ESCALA * X, ESCALA* Y, ESCALA, ESCALA, COR)
 
 /**
 \brief Macro para abrir um link
 @param link O caminho para o link
 */
-#define ABRIR_LINK(link)					printf("<a xlink:href=%s>\n", link)
+#define ABRIR_LINK(link)                      printf("<a xlink:href=%s>\n", link)
 
 /**
 \brief Macro para fechar o link
 */
-#define FECHAR_LINK							printf("</a>\n")
+#define FECHAR_LINK                           printf("</a>\n")
 
 /**
 \brief Macro para abrir a tabela das pontuções
 */
-#define ABRIR_TABELA                        printf("<TABLE border=\"1\" style=\"position:absolute; left:100px; top: 100px;\">\n")
+#define ABRIR_TABELA                          printf("<TABLE border=\"1\" style=\"position:absolute; left:100px; top: 100px;\">\n")
 
 /**
 \brief Macro para fechar a tabela das pontuções
 */
-#define FECHAR_TABELA                       printf("</TABLE>\n")
+#define FECHAR_TABELA                         printf("</TABLE>\n")
 
 /**
 \brief Macro para abrir uma linha da tabela
 */
-#define ABRIR_LINHA                         printf("<TR>\n")
+#define ABRIR_LINHA                           printf("<TR>\n")
 
 /**
 \brief Macro para fechar uma linha da tabela
 */
-#define FECHAR_LINHA                        printf("</TR>\n")
+#define FECHAR_LINHA                          printf("</TR>\n")
 
 /**
 \brief Macro para imprimir uma célula da tabela
 */
-#define IMPRIMIR_CELULA(X)                  printf("<TD>%d</TD>\n", X)
+#define IMPRIMIR_CELULA(X)                    printf("<TD>%d</TD>\n", X)
 
 #endif

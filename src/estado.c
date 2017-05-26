@@ -13,12 +13,9 @@ char *estado2str(ESTADO e)
     static char buffer[MAX_BUFFER];
     char *p = (char *) &e;
     int i;
-
     buffer[0] = 0;
-
     for(i = 0; (unsigned int)i < sizeof(ESTADO); i++)
         sprintf(buffer, "%s%02x", buffer, p[i]);
-    
     return buffer;
 }
 
@@ -27,13 +24,11 @@ ESTADO str2estado(char *argumentos)
     ESTADO e;
     char *p = (char *) &e;
     int i;
-
     for(i = 0; (unsigned int)i < sizeof(ESTADO); i++, argumentos += 2) {
         int d;
         sscanf(argumentos, "%2x", (unsigned int *)&d);
         p[i] = (char) d;
     }
-    
     return e;
 }
 
@@ -43,7 +38,6 @@ ESTADO inicializar_inimigo(ESTADO e) {
     e.inimigo[(int)e.num_inimigos].tipo = rand() % 3;
     e.inimigo[(int)e.num_inimigos].pos = p;
     e.num_inimigos++;
-
     return e;
 }
 
@@ -59,7 +53,6 @@ ESTADO inicializar_obstaculo(ESTADO e) {
     rand_pos(e, &p, 1);
     e.obstaculo[(int)e.num_obstaculos] = p;
     e.num_obstaculos++;
-
     return e;
 }
 
@@ -201,7 +194,7 @@ void mover_cavaleiro(ESTADO *e, int n, int m_cavaleiro[TAM][TAM])
                     movimento_valido_cav(inimigo->pos.x - i, inimigo->pos.y - j) &&
                     m_cavaleiro[j][i] <= m_cavaleiro[ny][nx]) {
                     nx = i;
-                    ny = j;                    
+                    ny = j;
                 }
             }
     }
@@ -226,7 +219,7 @@ void mover_guerreiro(ESTADO *e, int n, int m_guerreiro[TAM][TAM])
                     movimento_valido(inimigo->pos.x - i, inimigo->pos.y - j) &&
                     m_guerreiro[j][i] < m_guerreiro[ny][nx]) {
                     nx = i;
-                    ny = j;                    
+                    ny = j;
                 }
             }
     }
@@ -250,7 +243,7 @@ void mover_corredor(ESTADO *e, int n, int m_guerreiro[TAM][TAM])
                 movimento_valido(inimigo->pos.x - i, inimigo->pos.y - j) &&
                 m_guerreiro[j][i] < m_guerreiro[ny][nx]) {
                 nx = i;
-                ny = j;                    
+                ny = j;
             }
         }
     inimigo->pos.x = nx;
@@ -382,14 +375,12 @@ ESTADO atualizar_estado(ESTADO e, char query[])
     int i;
     int m_guerreiro[TAM][TAM];
     int m_cavaleiro[TAM][TAM];
-
     sscanf(query, "%d", &pagina);
     if (pagina == 1) {
         sscanf(query, "1,%c", &modo);
         if (e.jog.vidas <= 0 || modo == 'x')
             return e;
         sscanf(query, "1,%c,%c", (char *)&e.jog.modo, &mov);
-        
         switch (e.jog.modo) {
             case NORMAL:
                 atualizar_normal(&e, &antigo, mov);
@@ -407,7 +398,6 @@ ESTADO atualizar_estado(ESTADO e, char query[])
             for (i = 0; i < e.num_inimigos; i++) {
                 mover_inimigo(&e, i, m_guerreiro, m_cavaleiro);
             }
-
             matar_jogador(&e, antigo);
         } else {
             atualizar_modo(&e, mov);
@@ -417,6 +407,5 @@ ESTADO atualizar_estado(ESTADO e, char query[])
     } else {
         return inicializar(INIT_VIDAS, 0);
     }
-
 }
 
