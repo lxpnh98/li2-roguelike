@@ -212,6 +212,7 @@ void imprime_modo(char modo, int x)
     FECHAR_LINK;
 }
 
+
 void imprime_modos(ESTADO e)
 {
     char modos[] = {'n', 'a', '\0'};
@@ -232,6 +233,13 @@ void imprime_jogo(ESTADO e)
     imprime_modos(e);
 }
 
+/**
+    \brief Função que imprime no ecrâ o top10 das melhores pontuções do jogador
+
+    @param não sei o que por aqui
+
+    @returns esta função não retorna nada, apenas imprime a tabela das pontuções no ecrã.
+*/
 void imprime_top(char top_scores[])
 {
     FILE *file = fopen(top_scores, "r");
@@ -251,6 +259,9 @@ void imprime_top(char top_scores[])
     fclose(file);
 }
 
+/**
+    \brief Função que imprime no ecrâ o botão que permite retornar ao Menu Principal, depois de acabado o jogo
+*/
 void imprime_retorno()
 {
     // Têm de fazer scroll para baixo para ver o link.
