@@ -50,7 +50,9 @@ void rand_pos(ESTADO e, POSICAO *p, int testar_saida)
     do {
         p->x = rand() % TAM;
         p->y = rand() % TAM;
-    } while (!posicao_valida(*p) || posicao_ocupada(e, *p) || (tem_saida(e, *p) && testar_saida));
+    } while (!posicao_valida(*p)    ||
+             posicao_ocupada(e, *p) ||
+             (tem_saida(e, *p) && testar_saida));
 }
 
 int posicao_igual(POSICAO p1, POSICAO p2)
@@ -65,22 +67,24 @@ int tem_jogador(ESTADO e, POSICAO p)
 
 int tem_inimigo(ESTADO e, POSICAO p)
 {
-    int i;
+    int i, r = 0;
     for (i = 0; i < e.num_inimigos; i++) {
         if (posicao_igual(e.inimigo[i].pos, p))
-            return 1;
+            r = 1;
+            break;
         }
-    return 0;
+    return r;
 }
 
 int tem_obstaculo(ESTADO e, POSICAO p)
 {
-    int i;
+    int i, r = 0;
     for (i = 0; i < e.num_obstaculos; i++) {
         if (posicao_igual(e.obstaculo[i], p))
-            return 1;
-    }
-    return 0;
+            r = 1;
+            break;
+        }
+    return r;
 }
 
 int tem_saida(ESTADO e, POSICAO p)

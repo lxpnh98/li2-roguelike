@@ -7,6 +7,10 @@
 #include "calc.h"
 
 #define INIT_VIDAS              5
+#define NUM_TIPO_INIMIGOS       3
+#define TESTAR_SAIDA            1
+
+#define PASTE(X,Y) (X ## Y)
 
 char *estado2str(ESTADO e)
 {
@@ -34,8 +38,8 @@ ESTADO str2estado(char *argumentos)
 
 ESTADO inicializar_inimigo(ESTADO e) {
     POSICAO p;
-    rand_pos(e, &p, 1);
-    e.inimigo[(int)e.num_inimigos].tipo = rand() % 3;
+    rand_pos(e, &p, TESTAR_SAIDA);
+    e.inimigo[(int)e.num_inimigos].tipo = rand() % NUM_TIPO_INIMIGOS;
     e.inimigo[(int)e.num_inimigos].pos = p;
     e.num_inimigos++;
     return e;
@@ -50,7 +54,7 @@ ESTADO inicializar_inimigos(ESTADO e, int num) {
 
 ESTADO inicializar_obstaculo(ESTADO e) {
     POSICAO p;
-    rand_pos(e, &p, 1);
+    rand_pos(e, &p, TESTAR_SAIDA);
     e.obstaculo[(int)e.num_obstaculos] = p;
     e.num_obstaculos++;
     return e;
@@ -66,12 +70,12 @@ ESTADO inicializar_obstaculos(ESTADO e, int num) {
 ESTADO inicializar(int vidas, int score) {
     POSICAO p;
     ESTADO e = {{{0,0},0,0,0},0,0,{{0}},{{0}},{0,0}};
-    rand_pos(e, &p, 0);
+    rand_pos(e, &p, !TESTAR_SAIDA);
     e.jog.pos = p;
     e.jog.vidas = vidas;
     e.jog.score = score;
     e.jog.modo = NORMAL;
-    rand_pos(e, &p, 0);
+    rand_pos(e, &p, !TESTAR_SAIDA);
     e.saida = p;
     e = inicializar_inimigos(e, 10);
     e = inicializar_obstaculos(e, 10);
@@ -252,18 +256,13 @@ void mover_corredor(ESTADO *e, int n, int m_guerreiro[TAM][TAM])
 
 void mover_inimigo(ESTADO *e, int n, int m_guerreiro[TAM][TAM], int m_cavaleiro[TAM][TAM])
 {
+    void (*f[])(ESTADO *e, int n, int m[TAM][TAM]) = {
+        mover_guerreiro,
+        mover_corredor,
+        mover_cavaleiro
+    };
     INIMIGO *inimigo = &(e->inimigo[n]);
-    switch (inimigo->tipo) {
-        case GUERREIRO:
-            mover_guerreiro(e, n, m_guerreiro);
-            break;
-        case CORREDOR:
-            mover_corredor(e, n, m_guerreiro);
-            break;
-        case CAVALEIRO:
-            mover_cavaleiro(e, n, m_guerreiro /* m_cavaleiro */);
-            break;
-    }
+    (f[inimigo->tipo])(e, n, m_guerreiro);
 }
 
 void matar_jogador(ESTADO *e, ESTADO antigo)
