@@ -238,6 +238,7 @@ void imprime_jogo(ESTADO e)
 
     @param não sei o que por aqui
 
+
     @returns esta função não retorna nada, apenas imprime a tabela das pontuções no ecrã.
 */
 void imprime_top(char top_scores[])
@@ -252,6 +253,7 @@ void imprime_top(char top_scores[])
     ABRIR_TABELA;
     for (i = 0; fscanf(file, "%d\n", &x) && i < 10; i++) {
         ABRIR_LINHA;
+        IMPRIMIR_CELULA(i+1);
         IMPRIMIR_CELULA(x);
         FECHAR_LINHA;
     }
@@ -260,12 +262,15 @@ void imprime_top(char top_scores[])
 }
 
 /**
-    \brief Função que imprime no ecrâ o botão que permite retornar ao Menu Principal, depois de acabado o jogo
+    \brief Função que imprime no ecrâ o botão que inicia o novo jogo.
 */
 void imprime_retorno()
 {
-    // Têm de fazer scroll para baixo para ver o link.
-    // Depois substitui-se por uma imagem (e põe-se a retornar para o menu
-    // principal, não um novo jogo).
-    printf("<a href=\"http://localhost/cgi-bin/main?0\" class=\"button\">Retornar</a>");
+	//int x = 3;
+	//int y = 2;<
+    //ABRIR_LINK("http://localhost/cgi-bin/main?0");
+    //IMAGEM(x, y, OFFSET_WIDTH, OFFSET_HEIGHT, ESCALA, "botao.png"); 
+    printf("<image x=%d y=%d width=%d height=%d xlink:href=%s />\n", \
+    	100, 200, 167, 61, IMAGE_PATH "botao.png");
+    //FECHAR_LINK;
 }

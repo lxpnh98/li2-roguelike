@@ -55,15 +55,20 @@ int main()
         file = fopen("/var/www/estado", "w");
         fputs(estado2str(e), file);
     }
-    ABRIR_SVG(600, 600);
+    
     if (e.jog.vidas > 0) {
+        ABRIR_SVG(600, 600);
         imprime_jogo(e);
+        imprime_retorno();
+        FECHAR_SVG;
     } else {
+        ABRIR_SVG(600, 600);
         guardar_pontuacao("/var/www/scores", e.jog);
         imprime_top("/var/www/scores");
         imprime_retorno();
+        FECHAR_SVG;
     }
-    FECHAR_SVG;
+    
     if (file)
         fclose(file);
     return 0;
