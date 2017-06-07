@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <math.h>
+#include <string.h>
 
 #include "cgi.h"
 #include "estado.h"
@@ -193,22 +194,26 @@ void imprime_obstaculos(ESTADO e)
     }
 }
 
+void imprime_imagem(int x, int y, int x_offset, int y_offset, int escala, char ficheiro[])
+{
+    char link[MAX_BUFFER];
+    sprintf(link, "%s%s", IMAGE_PATH, ficheiro);
+    printf("<image x=%d y=%d width=%d height=%d xlink:href=%s />\n",
+        escala * x + x_offset, escala * y + y_offset, escala, escala, link);
+}
+
 void imprime_modo(char modo, int x)
 {
+    static char modos[] = "na";
+    static char *imgs[] = {"botao_normal.png", "botao_ataque.png"};
     int y = 8;
     char link[MAX_BUFFER];
     sprintf(link, "http://localhost/cgi-bin/main?1,m,%c", modo);
     ABRIR_LINK(link);
-    switch (modo) {
-        case NORMAL:
-            IMAGEM(x, y, OFFSET_WIDTH, OFFSET_HEIGHT, ESCALA, "botao_normal.png");
-            break;
-        case ATAQUE:
-            IMAGEM(x, y, OFFSET_WIDTH, OFFSET_HEIGHT, ESCALA, "botao_ataque.png");
-            break;
-        default:
-            break;
-    }
+    int i;
+    for (i = 0; modos[i] != '\0'; i++)
+        if (modos[i] == modo)
+            imprime_imagem(x, y, OFFSET_WIDTH, OFFSET_HEIGHT, ESCALA, imgs[i]);
     FECHAR_LINK;
 }
 
@@ -237,8 +242,6 @@ void imprime_jogo(ESTADO e)
     \brief Função que imprime no ecrâ o top10 das melhores pontuções do jogador
 
     @param não sei o que por aqui
-
-    @returns esta função não retorna nada, apenas imprime a tabela das pontuções no ecrã.
 */
 void imprime_top(char top_scores[])
 {
@@ -264,8 +267,5 @@ void imprime_top(char top_scores[])
 */
 void imprime_retorno()
 {
-    // Têm de fazer scroll para baixo para ver o link.
-    // Depois substitui-se por uma imagem (e põe-se a retornar para o menu
-    // principal, não um novo jogo).
-    printf("<a href=\"http://localhost/cgi-bin/main?0\" class=\"button\">Retornar</a>");
+    printf("<a href=\"http://localhost/cgi-bin/main?0\" class=\"button\">Novo jogo</a>");
 }

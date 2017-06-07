@@ -69,10 +69,11 @@ int tem_inimigo(ESTADO e, POSICAO p)
 {
     int i, r = 0;
     for (i = 0; i < e.num_inimigos; i++) {
-        if (posicao_igual(e.inimigo[i].pos, p))
+        if (posicao_igual(e.inimigo[i].pos, p)) {
             r = 1;
             break;
         }
+    }
     return r;
 }
 
@@ -80,10 +81,11 @@ int tem_obstaculo(ESTADO e, POSICAO p)
 {
     int i, r = 0;
     for (i = 0; i < e.num_obstaculos; i++) {
-        if (posicao_igual(e.obstaculo[i], p))
+        if (posicao_igual(e.obstaculo[i], p)) {
             r = 1;
             break;
         }
+    }
     return r;
 }
 
