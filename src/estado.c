@@ -10,8 +10,6 @@
 #define NUM_TIPO_INIMIGOS       3
 #define TESTAR_SAIDA            1
 
-#define PASTE(X,Y) (X ## Y)
-
 char *estado2str(ESTADO e)
 {
     static char buffer[MAX_BUFFER];
