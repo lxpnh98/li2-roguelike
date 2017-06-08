@@ -60,11 +60,9 @@ int main()
         imprime_jogo(e);
         FECHAR_SVG;
     } else {
-        ABRIR_SVG(600, 600);
         guardar_pontuacao("/var/www/scores", e.jog);
         imprime_top("/var/www/scores");
         imprime_retorno();
-        FECHAR_SVG;
     }
     if (file)
         fclose(file);
