@@ -20,6 +20,8 @@ Definição do estado e das funções que convertem estados em strings e vice-ve
 
 #define ESCALA            40
 
+#define NUM_TIPO_INIMIGOS       3
+
 /**
 \brief Estrutura que armazena uma posição
 */

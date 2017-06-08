@@ -7,7 +7,6 @@
 #include "calc.h"
 
 #define INIT_VIDAS              5
-#define NUM_TIPO_INIMIGOS       3
 #define TESTAR_SAIDA            1
 
 char *estado2str(ESTADO e)
@@ -86,13 +85,11 @@ ESTADO ler_estado(FILE *file, char query[])
     int tamanho;
     int pagina, vidas, score;
     char modo;
-
-    /* Se não existir ficheiro , criar estado aleatório. */
+    // Se não existir ficheiro , criar estado aleatório.
     if (file == NULL)
         return inicializar(INIT_VIDAS, 0);
-
-    /* Se estiver no menu principal ou jogador passar de nível, gerar estado
-     * aleatório */
+    // Se estiver no menu principal ou jogador passar de nível, gerar estado
+    // aleatório.
     sscanf(query, "%d", &pagina);
     if (pagina == 1) {
         sscanf(query, "1,%c", &modo);
@@ -101,23 +98,19 @@ ESTADO ler_estado(FILE *file, char query[])
             return inicializar(vidas, score);
         }
     }
-
-    /* Descubrir tamanho do ficheiro. */
+    // Descubrir tamanho do ficheiro.
     fseek(file, 0, SEEK_END);
     tamanho = ftell(file);
     rewind(file);
-
-    /* Se ficheiro existir mas for vazio, criar estado aleatório. */
+    // Se ficheiro existir mas for vazio, criar estado aleatório.
     if (tamanho == 0)
         return inicializar(INIT_VIDAS, 0);
-
-    /* Alocar memória necessária, copiar conteúdos do ficheiro para a variável
-     * e terminar o string. */
+    // Alocar memória necessária, copiar conteúdos do ficheiro para a variável
+    // e terminar o string.
     e = (char *)malloc(sizeof(char) * (tamanho + 1));
     tamanho = fread(e, sizeof(char), tamanho, file);
     e[tamanho] = '\0';
-
-    /* Converter o string para estado e retornar. */
+    // Converter o string para estado e retornar.
     return str2estado(e);
 }
 
@@ -169,8 +162,10 @@ void mover_cavaleiro(ESTADO *e, int n, int m_guerreiro[TAM][TAM])
             if (posicao_valida(p) &&
                 !posicao_ocupada(*e, p) &&
                 movimento_valido_cav(inimigo->pos.x - i, inimigo->pos.y - j)) {
-                if ((!adjacente(inimigo->pos, e->jog.pos) && m_guerreiro[j][i] <= m_guerreiro[ny][nx]) ||
-                    (adjacente(inimigo->pos, e->jog.pos) && adjacente(p, e->jog.pos))) {
+                if ((!adjacente(inimigo->pos, e->jog.pos) &&
+                    m_guerreiro[j][i] <= m_guerreiro[ny][nx]) ||
+                    (adjacente(inimigo->pos, e->jog.pos) &&
+                    adjacente(p, e->jog.pos))) {
                     nx = i;
                     ny = j;
                 }
@@ -240,29 +235,38 @@ void mover_inimigo(ESTADO *e, int n, int m_guerreiro[TAM][TAM])
     (f[inimigo->tipo])(e, n, m_guerreiro);
 }
 
+void ataque_guerreiro(ESTADO *e, ESTADO antigo, int i)
+{
+    if (posicao_igual(e->inimigo[i].pos, antigo.inimigo[i].pos) &&
+        adjacente(e->jog.pos, e->inimigo[i].pos))
+        e->jog.vidas--;
+}
+
+void ataque_corredor(ESTADO *e, ESTADO antigo, int i)
+{
+    if (colinear(e->inimigo[i].pos, antigo.inimigo[i].pos, e->jog.pos) &&
+        adjacente(e->jog.pos, e->inimigo[i].pos))
+        e->jog.vidas--;
+}
+
+void ataque_cavaleiro(ESTADO *e, ESTADO antigo, int i)
+{
+    if (!posicao_igual(e->inimigo[i].pos, antigo.inimigo[i].pos) &&
+        adjacente(e->jog.pos, antigo.inimigo[i].pos) &&
+        adjacente(e->jog.pos, e->inimigo[i].pos))
+        e->jog.vidas--;
+}
+
 void matar_jogador(ESTADO *e, ESTADO antigo)
 {
     int i;
-    for (i = 0; i < e->num_inimigos; i++) {
-        switch (e->inimigo[i].tipo) {
-            case GUERREIRO:
-                if (posicao_igual(e->inimigo[i].pos, antigo.inimigo[i].pos) &&
-                    adjacente(e->jog.pos, e->inimigo[i].pos))
-                    e->jog.vidas--;
-                break;
-            case CORREDOR:
-                if (colinear(e->inimigo[i].pos, antigo.inimigo[i].pos, e->jog.pos) &&
-                    adjacente(e->jog.pos, e->inimigo[i].pos))
-                    e->jog.vidas--;
-                break;
-            case CAVALEIRO:
-                if (!posicao_igual(e->inimigo[i].pos, antigo.inimigo[i].pos) &&
-                    adjacente(e->jog.pos, antigo.inimigo[i].pos) &&
-                    adjacente(e->jog.pos, e->inimigo[i].pos))
-                    e->jog.vidas--;
-                break;
-        }
-    }
+    static void (*f[])(ESTADO *e, ESTADO antigo, int i) = {
+        ataque_guerreiro,
+        ataque_corredor,
+        ataque_cavaleiro
+    };
+    for (i = 0; i < e->num_inimigos; i++)
+        (f[e->inimigo[i].tipo])(e, antigo, i);
     if (e->jog.vidas < 0)
         e->jog.vidas = 0;
 }
@@ -341,40 +345,48 @@ void atualizar_modo(ESTADO *e, char modo)
     e->jog.modo = modo;
 }
 
+void mover_inimigos(ESTADO *e, ESTADO antigo)
+{
+    int i;
+    int m_guerreiro[TAM][TAM];
+    matriz_guerreiro(*e, m_guerreiro);
+    for (i = 0; i < e->num_inimigos; i++) {
+        mover_inimigo(e, i, m_guerreiro);
+    }
+    matar_jogador(e, antigo);
+}
+
+void atualizar_jogador(ESTADO *e, ESTADO *antigo, char mov)
+{
+    switch (e->jog.modo) {
+        case NORMAL:
+            atualizar_normal(e, antigo, mov);
+            break;
+        case ATAQUE:
+            atualizar_ataque(e, antigo, mov);
+            break;
+        default:
+            break;
+    }
+}
+
 ESTADO atualizar_estado(ESTADO e, char query[])
 {
     ESTADO antigo = e;
     int pagina;
     char modo, mov;
-    int i;
-    int m_guerreiro[TAM][TAM];
     sscanf(query, "%d", &pagina);
     if (pagina == 1) {
         sscanf(query, "1,%c", &modo);
         if (e.jog.vidas <= 0 || modo == 'x')
             return e;
         sscanf(query, "1,%c,%c", (char *)&e.jog.modo, &mov);
-        switch (e.jog.modo) {
-            case NORMAL:
-                atualizar_normal(&e, &antigo, mov);
-                break;
-            case ATAQUE:
-                atualizar_ataque(&e, &antigo, mov);
-                break;
-            default:
-                break;
-        }
+        atualizar_jogador(&e, &antigo, mov);
 
-        /* Mover inimigos */
-        if (e.jog.modo != MUDAR_MODO) {
-            matriz_guerreiro(e, m_guerreiro);
-            for (i = 0; i < e.num_inimigos; i++) {
-                mover_inimigo(&e, i, m_guerreiro);
-            }
-            matar_jogador(&e, antigo);
-        } else {
+        if (e.jog.modo != MUDAR_MODO)
+            mover_inimigos(&e, antigo);
+        else
             atualizar_modo(&e, mov);
-        }
         return e;
 
     } else {
