@@ -75,6 +75,8 @@ ESTADO str2estado(char *argumentos);
 
 ESTADO ler_estado(FILE *file, char query[]);
 
+void guardar_estado(FILE *fp, ESTADO e);
+
 ESTADO atualizar_estado(ESTADO e, char query[]);
 
 #endif

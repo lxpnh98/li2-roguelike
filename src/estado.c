@@ -121,6 +121,14 @@ ESTADO ler_estado(FILE *file, char query[])
     return str2estado(e);
 }
 
+void guardar_estado(FILE *fp, ESTADO e)
+{
+    if (fp != NULL) {
+        fp = fopen("/var/www/estado", "w");
+        fputs(estado2str(e), fp);
+    }
+}
+
 void preencher_guerreiro(int m[TAM][TAM], ESTADO e, int x, int y, int dist)
 {
     POSICAO p;
