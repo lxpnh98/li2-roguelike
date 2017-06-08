@@ -65,7 +65,7 @@ Macros úteis para gerar CGIs
 /**
 \brief Macro para abrir a tabela das pontuções
 */
-#define ABRIR_TABELA                          printf("<TABLE border=\"1\" style=\"position:absolute; left:100px; top: 100px;\">\n")
+#define ABRIR_TABELA                          printf("<TABLE border=\"3\" style=\"position:absolute; left:20px; top: 20px;\">\n")
 
 /**
 \brief Macro para fechar a tabela das pontuções
@@ -85,6 +85,11 @@ Macros úteis para gerar CGIs
 /**
 \brief Macro para imprimir uma célula da tabela
 */
-#define IMPRIMIR_CELULA(X)                    printf("<TD>%d</TD>\n", X)
+#define IMPRIMIR_CELULA(X)                    printf("<TD align=center WIDTH=100 >%d</TD>\n", X)
+
+/**
+\brief Macro para imprimir o cabeçalhado da tabela, que contém uma string.
+*/
+#define IMPRIMIR_CABECALHO(S)                 printf("<Th align=center WIDTH=100 >%s</Th>\n", S)
 
 #endif

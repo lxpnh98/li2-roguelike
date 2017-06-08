@@ -251,6 +251,10 @@ void imprime_top(char top_scores[])
     }
     rewind(file);
     ABRIR_TABELA;
+    	ABRIR_LINHA;
+        IMPRIMIR_CABECALHO("Ranking");
+        IMPRIMIR_CABECALHO("Score");
+        FECHAR_LINHA;
     for (i = 0; fscanf(file, "%d\n", &x) && i < 10; i++) {
         ABRIR_LINHA;
         IMPRIMIR_CELULA(i+1);
