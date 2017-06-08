@@ -55,11 +55,9 @@ int main()
         file = fopen("/var/www/estado", "w");
         fputs(estado2str(e), file);
     }
-    
     if (e.jog.vidas > 0) {
         ABRIR_SVG(600, 600);
         imprime_jogo(e);
-        imprime_retorno();
         FECHAR_SVG;
     } else {
         ABRIR_SVG(600, 600);
@@ -68,7 +66,6 @@ int main()
         imprime_retorno();
         FECHAR_SVG;
     }
-    
     if (file)
         fclose(file);
     return 0;
