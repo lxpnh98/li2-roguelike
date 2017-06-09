@@ -507,7 +507,7 @@ ESTADO atualizar_estado(ESTADO e, char query[])
         if (e.jog.modo != MUDAR_MODO)
             mover_inimigos(&e, antigo);
         else
-            e.jog.modo = modo;
+            e.jog.modo = mov;
         return e;
 
     } else {
