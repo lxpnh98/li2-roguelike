@@ -1,5 +1,5 @@
 /**
-@file calc.c
+@file calc.h
 Definições das funções auxiliares à inicialização e atualização do estado.
 */
 

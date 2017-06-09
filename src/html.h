@@ -1,5 +1,5 @@
 /**
-@file html.c
+@file html.h
 Ficheiro que expõe função imprime_estado() ao ficheiro main.c.
 */
 

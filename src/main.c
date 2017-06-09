@@ -13,6 +13,11 @@ Função main() do programa.
 #include "html.h"
 #include "ficheiro.h"
 
+/**
+    \brief Função main do programa.
+
+    @returns Sucesso da função main.
+*/
 int main()
 {
     FILE *fp = fopen("/var/www/estado", "r");

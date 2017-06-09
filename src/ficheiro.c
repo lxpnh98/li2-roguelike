@@ -63,7 +63,7 @@ ESTADO ler_estado(FILE *file, char query[])
     int tamanho;
     int pagina, vidas, score;
     char modo;
-    // Se não existir ficheiro , criar estado aleatório.
+    // Se não existir ficheiro, criar estado aleatório.
     if (file == NULL)
         return inicializar(INIT_VIDAS, 0);
     // Se estiver no menu principal ou jogador passar de nível, gerar estado

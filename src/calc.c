@@ -10,7 +10,7 @@ Funções auxiliares à inicialização e atualização do estado.
 #include "calc.h"
 /**
     \brief Função que calcula a coordenada z de uma dada estrutura que representa uma posição.
-           Esta função recebe uma variavel p, do tipo POSICAO, e retorna a componente z dessa mesma posição.
+           Esta função recebe uma variavel p do tipo POSICAO e retorna a componente z dessa mesma posição.
 
     @param p Estrutura que representa uma posição.
     @retuns coordenada z do ponto.
@@ -22,7 +22,7 @@ int get_z(POSICAO p)
 
 /**
     \brief Função que verifica se uma posição é válida.
-           Esta função recebe uma variavel p, do tipo POSICAO, e retorna uma variavel do tipo boleano 
+           Esta função recebe uma variavel p do tipo POSICAO e retorna uma variavel do tipo boleano 
            como resultado do teste que deverá ser verdadeira caso a posição seja válida.
 
     @param p estrutura que representa uma posição.
@@ -86,8 +86,8 @@ int movimento_valido_cav(int dx, int dy)
 
 /**
     \brief Função que gera posições aleatórias.
-           Esta função recebe uma variavel e, do tipo ESTADO, um apontador para uma 
-           variavel p, do tipo POSICAO, e uma variavel do tipo boleano e gera posições aleatórias a partir delas.
+           Esta função recebe uma variavel e do tipo ESTADO um apontador para uma 
+           variavel p do tipo POSICAO e uma variavel do tipo boleano e gera posições aleatórias a partir delas.
 
     @param e estrutura que representa o estado.
     @param p estrutura que representa uma posição.
@@ -105,7 +105,7 @@ void rand_pos(ESTADO e, POSICAO *p, int testar_saida)
 
 /**
     \brief Função que verifica se duas posições são iguais.
-           Esta função recebe duas variaveis p1 e p2, do tipo POSICAO, e retorna uma variavel 
+           Esta função recebe duas variaveis p1 e p2 do tipo POSICAO e retorna uma variavel 
            do tipo boleano como resultado do teste que deverá ser verdadeira no caso de as
            posições serem iguais. 
 
@@ -120,7 +120,7 @@ int posicao_igual(POSICAO p1, POSICAO p2)
 
 /**
     \brief Função que verifica se uma dada posição está ocupada pelo jogador.
-           Esta função recebe uma variavel e, do tipo ESTADO, e uma variavel p, do tipo POSICAO, e retorna 
+           Esta função recebe uma variavel e do tipo ESTADO e uma variavel p do tipo POSICAO e retorna 
            uma variavel do tipo boleano como resultado do teste que deverá ser verdadeira caso essa
            posição seja o jogador.
 
@@ -135,7 +135,7 @@ int tem_jogador(ESTADO e, POSICAO p)
 
 /**
     \brief Função que verifica se uma dada posição está ocupada por um inimigo.
-           Esta função recebe uma variavel e, do tipo ESTADO, e uma variavel p, do tipo POSICAO, e retorna 
+           Esta função recebe uma variavel e do tipo ESTADO e uma variavel p do tipo POSICAO e retorna 
            uma variavel do tipo boleano como resultado do teste que deverá ser verdadeira no caso de a
            posição ser um inimigo.
 
@@ -157,7 +157,7 @@ int tem_inimigo(ESTADO e, POSICAO p)
 
 /**
     \brief Função que verifica se uma dada posição está ocupada por um obstáculo.
-           Esta função recebe uma variavel e, do tipo ESTADO, e uma variavel p, do tipo POSICAO, e retorna 
+           Esta função recebe uma variavel e do tipo ESTADO e uma variavel p do tipo POSICAO e retorna 
            uma variavel do tipo boleano como resultado do teste que deverá ser verdadeira caso essa
            posição seja um obstaculo.
 
@@ -179,7 +179,7 @@ int tem_obstaculo(ESTADO e, POSICAO p)
 
 /**
     \brief Função que verifica se uma dada posição é a saida.
-           Esta função recebe uma variavel e, do tipo ESTADO, e uma variavel p, do tipo POSICAO, e retorna 
+           Esta função recebe uma variavel e do tipo ESTADO e uma variavel p do tipo POSICAO e retorna 
            uma variavel do tipo boleano como resultado do teste que deverá ser verdadeira no caso de a
            posição ser a saída.
 
@@ -194,7 +194,7 @@ int tem_saida(ESTADO e, POSICAO p)
 
 /**
     \brief Função que verifica se uma dada posição está ocupada.
-           Esta função recebe uma variavel e, do tipo ESTADO, e uma variavel p, do tipo POSICAO, e retorna 
+           Esta função recebe uma variavel e do tipo ESTADO e uma variavel p do tipo POSICAO e retorna 
            uma variavel do tipo boleano como resultado do teste que deverá ser verdadeira no caso de a posição
            esteja ocupada.
 
@@ -211,7 +211,7 @@ int posicao_ocupada(ESTADO e, POSICAO p)
 
 /**
     \brief Função que verifica se duas posições são adjacentes.
-           Esta função recebe duas variaveis p1 e p2, do tipo POSICAO, e retorna uma variavel 
+           Esta função recebe duas variaveis p1 e p2 do tipo POSICAO e retorna uma variavel 
            do tipo boleano como resultado do teste que deverá ser verdadeira no caso de as 
            posições serem adjacentes. 
 
@@ -228,7 +228,7 @@ int adjacente(POSICAO p1, POSICAO p2)
 
 /**
     \brief Função que verifica se três posições são colineares.
-           Esta função recebe três variaveis p1, p2 e p3, do tipo POSICAO, e retorna uma variavel 
+           Esta função recebe três variaveis p1, p2 e p3 do tipo POSICAO e retorna uma variavel 
            do tipo boleano como resultado do teste que deverá ser verdadeira no caso de as 
            posições serem olineares. 
 
