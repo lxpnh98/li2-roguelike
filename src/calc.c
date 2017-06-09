@@ -1,6 +1,6 @@
 /**
 @file calc.c
-Ficheiro contendo funções auxiliares à inicialização e atualização do estado.
+Funções auxiliares à inicialização e atualização do estado.
 */
 
 #include <math.h>

@@ -1,3 +1,8 @@
+/**
+@file estado.c
+Funções de inicialização e atualização do estado.
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

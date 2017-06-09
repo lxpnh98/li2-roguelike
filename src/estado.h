@@ -1,6 +1,6 @@
 /**
 @file estado.h
-Definição do estado e das funções que convertem estados em strings e vice-versa
+Definição do estado, de contantes relevantes e das funções que o inicializam e atualizam.
 */
 
 #include <stdio.h>
@@ -14,11 +14,11 @@ Definição do estado e das funções que convertem estados em strings e vice-ve
 /** \brief O nº máximo de obstáculos */
 #define MAX_OBSTACULOS		100
 
-#define MAX_BUFFER        10240
+#define MAX_BUFFER              10240
 
-#define TAM               9
+#define TAM                     9
 
-#define ESCALA            40
+#define ESCALA                  40
 
 #define NUM_TIPO_INIMIGOS       3
 

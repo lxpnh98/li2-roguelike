@@ -1,3 +1,8 @@
+/**
+@file ficheiro.h
+Definição de funções de conversão entre string e ESTADO, de leitura e escrita do estado e das pontuações.
+*/
+
 #include "estado.h"
 
 /**

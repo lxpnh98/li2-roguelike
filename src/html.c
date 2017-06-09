@@ -1,3 +1,8 @@
+/**
+@file html.c
+Funções que imprimem o estado do jogo.
+*/
+
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>

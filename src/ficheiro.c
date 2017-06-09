@@ -1,3 +1,8 @@
+/**
+@file ficheiro.c
+Funções de conversão entre string e ESTADO, de leitura e escrita do estado e das pontuações.
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -79,11 +84,9 @@ void guardar_pontuacao(char top_scores[], JOGADOR jog)
         fprintf(stderr, "nao consegui abrir o ficheiro de scores para leitura");
         exit(1);
     }
-
     /* Carregar pontuações mais altas, preenchendo o resto da array com 0s. */
     for (i = 0; fscanf(score_file, "%d\n", &scores[i]) == 1 && i < 10; i++);
     for (; i < 10; i++) scores[i] = 0;
-
     /* Inserir pontuação na array ordenada. */
     for (i = 0; i < 10; i++) {
         if (jog.score > scores[i]) {
@@ -94,7 +97,6 @@ void guardar_pontuacao(char top_scores[], JOGADOR jog)
         }
     }
     fclose(score_file);
-
     /* Escrever o top das pontuações atualizado para o ficheiro. */
     score_file = fopen(top_scores, "w+");
     for (i = 0; i < 10; i++) {
