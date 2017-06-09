@@ -8,6 +8,14 @@ Funções de conversão entre string e ESTADO, de leitura e escrita do estado e 
 
 #include "ficheiro.h"
 
+/**
+    \brief Função que converte o estado em uma string.
+           Esta função recebe uma variavel e, do tipo ESTADO, e retorna uma variavel 
+           do tipo char, isto é, o ESTADO convertido para string. 
+
+    @param e estrutura que representa o estado.
+    @retuns variavel do tipo char que representa o estado.
+*/
 char *estado2str(ESTADO e)
 {
     static char buffer[MAX_BUFFER];
@@ -19,6 +27,14 @@ char *estado2str(ESTADO e)
     return buffer;
 }
 
+/**
+    \brief Função que converte uma string em um estado.
+           Esta função recebe um apontador para uma variavel do tipo char e retorna uma variavel 
+           do tipo ESTADO, isto é, a string é convertida em um ESTADO.
+
+    @param *argumentos um apontador para uma string.
+    @retuns Uma estrutura que representa o estado.
+*/
 ESTADO str2estado(char *argumentos)
 {
     ESTADO e;
@@ -32,6 +48,15 @@ ESTADO str2estado(char *argumentos)
     return e;
 }
 
+/**
+    \brief Função que lê o estado.
+           Esta função recebe um apontador para um fichero e uma string e retorna uma variavel 
+           do tipo ESTADO.
+
+    @param *file uma variavel do tipo FILE.
+    @param query[] uma string, do tipo char.
+    @retuns Uma estrutura que representa o estado.
+*/
 ESTADO ler_estado(FILE *file, char query[])
 {
     char *e;
@@ -67,6 +92,13 @@ ESTADO ler_estado(FILE *file, char query[])
     return str2estado(e);
 }
 
+/**
+    \brief Função que guarda o estado.
+           Esta função recebe um apontador para um fichero e uma variável e do tipo ESTADO e guarda o estado.
+
+    @param *file uma variavel do tipo FILE.
+    @param e estrutura que representa o estado.
+*/
 void guardar_estado(FILE *fp, ESTADO e)
 {
     if (fp != NULL) {
@@ -75,6 +107,13 @@ void guardar_estado(FILE *fp, ESTADO e)
     }
 }
 
+/**
+    \brief Função que guarda as pontuações.
+           Esta função recebe uma string e uma variável jog do tipo JOGADOR e guarda a pontuação.
+
+    @param top_scores[] uma string, do tipo char.
+    @param jog estrutura que representa o jogador.
+*/
 void guardar_pontuacao(char top_scores[], JOGADOR jog)
 {
     int i, j;
