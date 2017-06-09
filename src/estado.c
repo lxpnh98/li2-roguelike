@@ -13,11 +13,9 @@ Funções de inicialização e atualização do estado.
 #include "ficheiro.h"
 
 /**
-    \brief Função que adiciona um inimigo ao mapa.
-
-    @param ESTADO Estado do jogo anterior.
-
-    @returns ESTADO Novo estado do jogo.
+\brief Função que adiciona um inimigo ao mapa.
+@param e Estado do jogo anterior.
+@returns ESTADO Novo estado do jogo.
 */
 ESTADO inicializar_inimigo(ESTADO e) {
     POSICAO p;
@@ -29,13 +27,10 @@ ESTADO inicializar_inimigo(ESTADO e) {
 }
 
 /**
-    \brief Função que inicializa a posição dos inimigos.
-
-    @param ESTADO Estado do jogo anterior.
-
-    @param int Número de inimigos a serem colocados no mapa.
-
-    @returns ESTADO Novo estado do jogo.
+\brief Função que inicializa a posição dos inimigos.
+@param e Estado do jogo anterior.
+@param num Número de inimigos a serem colocados no mapa.
+@returns ESTADO Novo estado do jogo.
 */
 ESTADO inicializar_inimigos(ESTADO e, int num) {
     int i;
@@ -45,11 +40,9 @@ ESTADO inicializar_inimigos(ESTADO e, int num) {
 }
 
 /**
-    \brief Função que adiciona um obstáculo ao mapa.
-
-    @param ESTADO Estado do jogo anterior.
-
-    @returns ESTADO Novo estado do jogo.
+\brief Função que adiciona um obstáculo ao mapa.
+@param e Estado do jogo anterior.
+@returns ESTADO Novo estado do jogo.
 */
 ESTADO inicializar_obstaculo(ESTADO e) {
     POSICAO p;
@@ -60,13 +53,10 @@ ESTADO inicializar_obstaculo(ESTADO e) {
 }
 
 /**
-    \brief Função que inicializa a posição dos obstáculos.
-
-    @param ESTADO Estado do jogo anterior.
-
-    @param int Número de obstáculos a serem colocados no mapa.
-
-    @returns ESTADO Novo estado do jogo.
+\brief Função que inicializa a posição dos obstáculos.
+@param e Estado do jogo anterior.
+@param num Número de obstáculos a serem colocados no mapa.
+@returns ESTADO Novo estado do jogo.
 */
 ESTADO inicializar_obstaculos(ESTADO e, int num) {
     int i;
@@ -76,13 +66,10 @@ ESTADO inicializar_obstaculos(ESTADO e, int num) {
 }
 
 /**
-    \brief Função que inicializa um novo nível do jogo.
-
-    @param int Número de vidas do jogador ao entrar no nível.
-
-    @param int Pontuação do jogador ao entrar no nível.
-
-    @returns ESTADO Novo estado do jogo.
+\brief Função que inicializa um novo nível do jogo.
+@param vidas Número de vidas do jogador ao entrar no nível.
+@param score Pontuação do jogador ao entrar no nível.
+@returns ESTADO Novo estado do jogo.
 */
 ESTADO inicializar(int vidas, int score) {
     POSICAO p;
@@ -100,17 +87,12 @@ ESTADO inicializar(int vidas, int score) {
 }
 
 /**
-    \brief Função que preenche a matriz de movimento.
-
-    @param int[TAM][TAM] Matriz a preencher.
-
-    @param ESTADO Estado do jogo.
-
-    @param int Coordenada X da posição a preencher.
-
-    @param int Coordenada Y da posição a preencher.
-
-    @param int Distância do jogador à posição atual.
+\brief Função que preenche a matriz de movimento.
+@param m Matriz a preencher.
+@param e Estado do jogo.
+@param x Coordenada X da posição a preencher.
+@param y Coordenada Y da posição a preencher.
+@param dist Distância do jogador à posição atual.
 */
 void preencher(int m[TAM][TAM], ESTADO e, int x, int y, int dist)
 {
@@ -130,11 +112,9 @@ void preencher(int m[TAM][TAM], ESTADO e, int x, int y, int dist)
 }
 
 /**
-    \brief Função que constrói a matriz de movimento.
-
-    @param ESTADO Estado do jogo.
-
-    @param int[TAM][TAM] Matriz a preencher.
+\brief Função que constrói a matriz de movimento.
+@param e Estado do jogo.
+@param m Matriz a preencher.
 */
 void matriz_guerreiro(ESTADO e, int m[TAM][TAM])
 {
@@ -146,13 +126,10 @@ void matriz_guerreiro(ESTADO e, int m[TAM][TAM])
 }
 
 /**
-    \brief Função que determina o movimento do cavaleiro.
-
-    @param ESTADO* Estado do jogo.
-
-    @param int Índice do inimigo no array de inimigos do estado.
-
-    @param int[TAM][TAM] Matriz de movimento.
+\brief Função que determina o movimento do cavaleiro.
+@param e Estado do jogo.
+@param n Índice do inimigo no array de inimigos do estado.
+@param m_guerreiro Matriz de movimento.
 */
 void mover_cavaleiro(ESTADO *e, int n, int m_guerreiro[TAM][TAM])
 {
@@ -183,13 +160,10 @@ void mover_cavaleiro(ESTADO *e, int n, int m_guerreiro[TAM][TAM])
 }
 
 /**
-    \brief Função que determina o movimento do guerreiro.
-
-    @param ESTADO* Estado do jogo.
-
-    @param int Índice do inimigo no array de inimigos do estado.
-
-    @param int[TAM][TAM] Matriz de movimento.
+\brief Função que determina o movimento do guerreiro.
+@param e Estado do jogo.
+@param n Índice do inimigo no array de inimigos do estado.
+@param m_guerreiro Matriz de movimento.
 */
 void mover_guerreiro(ESTADO *e, int n, int m_guerreiro[TAM][TAM])
 {
@@ -217,13 +191,10 @@ void mover_guerreiro(ESTADO *e, int n, int m_guerreiro[TAM][TAM])
 }
 
 /**
-    \brief Função que determina o movimento do corredor.
-
-    @param ESTADO* Estado do jogo.
-
-    @param int Índice do inimigo no array de inimigos do estado.
-
-    @param int[TAM][TAM] Matriz de movimento.
+\brief Função que determina o movimento do corredor.
+@param e Estado do jogo.
+@param n Índice do inimigo no array de inimigos do estado.
+@param m_guerreiro Matriz de movimento.
 */
 void mover_corredor(ESTADO *e, int n, int m_guerreiro[TAM][TAM])
 {
@@ -249,13 +220,10 @@ void mover_corredor(ESTADO *e, int n, int m_guerreiro[TAM][TAM])
 }
 
 /**
-    \brief Função que determina o movimento de um inimigo.
-
-    @param ESTADO* Estado do jogo.
-
-    @param int Índice do inimigo no array de inimigos do estado.
-
-    @param int[TAM][TAM] Matriz de movimento.
+\brief Função que determina o movimento de um inimigo.
+@param e Estado do jogo.
+@param n Índice do inimigo no array de inimigos do estado.
+@param m_guerreiro Matriz de movimento.
 */
 void mover_inimigo(ESTADO *e, int n, int m_guerreiro[TAM][TAM])
 {
@@ -269,13 +237,10 @@ void mover_inimigo(ESTADO *e, int n, int m_guerreiro[TAM][TAM])
 }
 
 /**
-    \brief Função que determina quando um guerreiro ataca o jogador.
-
-    @param ESTADO* Estado do jogo.
-
-    @param ESTADO Antigo estado do jogo.
-
-    @param int Índice do inimigo no array de inimigos do estado.
+\brief Função que determina quando um guerreiro ataca o jogador.
+@param e Estado do jogo.
+@param antigo Antigo estado do jogo.
+@param i Índice do inimigo no array de inimigos do estado.
 */
 void ataque_guerreiro(ESTADO *e, ESTADO antigo, int i)
 {
@@ -285,13 +250,10 @@ void ataque_guerreiro(ESTADO *e, ESTADO antigo, int i)
 }
 
 /**
-    \brief Função que determina quando um corredor ataca o jogador.
-
-    @param ESTADO* Estado do jogo.
-
-    @param ESTADO Antigo estado do jogo.
-
-    @param int Índice do inimigo no array de inimigos do estado.
+\brief Função que determina quando um corredor ataca o jogador.
+@param e Estado do jogo.
+@param antigo Antigo estado do jogo.
+@param i Índice do inimigo no array de inimigos do estado.
 */
 void ataque_corredor(ESTADO *e, ESTADO antigo, int i)
 {
@@ -301,13 +263,10 @@ void ataque_corredor(ESTADO *e, ESTADO antigo, int i)
 }
 
 /**
-    \brief Função que determina quando um cavaleiro ataca o jogador.
-
-    @param ESTADO* Estado do jogo.
-
-    @param ESTADO Antigo estado do jogo.
-
-    @param int Índice do inimigo no array de inimigos do estado.
+\brief Função que determina quando um cavaleiro ataca o jogador.
+@param e Estado do jogo.
+@param antigo Antigo estado do jogo.
+@param i Índice do inimigo no array de inimigos do estado.
 */
 void ataque_cavaleiro(ESTADO *e, ESTADO antigo, int i)
 {
@@ -318,11 +277,9 @@ void ataque_cavaleiro(ESTADO *e, ESTADO antigo, int i)
 }
 
 /**
-    \brief Função que determina o dano que o jogador recebe num turno.
-
-    @param ESTADO* Estado do jogo.
-
-    @param ESTADO Antigo estado do jogo.
+\brief Função que determina o dano que o jogador recebe num turno.
+@param e Estado do jogo.
+@param antigo Antigo estado do jogo.
 */
 void matar_jogador(ESTADO *e, ESTADO antigo)
 {
@@ -339,11 +296,9 @@ void matar_jogador(ESTADO *e, ESTADO antigo)
 }
 
 /**
-    \brief Função que elimina um inimigo do array de inimigos do estado.
-
-    @param ESTADO* Estado do jogo.
-
-    @param int Índice do inimigo no array de inimigos do estado.
+\brief Função que elimina um inimigo do array de inimigos do estado.
+@param e Estado do jogo.
+@param n Índice do inimigo no array de inimigos do estado.
 */
 void eliminar_inimigo(ESTADO *e, int n)
 {
@@ -354,13 +309,10 @@ void eliminar_inimigo(ESTADO *e, int n)
 }
 
 /**
-    \brief Função que determina uma posição nova a partir da antiga e um movimento.
-
-    @param POSICAO Posição antiga.
-
-    @param char Movimento a aplicar.
-
-    @returns POSICAO Nova posição.
+\brief Função que determina uma posição nova a partir da antiga e um movimento.
+@param antiga Posição antiga.
+@param mov Movimento a aplicar.
+@returns POSICAO Nova posição.
 */
 POSICAO nova_posicao(POSICAO antiga, char mov)
 {
@@ -390,13 +342,10 @@ POSICAO nova_posicao(POSICAO antiga, char mov)
 }
 
 /**
-    \brief Função que atualiza o estado do jogo caso o modo atual seja o modo normal.
-
-    @param ESTADO* Estado do jogo.
-
-    @param ESTADO* Antigo estado do jogo.
-
-    @param char Movimento a aplicar.
+\brief Função que atualiza o estado do jogo caso o modo atual seja o modo normal.
+@param e Estado do jogo.
+@param antigo Antigo estado do jogo.
+@param mov Movimento a aplicar.
 */
 void atualizar_normal(ESTADO *e, ESTADO *antigo, char mov)
 {
@@ -418,13 +367,10 @@ void atualizar_normal(ESTADO *e, ESTADO *antigo, char mov)
 }
 
 /**
-    \brief Função que atualiza o estado do jogo caso o modo atual seja o modo de ataque.
-
-    @param ESTADO* Estado do jogo.
-
-    @param ESTADO* Antigo estado do jogo.
-
-    @param char Direção de ataque.
+\brief Função que atualiza o estado do jogo caso o modo atual seja o modo de ataque.
+@param e Estado do jogo.
+@param antigo Antigo estado do jogo.
+@param mov Direção de ataque.
 */
 void atualizar_ataque(ESTADO *e, ESTADO *antigo, char mov)
 {
@@ -442,11 +388,9 @@ void atualizar_ataque(ESTADO *e, ESTADO *antigo, char mov)
 }
 
 /**
-    \brief Função que atualiza a posição dos inimigos e se eles causam danos ao jogador.
-
-    @param ESTADO* Estado do jogo.
-
-    @param ESTADO Antigo estado do jogo.
+\brief Função que atualiza a posição dos inimigos e se eles causam danos ao jogador.
+@param e Estado do jogo.
+@param antigo Antigo estado do jogo.
 */
 void mover_inimigos(ESTADO *e, ESTADO antigo)
 {
@@ -460,13 +404,10 @@ void mover_inimigos(ESTADO *e, ESTADO antigo)
 }
 
 /**
-    \brief Função que atualiza o jogador (movimento e ataques).
-
-    @param ESTADO* Estado do jogo.
-
-    @param ESTADO Antigo estado do jogo.
-
-    @param char Direção da ação executada.
+\brief Função que atualiza o jogador (movimento e ataques).
+@param e Estado do jogo.
+@param antigo Antigo estado do jogo.
+@param mov Direção da ação executada.
 */
 void atualizar_jogador(ESTADO *e, ESTADO *antigo, char mov)
 {
@@ -483,13 +424,10 @@ void atualizar_jogador(ESTADO *e, ESTADO *antigo, char mov)
 }
 
 /**
-    \brief Função que atualiza o estado.
-
-    @param ESTADO Estado do jogo.
-
-    @param char[] Argumento no query string.
-
-    @returns ESTADO Novo estado.
+\brief Função que atualiza o estado.
+@param e Estado do jogo.
+@param query Argumento no query string.
+@returns ESTADO Novo estado.
 */
 ESTADO atualizar_estado(ESTADO e, char query[])
 {

@@ -14,9 +14,8 @@ Função main() do programa.
 #include "ficheiro.h"
 
 /**
-    \brief Função main do programa.
-
-    @returns Sucesso da função main.
+\brief Função main do programa.
+@returns Sucesso da função main.
 */
 int main()
 {

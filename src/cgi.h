@@ -9,7 +9,7 @@ Macros úteis para gerar CGIs
 #include <stdio.h>
 
 /**
-* Caminho para as imagens
+/brief Caminho para as imagens
 */
 #define IMAGE_PATH                            "http://localhost/images/"
 

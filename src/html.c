@@ -13,17 +13,23 @@ Funções que imprimem o estado do jogo.
 #include "calc.h"
 #include "ficheiro.h"
 
+/**
+\brief Número de pixeis de desvio horizontal por casa
+*/
 #define OFFSET_WIDTH            20
+/**
+\brief Número de pixeis de desvio vertical por casa 
+*/
 #define OFFSET_HEIGHT           10
-
+/**
+\brief Tamanho de uma casa
+*/
 #define TAM_CASA                45
 
 /**
-    \brief Função que calcula o desvio (em x) que é preciso para tornar o mapa hexagonal (anteriormente retangular);
-
-    @param 
-
-    @returns retorna o desvio necessário
+\brief Função que calcula o desvio (em x) que é preciso para tornar o mapa hexagonal (anteriormente retangular);
+@param y Componente Y da posição considerada
+@returns retorna o desvio necessário
 */
 int calc_xoffset(int y)
 {
@@ -31,11 +37,9 @@ int calc_xoffset(int y)
 }
 
 /**
-    \brief Função que calcula o desvio (em y) que é preciso para tornar o mapa hexagonal (anteriormente retangular);
-
-    @param 
-
-    @returns retorna o desvio necessário
+\brief Função que calcula o desvio (em y) que é preciso para tornar o mapa hexagonal (anteriormente retangular);
+@param y Componente Y da posição considerada
+@returns retorna o desvio necessário
 */
 int calc_yoffset(int y)
 {
@@ -43,9 +47,8 @@ int calc_yoffset(int y)
 }
 
 /**
-    \brief Função que imprime a imagem de uma vida (imprime um coração);
-
-    @param é a componente horizontal da posição da imagem (vida);
+\brief Função que imprime a imagem de uma vida (imprime um coração);
+@param x Componente horizontal da posição da imagem (vida);
 */
 void imprime_vida(int x)
 {
@@ -54,9 +57,8 @@ void imprime_vida(int x)
 }
 
 /**
-    \brief Função que imprime as vidas do jogador;
-
-    @param recebe o estado do jogo, que permite identificar quantas vidas tem o jogador;
+\brief Função que imprime as vidas do jogador;
+@param e O estado do jogo, que permite identificar quantas vidas tem o jogador;
 */
 void imprime_vidas(ESTADO e)
 {
@@ -67,11 +69,9 @@ void imprime_vidas(ESTADO e)
 }
 
 /** 
-    \brief Função que imprime uma casa (um hexágono) no ecrãn;
-
-    @param recebe o estado, para testar, se a casa é a casa de saída;
-    @param posição onde queremos imprimir a casa;
-
+\brief Função que imprime uma casa (um hexágono) no ecrãn;
+@param e Estado do jogo, para testar, se a casa é a casa de saída;
+@param p Posição onde queremos imprimir a casa;
 */  
 void imprime_casa(ESTADO e, POSICAO p)
 {
@@ -82,9 +82,8 @@ void imprime_casa(ESTADO e, POSICAO p)
         IMAGEM(p.x, p.y, x_offset, y_offset, ESCALA, "hexit.png");
 }
 /**
-    \brief Função que imprime uma casa (transparente) no ecrãn, com o proposito de fazer um link;
-
-    @param posição onde queremos imprimir a casa;
+\brief Função que imprime uma casa (transparente) no ecrãn, com o proposito de fazer um link;
+@param p Posição onde queremos imprimir a casa;
 */
 void imprime_casa_transparente(POSICAO p)
 {
@@ -94,9 +93,8 @@ void imprime_casa_transparente(POSICAO p)
 }
 
 /**
-    \brief Função que imprime no ecrãn o tabuleiro de jogo;
-
-    @param recebe um estado como argumento, que é usado nas suas funções auxiliares;
+\brief Função que imprime no ecrãn o tabuleiro de jogo;
+@param e O estado do jogo
 */
 void imprime_tabuleiro(ESTADO e)
 {
@@ -113,12 +111,10 @@ void imprime_tabuleiro(ESTADO e)
 }
 
 /**
-    /brief determina qual é o movimento do jogador;
-
-    @param movimento do jogador em x;
-    @param movimento do jogador em y;
-
-    @returns o movimento do jogador;
+/brief Função que determina qual é o movimento do jogador;
+@param dx Movimento do jogador em x;
+@param dy Movimento do jogador em y;
+@returns Carater que codifica o movimento do jogador;
 */
 char determinar_mov(int dx, int dy)
 {
@@ -132,6 +128,12 @@ char determinar_mov(int dx, int dy)
     return mov;
 }
 
+/**
+/brief Função que cria uma hiperligação para um movimento do jogador;
+@param e O estado do jogo
+@param dx Movimento do jogador em x;
+@param dy Movimento do jogador em y;
+*/
 void imprime_movimento(ESTADO e, int dx, int dy)
 {
     char mov;
@@ -157,9 +159,8 @@ void imprime_movimento(ESTADO e, int dx, int dy)
 }
 
 /**
-    /brief imprime o movimento do jogador no ecrãn;
-
-    @param recebe um estado para passar à sua função auxiliar;  
+/brief Função que cria as hiperligações do movimento do jogador
+@param e Estado para passar à sua função auxiliar;  
 */
 void imprime_movimentos(ESTADO e)
 {
@@ -171,6 +172,12 @@ void imprime_movimentos(ESTADO e)
     imprime_movimento(e, +1, -1);
 }
 
+/**
+/brief Função que cria uma hiperligação para um ataque do jogador;
+@param e Estado do jogo
+@param dx Movimento do jogador em x;
+@param dy Movimento do jogador em y;
+*/
 void imprime_ataque(ESTADO e, int dx, int dy)
 {
     char mov;
@@ -190,9 +197,8 @@ void imprime_ataque(ESTADO e, int dx, int dy)
 }
 
 /**
-    /brief imprime o ataque feito pelo jogador no ecrãn;
-
-    @param recebe um estado para passar à sua função auxiliar;  
+/brief Função que cria as hiperligações para ataque de inimigos
+@param e Estado do jogo;  
 */
 void imprime_ataques(ESTADO e)
 {
@@ -205,9 +211,8 @@ void imprime_ataques(ESTADO e)
 }
 
 /**
-    \brief Função que imprime o jogador, os seus movimentos e os seus ataques;
-
-    @param estado atual do jogo;
+\brief Função que imprime o jogador, os seus movimentos e os seus ataques;
+@param e Estado atual do jogo;
 */
 void imprime_jogador(ESTADO e)
 {
@@ -230,9 +235,8 @@ void imprime_jogador(ESTADO e)
 }
 
 /**
-    /brief função responsável por imprimir cada um dos três inimigos;
-
-    @param recebe um estado para determinar a posição dos inimigos, e se estes podem estar em determinados locais;
+/brief função responsável por imprimir cada um dos três inimigos;
+@param e Estado do jogo (para determinar a posição dos inimigos, e se estes podem estar em determinados locais)
 */
 void imprime_inimigos(ESTADO e)
 {
@@ -257,9 +261,8 @@ void imprime_inimigos(ESTADO e)
 }
 
 /**
-    /brief imprime os obstaculos no ecrãn;
-
-    @param utiliza o estado para determinar a posição do obstáculo;
+/brief imprime os obstaculos no ecrãn;
+@param e Estado para determinar a posição do obstáculo;
 */
 void imprime_obstaculos(ESTADO e)
 {
@@ -273,6 +276,15 @@ void imprime_obstaculos(ESTADO e)
     }
 }
 
+/**
+/brief Função que imprime uma imagem no ecrãn
+@param x A coordenada X do canto superior esquerdo
+@param y A coordenada Y do canto superior esquerdo
+@param x_offset A componente horizontal do desvio na posição
+@param y_offset A componente vertical do desvio na posição
+@param escala A escala da imagem
+@param ficheiro O caminho para o link do ficheiro
+*/
 void imprime_imagem(int x, int y, int x_offset, int y_offset, int escala, char ficheiro[])
 {
     char link[MAX_BUFFER];
@@ -282,10 +294,9 @@ void imprime_imagem(int x, int y, int x_offset, int y_offset, int escala, char f
 }
 
 /**
-    \brief Função que imprime os modos do jogos(N e A);
-
-    @param recebe um char que indica quais ou qual é o modo que deve ser imprimido no ecrãn;
-    @param recebe um x, que é a componente horizontal da posição da imagem;
+\brief Função que imprime os modos do jogos(N e A);
+@param modo char que indica quais ou qual é o modo que deve ser imprimido no ecrãn;
+@param x Componente horizontal da posição da imagem;
 */
 void imprime_modo(char modo, int x)
 {
@@ -303,9 +314,8 @@ void imprime_modo(char modo, int x)
 }
 
 /**
-    \brief Função que imprime os modos do jogo (Normal e Ataque);
-
-    @param recebe o estado 
+\brief Função que imprime os modos do jogo (Normal e Ataque);
+@param e Estado do jogo
 */
 void imprime_modos(ESTADO e)
 {
@@ -318,9 +328,8 @@ void imprime_modos(ESTADO e)
 }
 
 /**
-    \brief Função principal, responsável pela impressão de todo o jogo;
-
-    @param recebe o estado do jogo;
+\brief Função principal, responsável pela impressão de todo o jogo;
+@param e Estado do jogo
 */
 void imprime_jogo(ESTADO e)
 {
@@ -333,9 +342,8 @@ void imprime_jogo(ESTADO e)
 }
 
 /**
-    \brief Função que imprime no ecrâ o top10 das melhores pontuções do jogador
-
-    @param não sei o que por aqui
+\brief Função que imprime no ecrâ o top10 das melhores pontuções do jogador
+@param top_scores nome do ficheiro das pontuações mais altas
 */
 void imprime_top(char top_scores[])
 {
@@ -362,7 +370,7 @@ void imprime_top(char top_scores[])
 }
 
 /**
-    \brief Função que imprime no ecrâ o botão que inicia o novo jogo.
+\brief Função que imprime no ecrâ o botão que inicia o novo jogo.
 */
 void imprime_retorno()
 {
@@ -370,9 +378,8 @@ void imprime_retorno()
 }
 
 /**
-    \brief Função que imprime o estado atual do jogo;
-
-    @param recebe o estado para saber o que se deve imprimir;
+\brief Função que imprime o estado atual do jogo;
+@param e Estado do jogo
 */
 void imprime_estado(ESTADO e)
 {
