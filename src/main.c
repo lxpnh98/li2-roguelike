@@ -6,6 +6,7 @@
 #include "cgi.h"
 #include "estado.h"
 #include "html.h"
+#include "ficheiro.h"
 
 int main()
 {

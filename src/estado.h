@@ -1,12 +1,12 @@
-#include <stdio.h>
-
-#ifndef ___ESTADO_H___
-#define ___ESTADO_H___
-
 /**
 @file estado.h
 Definição do estado e das funções que convertem estados em strings e vice-versa
 */
+
+#include <stdio.h>
+
+#ifndef ___ESTADO_H___
+#define ___ESTADO_H___
 
 /** \brief O nº máximo de inimigos */
 #define MAX_INIMIGOS		100
@@ -21,6 +21,10 @@ Definição do estado e das funções que convertem estados em strings e vice-ve
 #define ESCALA            40
 
 #define NUM_TIPO_INIMIGOS       3
+
+#define INIT_VIDAS              5
+
+#define TESTAR_SAIDA            1
 
 /**
 \brief Estrutura que armazena uma posição
@@ -61,24 +65,8 @@ typedef struct estado {
         POSICAO saida;
 } ESTADO;
 
-/**
-\brief Função que converte um estado numa string
-@param e O estado
-@returns A string correspondente ao estado e
-*/
-char *estado2str(ESTADO e);
-
-/**
-\brief Função que converte uma string num estado 
-@param argumentos Uma string contendo os argumentos passados à CGI
-@returns O estado correspondente à string dos argumentos
-*/
-ESTADO str2estado(char *argumentos);
-
-ESTADO ler_estado(FILE *file, char query[]);
-
-void guardar_estado(FILE *fp, ESTADO e);
-
 ESTADO atualizar_estado(ESTADO e, char query[]);
+
+ESTADO inicializar(int vidas, int score);
 
 #endif

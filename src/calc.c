@@ -1,3 +1,8 @@
+/**
+@file calc.c
+Ficheiro contendo funções auxiliares à inicialização e atualização do estado.
+*/
+
 #include <math.h>
 #include <stdlib.h>
 

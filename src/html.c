@@ -2,10 +2,11 @@
 #include <math.h>
 #include <string.h>
 
+#include "html.h"
 #include "cgi.h"
 #include "estado.h"
 #include "calc.h"
-#include "html.h"
+#include "ficheiro.h"
 
 #define OFFSET_WIDTH            20
 #define OFFSET_HEIGHT           10
@@ -217,7 +218,6 @@ void imprime_modo(char modo, int x)
     FECHAR_LINK;
 }
 
-
 void imprime_modos(ESTADO e)
 {
     char modos[] = {'n', 'a', '\0'};
@@ -273,40 +273,6 @@ void imprime_top(char top_scores[])
 void imprime_retorno()
 {
     printf("<a href=\"http://localhost/cgi-bin/main?0\" class=\"button\">Novo jogo</a>");
-}
-
-void guardar_pontuacao(char top_scores[], JOGADOR jog)
-{
-    int i, j;
-    int scores[10];
-    FILE *score_file = fopen(top_scores, "r");
-    if(score_file == NULL) {
-        fprintf(stderr, "nao consegui abrir o ficheiro de scores para leitura");
-        exit(1);
-    }
-
-    /* Carregar pontuações mais altas, preenchendo o resto da array com 0s. */
-    for (i = 0; fscanf(score_file, "%d\n", &scores[i]) == 1 && i < 10; i++);
-    for (; i < 10; i++) scores[i] = 0;
-
-    /* Inserir pontuação na array ordenada. */
-    for (i = 0; i < 10; i++) {
-        if (jog.score > scores[i]) {
-            for (j = 9; j > i; j--)
-                scores[j] = scores[j-1];
-            scores[j] = jog.score;
-            break;
-        }
-    }
-    fclose(score_file);
-
-    /* Escrever o top das pontuações atualizado para o ficheiro. */
-    score_file = fopen(top_scores, "w+");
-    for (i = 0; i < 10; i++) {
-        fprintf(score_file, "%d\n", scores[i]);
-    }
-    rewind(score_file); /* Esta linha resove o problema inteiro. (elimina este comentário) */
-    fclose(score_file);
 }
 
 void imprime_estado(ESTADO e)

@@ -33,6 +33,8 @@ Macros úteis para gerar CGIs
 \brief Macro para criar uma imagem
 @param X A coordenada X do canto superior esquerdo
 @param Y A coordenada Y do canto superior esquerdo
+@param X_OFFSET A componente horizontal do desvio na posição
+@param Y_OFFSET A componente vertical do desvio na posição
 @param ESCALA A escala da imagem
 @param FICHEIRO O caminho para o link do ficheiro
 */
@@ -64,6 +66,8 @@ Macros úteis para gerar CGIs
 
 /**
 \brief Macro para abrir a tabela das pontuções
+@param X A componente horizontal da posição da tabela
+@param Y A componente vertical da posição da tabela
 */
 #define ABRIR_TABELA(X, Y)                    printf("<TABLE border=\"3\" style=\"position:absolute; left:%dpx; top: %dpx;\">\n", X, Y)
 
@@ -84,11 +88,13 @@ Macros úteis para gerar CGIs
 
 /**
 \brief Macro para imprimir uma célula da tabela
+@param X O inteiro a ser imprimido
 */
 #define IMPRIMIR_CELULA(X)                    printf("<TD align=center WIDTH=100 >%d</TD>\n", X)
 
 /**
 \brief Macro para imprimir o cabeçalhado da tabela, que contém uma string.
+@param S O string a ser imprimido
 */
 #define IMPRIMIR_CABECALHO(S)                 printf("<Th align=center WIDTH=100 >%s</Th>\n", S)
 
